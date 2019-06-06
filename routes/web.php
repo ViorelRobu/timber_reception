@@ -15,6 +15,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/', function () {
         return view('home');
     });
+    Route::get('/suppliers', 'SuppliersController@index');
 });
 
 Auth::routes();
