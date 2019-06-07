@@ -13,7 +13,7 @@
     <section class="content container-fluid">
             <div class="box">
       <div class="box-body">
-        <table id="all_suppliers" class="table table-bordered table-hover">
+        <table id="all_suppliers" class="table table-bordered table-hover dataTables">
           <thead>
           <tr>
             <th>Fibu</th>

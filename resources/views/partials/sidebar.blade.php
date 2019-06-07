@@ -36,7 +36,7 @@
                 </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i>Tari</a></li>
+            <li><a href="/countries"><i class="fa fa-circle-o"></i>Tari</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>Grupa furnizor</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>Status furnizor</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>Vehicole</a></li>
