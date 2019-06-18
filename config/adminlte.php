@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => env('APP_NAME', 'TimberReception'),
+    'title' => env('APP_NAME'),
 
     'title_prefix' => '',
 

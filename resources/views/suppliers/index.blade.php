@@ -2,15 +2,16 @@
 
 @section('title', env('APP_NAME') . ' - Furnizori')
 
+{{-- @endsection --}}
+
 @section('content_header')
     <h1>Furnizori</h1>
-    {{ env('APP_NAME') }}
-@endsection
+@stop
 
 @section('content')
     <div class="box">
       <div class="box-body">
-        <table id="all-suppliers" class="table table-bordered table-hover dataTables">
+        <table class="table table-bordered table-hover dataTables" id="all-suppliers">
           <thead>
             <tr>
               <th>Nr crt</th>
@@ -28,7 +29,7 @@
         </table>
       </div>
     </div>        
-@endsection
+@stop
 
 @section('js')
   <script>

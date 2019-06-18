@@ -4,6 +4,7 @@
 
 @section('content_header')
     <h1>Dashboard</h1>
+    {{ env('APP_NAME') }}
 @stop
 
 @section('content')
