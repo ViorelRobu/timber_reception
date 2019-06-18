@@ -85,7 +85,7 @@ return [
     |
     */
 
-    'dashboard_url' => 'home',
+    'dashboard_url' => '/',
 
     'logout_url' => 'logout',
 
@@ -217,6 +217,6 @@ return [
     'plugins' => [
         'datatables' => true,
         'select2'    => true,
-        'chartjs'    => true,
+        'chartjs'    => false,
     ],
 ];

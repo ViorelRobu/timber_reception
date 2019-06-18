@@ -1,9 +1,5 @@
 @extends('adminlte::page')
 
-@section('title', env('APP_NAME') . ' - Furnizori')
-
-{{-- @endsection --}}
-
 @section('content_header')
     <h1>Furnizori</h1>
 @stop
