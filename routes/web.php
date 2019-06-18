@@ -12,14 +12,13 @@
 */
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/', function () {
-        return view('home');
-    });
-    Route::get('/suppliers', 'SuppliersController@index');    
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/suppliers', 'SuppliersController@index')->name('suppliers.index');    
     Route::get('/countries', 'CountriesController@index');
     Route::get('/supplier_group', 'SupplierGroupController@index');    
     Route::get('/supplier_status', 'SupplierStatusController@index');
-    Route::get('/suppliers/fetch', 'SuppliersController@fetchSuppliers')->name('suppliers.data');
 });
 
 Auth::routes();
+
+

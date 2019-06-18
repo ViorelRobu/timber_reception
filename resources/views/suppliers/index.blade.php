@@ -1,64 +1,55 @@
-@extends('layouts.layout')
+@extends('adminlte::page')
+
+@section('title', env('APP_NAME') . ' - Furnizori')
+
+@section('content_header')
+    <h1>Furnizori</h1>
+    {{ env('APP_NAME') }}
+@endsection
 
 @section('content')
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Furnizori
-      </h1>
-    </section>
-    
-    <!-- Main content -->
-    <section class="content container-fluid">
-            <div class="box">
+    <div class="box">
       <div class="box-body">
-        <table id="all_suppliers" class="table table-bordered table-hover dataTables">
+        <table id="all-suppliers" class="table table-bordered table-hover dataTables">
           <thead>
-          <tr>
-            <th>Fibu</th>
-            <th>Nume</th>
-            <th colspan="2">Date fiscale</th>
-            <th>Adresa</th>
-            <th>Tara rezidenta</th>
-            <th>Grup</th>
-            <th>Status</th>
-          </tr>
-          </thead>
-          <tbody>
-            @foreach ($suppliers as $supplier)
             <tr>
-              <td>
-                {{ $supplier->fibu }}
-              </td>
-              <td>
-                {{ $supplier->name }}
-              </td>
-              <td>
-                {{ $supplier->cui }}
-              </td>
-              <td>
-                {{ $supplier->j }}
-              </td>
-              <td>
-                {{ $supplier->address }}
-              </td>
-              <td>
-                {{ $supplier->countryOfResidence->name }}
-              </td>
-              <td>
-                {{ $supplier->supplierGroup->name }}
-              </td>
-              <td>
-                {{ $supplier->supplierStatus->name }}
-              </td>
+              <th>Nr crt</th>
+              <th>Fibu</th>
+              <th>Nume</th>
+              <th>CUI</th>
+              <th>J</th>
+              <th>Adresa</th>
+              <th>Tara rezidenta</th>
+              <th>Grup</th>
+              <th>Status</th>
+              <th>Actiuni</th>
             </tr>
-            @endforeach
-          </tbody>
+          </thead>
         </table>
       </div>
     </div>        
-    </section>
-    <!-- /.content -->
-  </div>
+@endsection
+
+@section('js')
+  <script>
+    $(document).ready(function () {
+      $('#all-suppliers').DataTable({
+          processing: true,
+          serverSide: true,
+          ajax: "{{ route('suppliers.index') }}",
+          columns: [
+              {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+              {data: 'fibu', name: 'fibu'},
+              {data: 'name', name: 'name'},
+              {data: 'cui', name: 'cui'},
+              {data: 'j', name: 'j'},
+              {data: 'address', name: 'address'},
+              {data: 'country_id', name: 'country_id'},
+              {data: 'supplier_group_id', name: 'supplier_group_id'},
+              {data: 'supplier_status_id', name: 'supplier_status_id'},
+              {data: 'action', name: 'action', orderable: false, searchable: false},
+          ]
+      });
+    });
+  </script>
 @endsection

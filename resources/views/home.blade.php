@@ -1,23 +1,11 @@
-@extends('layouts.layout')
+@extends('adminlte::page')
+
+@section('title', env('APP_NAME'))
+
+@section('content_header')
+    <h1>Dashboard</h1>
+@stop
 
 @section('content')
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Home page
-        <small>Optional description</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-        <li class="active">Here</li>
-      </ol>
-    </section>
-
-    <!-- Main content -->
-    <section class="content container-fluid">
-        You are logged in!
-    </section>
-    <!-- /.content -->
-  </div>
-@endsection
+    <p>You are logged in!</p>
+@stop
