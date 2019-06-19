@@ -1,42 +1,38 @@
-@extends('layouts.layout')
+@extends('adminlte::page')
+
+@section('content_header')
+    <h1>Status furnizori</h1>
+@stop
 
 @section('content')
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Status furnizor
-      </h1>
-    </section>
-    
-    <!-- Main content -->
-    <section class="content container-fluid">
-    <div class="box col-md-6">
-      <div class="box-body">
-            <table id="countries" class="table table-bordered table-hover">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Denumire</th>
-            </tr>
-            </thead>
-            <tbody>
-                @foreach ($supplier_status as $status)
-                <tr>
-                <td>
-                    {{ $status->id }}
-                </td>
-                <td>
-                    {{ $status->name }}
-                </td>
-                </tr>
-                @endforeach
-            </tbody>
-            </table>
-        </div>
-      </div>
-    </div>        
-    </section>
-    <!-- /.content -->
+  <div class="box">
+    <div class="box-body">
+      <table id="supplier_status" class="table table-bordered table-hover">
+        <thead>
+          <tr>
+              <th>ID</th>
+              <th>Denumire</th>
+              <th>Actiuni</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
   </div>
+@stop
+
+@section('js')
+  <script>
+    $(document).ready(function () {
+      $('#supplier_status').DataTable({
+          processing: true,
+          serverSide: true,
+          ajax: "{{ route('supplier_status.index') }}",
+          columns: [
+              {data: 'id', name: 'id'},
+              {data: 'name', name: 'name'},
+              {data: 'action', name: 'action', orderable: false, searchable: false},
+          ]
+      });
+    });
+  </script>
 @endsection

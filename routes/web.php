@@ -14,9 +14,9 @@
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/suppliers', 'SuppliersController@index')->name('suppliers.index');    
-    Route::get('/countries', 'CountriesController@index');
-    Route::get('/supplier_group', 'SupplierGroupController@index');    
-    Route::get('/supplier_status', 'SupplierStatusController@index');
+    Route::get('/countries', 'CountriesController@index')->name('countries.index');
+    Route::get('/supplier_group', 'SupplierGroupController@index')->name('supplier_group.index');    
+    Route::get('/supplier_status', 'SupplierStatusController@index')->name('supplier_status.index');
 });
 
 Auth::routes();

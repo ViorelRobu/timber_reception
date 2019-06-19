@@ -10,11 +10,10 @@
         <table class="table table-bordered table-hover dataTables" id="all-suppliers">
           <thead>
             <tr>
-              <th>Nr crt</th>
               <th>Fibu</th>
               <th>Nume</th>
-              <th>CUI</th>
-              <th>J</th>
+              <th>Cod Unic Inregistrare</th>
+              <th>Nr. Registru Comert</th>
               <th>Adresa</th>
               <th>Tara rezidenta</th>
               <th>Grup</th>
@@ -35,15 +34,14 @@
           serverSide: true,
           ajax: "{{ route('suppliers.index') }}",
           columns: [
-              {data: 'DT_RowIndex', name: 'DT_RowIndex'},
               {data: 'fibu', name: 'fibu'},
               {data: 'name', name: 'name'},
               {data: 'cui', name: 'cui'},
               {data: 'j', name: 'j'},
               {data: 'address', name: 'address'},
-              {data: 'country_id', name: 'country_id'},
-              {data: 'supplier_group_id', name: 'supplier_group_id'},
-              {data: 'supplier_status_id', name: 'supplier_status_id'},
+              {data: 'country', name: 'country'},
+              {data: 'supplier_group', name: 'supplier_group'},
+              {data: 'supplier_status', name: 'supplier_status'},
               {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
       });

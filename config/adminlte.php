@@ -119,43 +119,46 @@ return [
             'url'         => 'suppliers',
             'icon'        => 'list',
         ],
-        'ACCOUNT SETTINGS',
+        'SETARI',
         [
-            'text' => 'Profile',
-            'url'  => 'admin/settings',
+            'text' => 'Profil utilizator',
+            'url'  => '#',
             'icon' => 'user',
         ],
         [
-            'text' => 'Change Password',
-            'url'  => 'admin/settings',
-            'icon' => 'lock',
-        ],
-        [
-            'text'    => 'Multilevel',
-            'icon'    => 'share',
+            'text'    => 'Nomenclator',
+            'icon'    => 'cogs',
             'submenu' => [
                 [
-                    'text' => 'Level One',
-                    'url'  => '#',
+                    'text' => 'Tari',
+                    'url'  => 'countries',
                 ],
                 [
-                    'text'    => 'Level One',
+                    'text' => 'Grup furnizori',
+                    'url'  => 'supplier_group',
+                ],
+                [
+                    'text' => 'Status furnizori',
+                    'url'  => 'supplier_status',
+                ],
+                [
+                    'text'    => 'Level Two',
                     'url'     => '#',
                     'submenu' => [
                         [
-                            'text' => 'Level Two',
+                            'text' => 'Level Three',
                             'url'  => '#',
                         ],
                         [
-                            'text'    => 'Level Two',
+                            'text'    => 'Level Four',
                             'url'     => '#',
                             'submenu' => [
                                 [
-                                    'text' => 'Level Three',
+                                    'text' => 'Level Five',
                                     'url'  => '#',
                                 ],
                                 [
-                                    'text' => 'Level Three',
+                                    'text' => 'Level Six',
                                     'url'  => '#',
                                 ],
                             ],
@@ -163,7 +166,7 @@ return [
                     ],
                 ],
                 [
-                    'text' => 'Level One',
+                    'text' => 'Level Seven',
                     'url'  => '#',
                 ],
             ],
