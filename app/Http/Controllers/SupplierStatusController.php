@@ -24,4 +24,18 @@ class SupplierStatusController extends Controller
         }
         return view('supplier_status.index');
     }
+
+    public function store(SupplierStatus $supplierStatus)
+    {
+        $supplierStatus = auth()->user()->supplierStatusCreator()->create($this->validateRequest());
+        return redirect('supplier_status');
+    }
+
+    public function validateRequest()
+    {
+        return request()->validate([
+            'name' => 'required',
+            'name_en' => 'required',
+        ]);
+    }
 }

@@ -1,24 +1,22 @@
 @extends('adminlte::page')
 
 @section('content_header')
-    <h1 class="d-inline">Furnizori <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#supplierForm">Adauga furnizor</button></h1>
+    <h1>Date firma</h1>
 @stop
 
 @section('content')
     <div class="box">
       <div class="box-body">
-        <table class="table table-bordered table-hover dataTables" id="all-suppliers">
+        <table class="table table-bordered table-hover dataTables" id="company_info">
           <thead>
             <tr>
-              <th>Fibu</th>
               <th>Nume</th>
               <th>Cod Unic Inregistrare</th>
               <th>Nr. Registru Comert</th>
               <th>Adresa</th>
-              <th>Tara rezidenta</th>
-              <th>Grup</th>
-              <th>Status</th>
-              <th>Actiuni</th>
+              <th>Cont bancar</th>
+              <th>Banca</th>
+              <th>Editeaza</th>
             </tr>
           </thead>
         </table>
@@ -26,24 +24,20 @@
     </div>        
 @stop
 
-@include('suppliers.form')
-
 @section('js')
   <script>
     $(document).ready(function () {
-      $('#all-suppliers').DataTable({
+      $('#company_info').DataTable({
           processing: true,
           serverSide: true,
-          ajax: "{{ route('suppliers.index') }}",
+          ajax: "{{ route('info.index') }}",
           columns: [
-              {data: 'fibu', name: 'fibu'},
               {data: 'name', name: 'name'},
               {data: 'cui', name: 'cui'},
               {data: 'j', name: 'j'},
               {data: 'address', name: 'address'},
-              {data: 'country', name: 'country'},
-              {data: 'supplier_group', name: 'supplier_group'},
-              {data: 'supplier_status', name: 'supplier_status'},
+              {data: 'account_number', name: 'account_number'},
+              {data: 'bank', name: 'bank'},
               {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
       });

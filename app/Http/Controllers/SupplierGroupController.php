@@ -24,4 +24,18 @@ class SupplierGroupController extends Controller
         }
         return view('supplier_group.index');
     }
+
+    public function store(SupplierGroup $supplierGroup)
+    {
+        $supplierGroup = auth()->user()->supplierGroupCreator()->create($this->validateRequest());
+        return redirect('supplier_group');
+    }
+
+    public function validateRequest()
+    {
+        return request()->validate([
+            'name' => 'required',
+            'name_en' => 'required',
+        ]);
+    }
 }

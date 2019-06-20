@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'skin' => 'blue',
+    'skin' => 'yellow-light',
 
     /*
     |--------------------------------------------------------------------------
@@ -109,15 +109,35 @@ return [
 
     'menu' => [
         'MENIU PRINCIPAL',
+        // [
+        //     'text' => 'Blog',
+        //     'url'  => 'admin/blog',
+        //     'can'  => 'manage-blog',
+        // ],
         [
-            'text' => 'Blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
+            'text'        => 'Dashboard',
+            'url'         => '',
+            'icon'        => 'dashboard',
+        ],
+        [
+            'text'        => 'NIR-uri',
+            'url'         => '#',
+            'icon'        => 'list',
+        ],
+        [
+            'text'        => 'Facturi',
+            'url'         => '#',
+            'icon'        => 'file',
+        ],
+        [
+            'text'        => 'Deseuri',
+            'url'         => '#',
+            'icon'        => 'recycle',
         ],
         [
             'text'        => 'Furnizori',
             'url'         => 'suppliers',
-            'icon'        => 'list',
+            'icon'        => 'tree',
         ],
         'SETARI',
         [
@@ -129,6 +149,10 @@ return [
             'text'    => 'Nomenclator',
             'icon'    => 'cogs',
             'submenu' => [
+                [
+                    'text' => 'Date firma',
+                    'url'  => 'info',
+                ],
                 [
                     'text' => 'Tari',
                     'url'  => 'countries',
@@ -142,48 +166,37 @@ return [
                     'url'  => 'supplier_status',
                 ],
                 [
-                    'text'    => 'Level Two',
+                    'text'    => 'Deseuri',
                     'url'     => '#',
                     'submenu' => [
                         [
-                            'text' => 'Level Three',
+                            'text' => 'Grupa principala',
                             'url'  => '#',
                         ],
                         [
-                            'text'    => 'Level Four',
+                            'text'    => 'Subgrupa deseu',
                             'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'Level Five',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'Level Six',
-                                    'url'  => '#',
-                                ],
-                            ],
+                        ],[
+                            'text'    => 'Cantitati per furnizor',
+                            'url'     => '#',
                         ],
                     ],
                 ],
-                [
-                    'text' => 'Level Seven',
-                    'url'  => '#',
-                ],
             ],
         ],
-        'LABELS',
-        [
-            'text'       => 'Important',
-            'icon_color' => 'red',
-        ],
-        [
-            'text'       => 'Warning',
-            'icon_color' => 'yellow',
-        ],
-        [
-            'text'       => 'Information',
-            'icon_color' => 'aqua',
-        ],
+        // 'LABELS',
+        // [
+        //     'text'       => 'Important',
+        //     'icon_color' => 'red',
+        // ],
+        // [
+        //     'text'       => 'Warning',
+        //     'icon_color' => 'yellow',
+        // ],
+        // [
+        //     'text'       => 'Information',
+        //     'icon_color' => 'aqua',
+        // ],
     ],
 
     /*

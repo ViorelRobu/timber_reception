@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSupplierGroupTable extends Migration
+class CreateVehiclesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateSupplierGroupTable extends Migration
      */
     public function up()
     {
-        Schema::create('supplier_group', function (Blueprint $table) {
+        Schema::create('vehicles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('name_en');
+            $table->string('type');
+            $table->string('type_en');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
@@ -32,6 +32,6 @@ class CreateSupplierGroupTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('supplier_group');
+        Schema::dropIfExists('vehicles');
     }
 }

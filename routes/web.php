@@ -13,10 +13,15 @@
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/suppliers', 'SuppliersController@index')->name('suppliers.index');    
+    Route::get('/suppliers', 'SuppliersController@index')->name('suppliers.index'); 
+    Route::post('suppliers/add', 'SuppliersController@store');   
     Route::get('/countries', 'CountriesController@index')->name('countries.index');
-    Route::get('/supplier_group', 'SupplierGroupController@index')->name('supplier_group.index');    
+    Route::post('/countries/add', 'CountriesController@store');
+    Route::get('/supplier_group', 'SupplierGroupController@index')->name('supplier_group.index'); 
+    Route::post('/supplier_group/add', 'SupplierGroupController@store');   
     Route::get('/supplier_status', 'SupplierStatusController@index')->name('supplier_status.index');
+    Route::post('/supplier_status/add', 'SupplierStatusController@store'); 
+    Route::get('/info', 'CompanyInfoController@index')->name('info.index');
 });
 
 Auth::routes();

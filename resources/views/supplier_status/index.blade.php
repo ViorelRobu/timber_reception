@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 
 @section('content_header')
-    <h1>Status furnizori</h1>
+    <h1 class="d-inline">Status furnizori <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#supplierStatusForm">Creaza status</button></h1>
 @stop
 
 @section('content')
@@ -12,6 +12,7 @@
           <tr>
               <th>ID</th>
               <th>Denumire</th>
+              <th>Denumire engleza</th>
               <th>Actiuni</th>
           </tr>
         </thead>
@@ -19,6 +20,8 @@
     </div>
   </div>
 @stop
+
+@include('supplier_status.form')
 
 @section('js')
   <script>
@@ -30,6 +33,7 @@
           columns: [
               {data: 'id', name: 'id'},
               {data: 'name', name: 'name'},
+              {data: 'name_en', name: 'name_en'},
               {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
       });

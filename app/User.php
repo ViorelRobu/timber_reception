@@ -5,6 +5,10 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Countries;
+use App\SupplierGroup;
+use App\SupplierStatus;
+use App\Suppliers;
 
 class User extends Authenticatable
 {
@@ -36,4 +40,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function countriesCreator()
+    {
+        return $this->hasMany(Countries::class, 'user_id');
+    }
+
+    public function supplierGroupCreator()
+    {
+        return $this->hasMany(SupplierGroup::class, 'user_id');
+    }
+
+    public function supplierStatusCreator()
+    {
+        return $this->hasMany(SupplierStatus::class, 'user_id');
+    }
+
+    public function supplierCreator()
+    {
+        return $this->hasMany(Suppliers::class, 'user_id');
+    }
 }

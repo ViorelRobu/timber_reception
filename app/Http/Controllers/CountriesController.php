@@ -24,4 +24,18 @@ class CountriesController extends Controller
         }
         return view('countries.index');
     }
+
+    public function store(Countries $countries)
+    {
+        $countries = auth()->user()->countriesCreator()->create($this->validateRequest());
+        return redirect('countries');
+    }
+
+    public function validateRequest()
+    {
+        return request()->validate([
+            'name' => 'required',
+            'name_en' => 'required',
+        ]);
+    }
 }

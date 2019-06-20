@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Suppliers;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use App\Countries;
+use App\SupplierGroup;
+use App\SupplierStatus;
 
 class SuppliersController extends Controller
 {
@@ -28,6 +31,32 @@ class SuppliersController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('suppliers.index');
+
+        $countries = Countries::orderBy('name')->get();
+        $supplier_groups = SupplierGroup::orderBy('name')->get();
+        $supplier_statuses = SupplierStatus::orderBy('name')->get();
+
+        return view('suppliers.index', ['countries' => $countries, 'supplier_groups' => $supplier_groups, 'supplier_statuses' => $supplier_statuses]);
     }
+
+    public function store(Suppliers $suppliers)
+    {
+        $suppliers = auth()->user()->supplierCreator()->create($this->validateRequest());
+        return redirect('suppliers');
+    }
+
+    public function validateRequest()
+    {
+        return request()->validate([
+            'fibu' => 'required',
+            'name' => 'required',
+            'cui' => 'sometimes',
+            'j' => 'sometimes',
+            'address' => 'required',
+            'country_id' => 'required',
+            'supplier_group_id' => 'required',
+            'supplier_status_id' => 'required'
+        ]);
+    }
+
 }

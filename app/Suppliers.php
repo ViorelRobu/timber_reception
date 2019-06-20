@@ -9,6 +9,8 @@ use App\SupplierStatus;
 
 class Suppliers extends Model
 {
+    protected $guarded = [];
+    
     public function countryOfResidence()
     {
         return $this->belongsTo(Countries::class, 'country_id');
