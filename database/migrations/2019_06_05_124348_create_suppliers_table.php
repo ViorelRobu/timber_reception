@@ -15,7 +15,7 @@ class CreateSuppliersTable extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('fibu');
+            $table->integer('fibu')->unique();
             $table->string('name');
             $table->string('cui')->nullable();
             $table->string('j')->nullable();
