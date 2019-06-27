@@ -13,11 +13,12 @@
         <form action="/countries/add" method="POST">
             @method('POST')
             @csrf
+            <input type="hidden" name="id" id="id">
             <div class="form-group">
-                <input type="text" class="form-control" name="name" placeholder="Denumire tara" required>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Denumire tara" required>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" name="name_en" placeholder="Denumire tara EN" required>
+                <input type="text" class="form-control" id="name_en" name="name_en" placeholder="Denumire tara EN" required>
             </div>
       </div>
       <div class="modal-footer">

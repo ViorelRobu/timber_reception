@@ -16,7 +16,7 @@ class CountriesController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
 
-                    $edit = '<a href="#"><i class="fa fa-edit"></i></a>';
+                    $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#countriesForm"><i class="fa fa-edit"></i></a>';
                     return $edit;
                 })
                 ->rawColumns(['action'])
@@ -29,6 +29,24 @@ class CountriesController extends Controller
     {
         $countries = auth()->user()->countriesCreator()->create($this->validateRequest());
         return redirect('countries');
+    }
+
+    public function update(Countries $countries)
+    {
+        $countries->update($this->validateRequest());
+
+        return redirect('/countries');
+    }
+
+    public function fetchCountry(Request $request)
+    {
+        $country = Countries::findOrFail($request->id);
+        $output = [
+            'name' => $country->name,
+            'name_en' => $country->name_en
+        ];
+
+        return json_encode($output);
     }
 
     public function validateRequest()
