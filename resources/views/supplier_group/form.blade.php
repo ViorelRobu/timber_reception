@@ -14,10 +14,11 @@
             @method('POST')
             @csrf
             <div class="form-group">
-                <input type="text" class="form-control" name="name" placeholder="Denumire grup" required>
+                <input type="hidden" name="id" id="id">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Denumire grup" required>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" name="name_en" placeholder="Denumire grup EN" required>
+                <input type="text" class="form-control" id="name_en" name="name_en" placeholder="Denumire grup EN" required>
             </div>
       </div>
       <div class="modal-footer">

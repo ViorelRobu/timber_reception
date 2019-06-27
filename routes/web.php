@@ -19,8 +19,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/countries/fetch', 'CountriesController@fetchCountry')->name('countries.fetch');
     Route::post('/countries/add', 'CountriesController@store');
     Route::patch('/countries/{countries}/update', 'CountriesController@update');
-    Route::get('/supplier_group', 'SupplierGroupController@index')->name('supplier_group.index'); 
-    Route::post('/supplier_group/add', 'SupplierGroupController@store');   
+    Route::get('/supplier_group', 'SupplierGroupController@index')->name('supplier_group.index');
+    Route::get('supplier_group/fetch', 'SupplierGroupController@fetchSupplierGroup')->name('supplier_group.fetch');
+    Route::post('/supplier_group/add', 'SupplierGroupController@store');  
+    Route::patch('/supplier_group/{supplier_group}/update', 'SupplierGroupController@update'); 
     Route::get('/supplier_status', 'SupplierStatusController@index')->name('supplier_status.index');
     Route::post('/supplier_status/add', 'SupplierStatusController@store'); 
     Route::get('/info', 'CompanyInfoController@index')->name('info.index');

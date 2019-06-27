@@ -16,7 +16,7 @@ class SupplierGroupController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
 
-                    $edit = '<a href="#"><i class="fa fa-edit"></i></a>';
+                    $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#supplierGroupForm"><i class="fa fa-edit"></i></a>';
                     return $edit;
                 })
                 ->rawColumns(['action'])
@@ -29,6 +29,24 @@ class SupplierGroupController extends Controller
     {
         $supplierGroup = auth()->user()->supplierGroupCreator()->create($this->validateRequest());
         return redirect('supplier_group');
+    }
+
+    public function update(SupplierGroup $supplierGroup)
+    {
+        $supplierGroup->update($this->validateRequest());
+
+        return redirect('/supplier_group');
+    }
+
+    public function fetchSupplierGroup(Request $request)
+    {
+        $supplierGroup = SupplierGroup::findOrFail($request->id);
+        $output = [
+            'name' => $supplierGroup->name,
+            'name_en' => $supplierGroup->name_en
+        ];
+
+        return json_encode($output);
     }
 
     public function validateRequest()
