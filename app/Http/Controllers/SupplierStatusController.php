@@ -16,7 +16,7 @@ class SupplierStatusController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
 
-                    $edit = '<a href="#"><i class="fa fa-edit"></i></a>';
+                    $edit = '<a href="#" class="edit" id=' . $data->id . ' data-toggle="modal" data-target="#supplierStatusForm"><i class="fa fa-edit"></i></a>';
                     return $edit;
                 })
                 ->rawColumns(['action'])
@@ -29,6 +29,22 @@ class SupplierStatusController extends Controller
     {
         $supplierStatus = auth()->user()->supplierStatusCreator()->create($this->validateRequest());
         return redirect('supplier_status');
+    }
+
+    public function update(SupplierStatus $supplierStatus)
+    {
+        $supplierStatus->update($this->validateRequest());
+        return redirect('/supplier_status');
+    }
+
+    public function fetchSupplierStatus(Request $request)
+    {
+        $supplierStatus = SupplierStatus::findOrFail($request->id);
+        $output = [
+            'name' => $supplierStatus->name,
+            'name_en' => $supplierStatus->name_en
+        ];
+        return json_encode($output);
     }
 
     public function validateRequest()

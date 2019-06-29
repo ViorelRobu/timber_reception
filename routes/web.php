@@ -24,7 +24,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/supplier_group/add', 'SupplierGroupController@store');  
     Route::patch('/supplier_group/{supplier_group}/update', 'SupplierGroupController@update'); 
     Route::get('/supplier_status', 'SupplierStatusController@index')->name('supplier_status.index');
+    Route::get('/supplier_status/fetch', 'SupplierStatusController@fetchSupplierStatus')->name('supplier_status.fetch');
     Route::post('/supplier_status/add', 'SupplierStatusController@store'); 
+    Route::patch('/supplier_status/{supplier_status}/update', 'SupplierStatusController@update');
     Route::get('/info', 'CompanyInfoController@index')->name('info.index');
 });
 
