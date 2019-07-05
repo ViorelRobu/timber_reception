@@ -41,8 +41,10 @@
 
     $('#supplierStatusForm').on('hidden.bs.modal', function(){
       $(this).find('form')[0].reset();
+      $('form').attr('action', '/supplier_status/add');
       $('.modal-title').text('Adauga status');
       $('#id').val('');
+      $(document).off('submit');
     });
 
     $(document).on('click', '.edit', function () {

@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 
 @section('content_header')
-    <h1 class="d-inline">Lista tari <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#countriesForm">Adauga tara</button></h1>
+    <h1 class="d-inline">Lista tari <button id="addCountry" class="btn btn-primary pull-right" data-toggle="modal" data-target="#countriesForm">Adauga tara</button></h1>
 @stop
 
 @section('content')
@@ -39,13 +39,15 @@
       });
     });
 
-    $('#countriesForm').on('hidden.bs.modal', function(){
+    $('#countriesForm').on('hidden.bs.modal', function() {
       $(this).find('form')[0].reset();
+      $('form').attr('action', '/countries/add');
       $('.modal-title').text('Adauga tara');
       $('#id').val('');
+      $(document).off('submit');
     });
 
-    $(document).on('click', '.edit', function () {
+    $(document).on('click', '.edit', function() {
       var id = $(this).attr("id");
       $.ajax({
         url: "{{ route('countries.fetch') }}",
