@@ -13,21 +13,31 @@
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/suppliers', 'SuppliersController@index')->name('suppliers.index'); 
-    Route::post('suppliers/add', 'SuppliersController@store');   
-    Route::get('/countries', 'CountriesController@index')->name('countries.index');
-    Route::get('/countries/fetch', 'CountriesController@fetchCountry')->name('countries.fetch');
-    Route::post('/countries/add', 'CountriesController@store');
-    Route::patch('/countries/{countries}/update', 'CountriesController@update');
-    Route::get('/supplier_group', 'SupplierGroupController@index')->name('supplier_group.index');
-    Route::get('supplier_group/fetch', 'SupplierGroupController@fetchSupplierGroup')->name('supplier_group.fetch');
-    Route::post('/supplier_group/add', 'SupplierGroupController@store');  
-    Route::patch('/supplier_group/{supplier_group}/update', 'SupplierGroupController@update'); 
-    Route::get('/supplier_status', 'SupplierStatusController@index')->name('supplier_status.index');
-    Route::get('/supplier_status/fetch', 'SupplierStatusController@fetchSupplierStatus')->name('supplier_status.fetch');
-    Route::post('/supplier_status/add', 'SupplierStatusController@store'); 
-    Route::patch('/supplier_status/{supplier_status}/update', 'SupplierStatusController@update');
-    Route::get('/info', 'CompanyInfoController@index')->name('info.index');
+    Route::prefix('suppliers')->group(function() {
+        Route::get('/', 'SuppliersController@index')->name('suppliers.index');
+        Route::post('/add', 'SuppliersController@store');   
+    });
+    Route::prefix('countries')->group(function() {
+        Route::get('/', 'CountriesController@index')->name('countries.index');
+        Route::get('/fetch', 'CountriesController@fetchCountry')->name('countries.fetch');
+        Route::post('/add', 'CountriesController@store');
+        Route::patch('/{countries}/update', 'CountriesController@update');
+    });
+    Route::prefix('supplier_group')->group(function() {
+        Route::get('/', 'SupplierGroupController@index')->name('supplier_group.index');
+        Route::get('/fetch', 'SupplierGroupController@fetchSupplierGroup')->name('supplier_group.fetch');
+        Route::post('/add', 'SupplierGroupController@store');
+        Route::patch('/{supplier_group}/update', 'SupplierGroupController@update'); 
+    });
+    Route::prefix('supplier_status')->group(function() {
+        Route::get('/', 'SupplierStatusController@index')->name('supplier_status.index');
+        Route::get('/fetch', 'SupplierStatusController@fetchSupplierStatus')->name('supplier_status.fetch');
+        Route::post('/add', 'SupplierStatusController@store');
+        Route::patch('/{supplier_status}/update', 'SupplierStatusController@update');
+    });
+    Route::prefix('info')->group(function() {
+        Route::get('/', 'CompanyInfoController@index')->name('info.index');
+    });
 });
 
 Auth::routes();
