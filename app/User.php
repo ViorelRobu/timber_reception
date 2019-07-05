@@ -9,6 +9,7 @@ use App\Countries;
 use App\SupplierGroup;
 use App\SupplierStatus;
 use App\Suppliers;
+use App\CompanyInfo;
 
 class User extends Authenticatable
 {
@@ -59,5 +60,10 @@ class User extends Authenticatable
     public function supplierCreator()
     {
         return $this->hasMany(Suppliers::class, 'user_id');
+    }
+
+    public function companyCreator()
+    {
+        return $this->hasMany(CompanyInfo::class, 'user_id');
     }
 }

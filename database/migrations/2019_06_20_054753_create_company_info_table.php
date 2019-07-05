@@ -15,9 +15,9 @@ class CreateCompanyInfoTable extends Migration
     {
         Schema::create('company_info', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('cui');
-            $table->string('j');
+            $table->string('j')->unique();
             $table->string('address');
             $table->string('account_number');
             $table->string('bank');

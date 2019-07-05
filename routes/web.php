@@ -35,8 +35,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/add', 'SupplierStatusController@store');
         Route::patch('/{supplier_status}/update', 'SupplierStatusController@update');
     });
-    Route::prefix('info')->group(function() {
-        Route::get('/', 'CompanyInfoController@index')->name('info.index');
+    Route::prefix('companies')->group(function() {
+        Route::get('/', 'CompanyInfoController@index')->name('companies.index');
+        Route::post('/add', 'CompanyInfoController@store');
     });
 });
 

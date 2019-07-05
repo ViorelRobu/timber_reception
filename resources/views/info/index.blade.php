@@ -1,7 +1,9 @@
 @extends('adminlte::page')
 
 @section('content_header')
-    <h1>Date firma</h1>
+    <h1>Date firma
+      <button id="addCountry" class="btn btn-primary pull-right" data-toggle="modal" data-target="#companyForm">Adauga firma</button>
+    </h1>
 @stop
 
 @section('content')
@@ -24,13 +26,15 @@
     </div>        
 @stop
 
+@include('info.form')
+
 @section('js')
   <script>
     $(document).ready(function () {
       $('#company_info').DataTable({
           processing: true,
           serverSide: true,
-          ajax: "{{ route('info.index') }}",
+          ajax: "{{ route('companies.index') }}",
           columns: [
               {data: 'name', name: 'name'},
               {data: 'cui', name: 'cui'},

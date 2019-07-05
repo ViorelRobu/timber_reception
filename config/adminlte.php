@@ -151,7 +151,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Date firma',
-                    'url'  => 'info',
+                    'url'  => 'companies',
                 ],
                 [
                     'text' => 'Tari',

@@ -53,4 +53,22 @@ class CompanyInfoController extends Controller
     {
         //
     }
+
+    public function store(CompanyInfo $companyInfo)
+    {
+        $companyInfo = auth()->user()->companyCreator()->create($this->validateRequest());
+        return redirect('companies');
+    }
+
+    public function validateRequest()
+    {
+        return request()->validate([
+            'name' => 'required',
+            'cui' => 'required',
+            'j' => 'required',
+            'address' => 'required',
+            'account_number' => 'required',
+            'bank' => 'required',
+        ]);
+    }
 }
