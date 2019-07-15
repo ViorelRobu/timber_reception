@@ -37,7 +37,9 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::prefix('companies')->group(function() {
         Route::get('/', 'CompanyInfoController@index')->name('companies.index');
+        Route::get('/fetch', 'CompanyInfoController@fetchCompanyInfo')->name('companies.fetch');
         Route::post('/add', 'CompanyInfoController@store');
+        Route::patch('/{company_info}/update', 'CompanyInfoController@update');
     });
 });
 

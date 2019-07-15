@@ -21,7 +21,7 @@ class CompanyInfoController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
 
-                    $edit = '<a href="#"><i class="fa fa-edit"></i></a>';
+                    $edit = '<a class="edit" href="#" id="' . $data->id . '" data-toggle="modal" data-target="#companyForm"><i class="fa fa-edit"></i></a>';
                     return $edit;
                 })
                 ->rawColumns(['action'])
@@ -32,26 +32,33 @@ class CompanyInfoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\CompanyInfo  $companyInfo
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CompanyInfo $companyInfo)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\CompanyInfo  $companyInfo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CompanyInfo $companyInfo)
+    public function update(CompanyInfo $companyInfo)
     {
-        //
+        // dd($this->validateRequest());
+        $companyInfo->update($this->validateRequest());
+
+        return redirect('/companies');
+    }
+
+    public function fetchCompanyInfo(Request $request)
+    {
+        $company = CompanyInfo::findOrFail($request->id);
+        $output = [
+            'name' => $company->name,
+            'cui' => $company->cui,
+            'j' => $company->j,
+            'address' => $company->address,
+            'account_number' => $company->account_number,
+            'bank' => $company->bank
+        ];
+
+        return json_encode($output);
     }
 
     public function store(CompanyInfo $companyInfo)
