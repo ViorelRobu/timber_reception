@@ -40,6 +40,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/fetch', 'CompanyInfoController@fetchCompanyInfo')->name('companies.fetch');
         Route::post('/add', 'CompanyInfoController@store');
         Route::patch('/{company_info}/update', 'CompanyInfoController@update');
+        Route::prefix('assign')->group(function() {
+            Route::get('/', 'CompanyAssignmentsController@index')->name('user_assignment.index');
+            Route::post('/add', 'CompanyAssignmentsController@store');
+        });
     });
 });
 

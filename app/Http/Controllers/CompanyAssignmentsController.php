@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\CompanyAssignment;
 use Illuminate\Http\Request;
+use App\CompanyInfo;
+use App\User;
+use Illuminate\Support\Facades\DB;
 
 class CompanyAssignmentsController extends Controller
 {
@@ -12,19 +15,26 @@ class CompanyAssignmentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
+        if ($request->ajax()) {
+            $table = DB::table('company_assignment')->join('users', 'company_assignment.user_id', '=', 'users.id')
+                    ->join('company_info', 'company_assignment.company_id', '=', 'company_info.id')
+                    ->select(['company_assignment.id as id', 'users.name as user', 'company_info.name as company']);
+            return DataTables::of($table)
+                ->addIndexColumn()
+                ->addColumn('action', function ($table) {
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+                    $edit = '<a class="edit" href="#" id="' . $table->id . '" data-toggle="modal" data-target="#companyForm"><i class="fa fa-edit"></i></a>';
+                    return $edit;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        $users = User::orderBy('name')->get();
+        $companies = CompanyInfo::orderBy('name')->get();
+        return view('company_assignment.index', compact(['users', 'companies']));
     }
 
     /**
@@ -33,31 +43,10 @@ class CompanyAssignmentsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CompanyAssignment $companyAssignment)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\CompanyAssignment  $companyAssignment
-     * @return \Illuminate\Http\Response
-     */
-    public function show(CompanyAssignment $companyAssignment)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\CompanyAssignment  $companyAssignment
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CompanyAssignment $companyAssignment)
-    {
-        //
+        $companyAssignment->create($this->validateRequest());
+        return redirect('companies/assign');
     }
 
     /**
@@ -72,14 +61,16 @@ class CompanyAssignmentsController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\CompanyAssignment  $companyAssignment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(CompanyAssignment $companyAssignment)
+    public function validateRequest()
     {
-        //
+        $error_messages = [
+            'user_id.required' => 'Va rog selectati utilizatorul!',
+            'company_id.required' => 'Va rog selectati compania!'
+        ];
+        
+        return request()->validate([
+            'user_id' => 'required',
+            'company_id' => 'required'
+        ], $error_messages);
     }
 }

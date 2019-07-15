@@ -22,7 +22,6 @@ class SuppliersController extends Controller
                 'suppliers.address as address', 'countries.name as country', 'supplier_group.name as supplier_group', 
                 'supplier_status.name as supplier_status']);
 
-            $data = Suppliers::latest()->get();
             return DataTables::of($suppliers)
                 ->addColumn('action', function () {
                     $edit = '<a href="#"><i class="fa fa-edit"></i></a>';
