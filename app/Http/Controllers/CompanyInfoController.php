@@ -69,6 +69,15 @@ class CompanyInfoController extends Controller
 
     public function validateRequest()
     {
+        $error_messages = [
+            'name.required' => 'Va rog completati denumirea firmei!',
+            'cui.required' => 'Va rog completati Codul Unic de Inregistrare!',
+            'j.required' => 'Va rog completati Numarul din Registrul Comertului!',
+            'address.required' => 'Va rog completati adresa!',
+            'account_number.required' => 'Va rog completati numarul contului!',
+            'bank.required' => 'Va rog specificati banca la care aveti deschis contul!',
+        ];
+
         return request()->validate([
             'name' => 'required',
             'cui' => 'required',
@@ -76,6 +85,6 @@ class CompanyInfoController extends Controller
             'address' => 'required',
             'account_number' => 'required',
             'bank' => 'required',
-        ]);
+        ], $error_messages);
     }
 }

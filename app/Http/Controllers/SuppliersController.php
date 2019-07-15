@@ -47,6 +47,16 @@ class SuppliersController extends Controller
 
     public function validateRequest()
     {
+        $error_messages = [
+            'fibu.required' => 'Campul FIBU trebuie sa fie completat!',
+            'name.required' => 'Va rog completati numele furnizorului!',
+            'cui.sometimes' => 'Codul unic de inregistrare este incorect!',
+            'j.sometimes' => 'Numarul de inregistrare in registrul comertului este incorect!',
+            'address.required' => 'Va rog completati adresa furnizorului!',
+            'country_id.required' => 'Va rog selectati tara furnizorului!',
+            'supplier_group_id.required' => 'Va rog selectati grupul furnizorului!',
+            'supplier_status_id.required' => 'Va rog selectati statusul furnizorului!'
+        ];
         return request()->validate([
             'fibu' => 'required',
             'name' => 'required',
@@ -56,7 +66,7 @@ class SuppliersController extends Controller
             'country_id' => 'required',
             'supplier_group_id' => 'required',
             'supplier_status_id' => 'required'
-        ]);
+        ], $error_messages);
     }
 
 }

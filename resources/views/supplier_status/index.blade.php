@@ -5,6 +5,17 @@
 @stop
 
 @section('content')
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
   <div class="box">
     <div class="box-body">
       <table id="supplier_status" class="table table-bordered table-hover">

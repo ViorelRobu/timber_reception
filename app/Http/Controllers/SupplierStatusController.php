@@ -49,9 +49,13 @@ class SupplierStatusController extends Controller
 
     public function validateRequest()
     {
+        $error_messages = [
+            'name.required' => 'Denumirea este necesara!',
+            'name_en.required' => 'Va rog completati denumirea in limba engleza'
+        ];
         return request()->validate([
             'name' => 'required',
             'name_en' => 'required',
-        ]);
+        ], $error_messages);
     }
 }
