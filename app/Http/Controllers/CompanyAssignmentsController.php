@@ -26,8 +26,8 @@ class CompanyAssignmentsController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($table) {
 
-                    $edit = '<a class="edit" href="#" id="' . $table->id . '" data-toggle="modal" data-target="#userAssginmentForm"><i class="fa fa-edit"></i></a>';
-                    return $edit;
+                    $delete = '<a class="delete" id="' . $table->id . '" data-toggle="modal" data-target="#deleteAccessRights"><i class="fa fa-trash"></i></a>';
+                    return $delete;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -51,15 +51,15 @@ class CompanyAssignmentsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Delete a stored resource
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CompanyAssignment  $companyAssignment
+     * @param  \Illuminate\Http\CompanyAssignment  $companyAssignment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CompanyAssignment $companyAssignment)
+    public function destroy(Request $request)
     {
-        //
+        CompanyAssignment::destroy($request->delete_id);
+        return redirect('/companies/assign');
     }
 
     public function validateRequest()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CompanyInfo;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\CompanyAssignment;
 
 class CompanyInfoController extends Controller
 {
@@ -29,6 +30,27 @@ class CompanyInfoController extends Controller
         }
 
         return view('info.index');
+    }
+
+    public function loadUnassignedCompanies(Request $request)
+    {
+        if($request->user_id) {
+            // get all assigned companies
+            $assignedCompanies = CompanyAssignment::where('user_id', $request->user_id)->pluck('company_id')->toArray();
+            // load the list for the unassigned companies
+            $unassignedCompanies = CompanyInfo::whereNotIn('id', $assignedCompanies)->get();
+            // send the response to the request
+            $response = '';
+            foreach ($unassignedCompanies as $company) {
+                $response .= '<option value="' . $company->id . '">' . $company->name . '</option>';
+            }
+            if (!$response) {
+                $response = '<option value="">---Nu exista companii la care utilizatorul selectat sa nu aiba drepturi de acces!---</option>';
+            }
+            return response()->json(['response' => $response]);
+        } else {
+            return false;
+        }
     }
 
     /**

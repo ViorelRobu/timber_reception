@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('assign')->group(function() {
             Route::get('/', 'CompanyAssignmentsController@index')->name('user_assignment.index');
             Route::post('/add', 'CompanyAssignmentsController@store');
+            Route::delete('/delete', 'CompanyAssignmentsController@destroy');
+            Route::get('/loadCompanies', 'CompanyInfoController@loadUnassignedCompanies')->name('loadUnassignedCompanies');
         });
     });
 });

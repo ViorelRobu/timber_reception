@@ -25,9 +25,6 @@
             <div class="form-group">
                 <select class="custom-select form-control" id="company_id" name="company_id" required>
                     <option value="" selected>--- Alege compania ---</option>
-                    @foreach ($companies as $company)
-                        <option value="{{ $company->id }}">{{ $company->name }}</option>
-                    @endforeach
                 </select>
             </div>
       </div>

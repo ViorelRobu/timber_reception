@@ -184,6 +184,17 @@ return [
                 ],
             ],
         ],
+        [
+            'text'    => 'Management utilizatori',
+            'icon'    => 'users',
+            'submenu' => [
+                [
+                    'text' => 'Drepturi acces companie',
+                    'url'  => '/companies/assign/',
+                    'icon' => 'check',
+                ]
+            ]
+        ]
         // 'LABELS',
         // [
         //     'text'       => 'Important',

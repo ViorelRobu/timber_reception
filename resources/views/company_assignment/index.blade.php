@@ -33,9 +33,11 @@
 @stop
 
 @include('company_assignment.form')
+@include('company_assignment.delete')
 
 @section('js')
   <script>
+    // load DataTables
     $(document).ready(function () {
       $('#userAssignments').DataTable({
           processing: true,
@@ -49,37 +51,30 @@
           ]
       });
     });
+    // Load the unassigned companies for the user
+    $('#user_id').change(function() {
+      $.ajax({
+        url: "{{ route('loadUnassignedCompanies') }}?user_id=" + $(this).val(),
+        method: 'GET',
+        success: function(data) {
+            $('#company_id').html(data.response);
+        }
+    });
+    });
+    // reset the form
+    $('#userAssginmentForm').on('hidden.bs.modal', function() {
+      $(this).find('form')[0].reset();
+      $('form').attr('action', '/companies/assign/add');
+      $('.modal-title').text('Drepturi de acces');
+      $('#id').val('');
+      $(document).off('submit');
+    });
 
-    // $('#countriesForm').on('hidden.bs.modal', function() {
-    //   $(this).find('form')[0].reset();
-    //   $('form').attr('action', '/countries/add');
-    //   $('.modal-title').text('Adauga tara');
-    //   $('#id').val('');
-    //   $(document).off('submit');
-    // });
+    $(document).on('click', '.delete', function() {
+      const id = $(this).attr("id");
+      $('#delete_id').val(id);
+    });
 
-    // $(document).on('click', '.edit', function() {
-    //   var id = $(this).attr("id");
-    //   $.ajax({
-    //     url: "{{ route('countries.fetch') }}",
-    //     method: 'get',
-    //     data: {id:id},
-    //     dataType:'json',
-    //     success: function(data)
-    //         {
-    //             $('.modal-title').text('Editeaza tara');
-    //             $('#id').val(id);
-    //             $('#name').val(data.name);
-    //             $('#name_en').val(data.name_en);
-    //         }
-    //   });
 
-    //   $(document).on('submit', function() {
-    //     var id = $('#id').val();
-    //     $('form').attr('action', 'countries/' + id + '/update');
-    //     $("input[name='_method']").val('PATCH');
-    //   });
-
-    // });
   </script>
 @endsection
