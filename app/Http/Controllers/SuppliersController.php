@@ -20,7 +20,7 @@ class SuppliersController extends Controller
                 ->join('supplier_status', 'suppliers.supplier_status_id', '=', 'supplier_status.id')
                 ->select(['suppliers.id as id', 'suppliers.fibu as fibu', 'suppliers.name as name', 'suppliers.cui as cui', 'suppliers.j as j', 
                 'suppliers.address as address', 'countries.name as country', 'supplier_group.name as supplier_group', 
-                'supplier_status.name as supplier_status']);
+                'supplier_status.name as supplier_status'])->get();
 
             return DataTables::of($suppliers)
                 ->addColumn('action', function () {

@@ -16,7 +16,7 @@
             <input type="hidden" name="id" id="id">
             <div class="form-group">
                 <select class="custom-select form-control" id="user_id" name="user_id" required>
-                    <option selected>--- Alege utilizatorul ---</option>
+                    <option value="" selected>--- Alege utilizatorul ---</option>
                     @foreach ($users as $user)
                         <option value="{{ $user->id }}">{{ $user->name }}</option>
                     @endforeach
@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <select class="custom-select form-control" id="company_id" name="company_id" required>
-                    <option selected>--- Alege compania ---</option>
+                    <option value="" selected>--- Alege compania ---</option>
                     @foreach ($companies as $company)
                         <option value="{{ $company->id }}">{{ $company->name }}</option>
                     @endforeach

@@ -30,7 +30,7 @@
             </div>
             <div class="form-group">
                 <select class="custom-select form-control" name="country_id" required>
-                    <option selected>--- Alege tara de rezidenta ---</option>
+                    <option value="" selected>--- Alege tara de rezidenta ---</option>
                     @foreach ($countries as $country)
                         <option value="{{ $country->id }}">{{ $country->name }}</option>
                     @endforeach
@@ -38,7 +38,7 @@
             </div>
             <div class="form-group">
                 <select class="custom-select form-control" name="supplier_group_id" required>
-                    <option selected>--- Alege grupul furnizorului ---</option>
+                    <option value="" selected>--- Alege grupul furnizorului ---</option>
                     @foreach ($supplier_groups as $supplier_group)
                         <option value="{{ $supplier_group->id }}">{{ $supplier_group->name }}</option>
                     @endforeach
@@ -46,7 +46,7 @@
             </div>
             <div class="form-group">
                 <select class="custom-select form-control" name="supplier_status_id" required>
-                    <option selected>--- Alege statusul furnizorului ---</option>
+                    <option value="" selected>--- Alege statusul furnizorului ---</option>
                     @foreach ($supplier_statuses as $supplier_status)
                         <option value="{{ $supplier_status->id }}">{{ $supplier_status->name }}</option>
                     @endforeach

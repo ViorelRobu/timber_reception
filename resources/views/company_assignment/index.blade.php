@@ -36,19 +36,19 @@
 
 @section('js')
   <script>
-    // $(document).ready(function () {
-    //   $('#userAssignments').DataTable({
-    //       processing: true,
-    //       serverSide: true,
-    //       ajax: "{{ route('user_assignment.index') }}",
-    //       columns: [
-    //           {data: 'id', name: 'id'},
-    //           {data: 'user_id', name: 'user'},
-    //           {data: 'company_id', name: 'company'},
-    //           {data: 'action', name: 'action', orderable: false, searchable: false},
-    //       ]
-    //   });
-    // });
+    $(document).ready(function () {
+      $('#userAssignments').DataTable({
+          processing: true,
+          serverSide: true,
+          ajax: "{{ route('user_assignment.index') }}",
+          columns: [
+              {data: 'id', name: 'id'},
+              {data: 'user', name: 'user'},
+              {data: 'company', name: 'company'},
+              {data: 'action', name: 'action', orderable: false, searchable: false},
+          ]
+      });
+    });
 
     // $('#countriesForm').on('hidden.bs.modal', function() {
     //   $(this).find('form')[0].reset();

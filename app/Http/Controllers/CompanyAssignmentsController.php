@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\CompanyInfo;
 use App\User;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class CompanyAssignmentsController extends Controller
 {
@@ -20,12 +21,12 @@ class CompanyAssignmentsController extends Controller
         if ($request->ajax()) {
             $table = DB::table('company_assignment')->join('users', 'company_assignment.user_id', '=', 'users.id')
                     ->join('company_info', 'company_assignment.company_id', '=', 'company_info.id')
-                    ->select(['company_assignment.id as id', 'users.name as user', 'company_info.name as company']);
+                    ->select(['company_assignment.id as id', 'users.name as user', 'company_info.name as company'])->get();
             return DataTables::of($table)
                 ->addIndexColumn()
                 ->addColumn('action', function ($table) {
 
-                    $edit = '<a class="edit" href="#" id="' . $table->id . '" data-toggle="modal" data-target="#companyForm"><i class="fa fa-edit"></i></a>';
+                    $edit = '<a class="edit" href="#" id="' . $table->id . '" data-toggle="modal" data-target="#userAssginmentForm"><i class="fa fa-edit"></i></a>';
                     return $edit;
                 })
                 ->rawColumns(['action'])
