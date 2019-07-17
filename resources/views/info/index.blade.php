@@ -39,6 +39,10 @@
 
 @include('info.form')
 
+@section('footer')
+    @include('footer')
+@endsection
+
 @section('js')
   <script>
     $(document).ready(function () {

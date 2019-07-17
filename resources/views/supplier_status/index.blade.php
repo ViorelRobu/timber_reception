@@ -34,6 +34,10 @@
 
 @include('supplier_status.form')
 
+@section('footer')
+    @include('footer')
+@endsection
+
 @section('js')
   <script>
     $(document).ready(function () {

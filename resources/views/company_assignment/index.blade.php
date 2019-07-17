@@ -35,6 +35,10 @@
 @include('company_assignment.form')
 @include('company_assignment.delete')
 
+@section('footer')
+    @include('footer')
+@endsection
+
 @section('js')
   <script>
     // load DataTables
