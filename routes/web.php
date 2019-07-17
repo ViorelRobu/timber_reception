@@ -11,8 +11,14 @@
 |
 */
 
+// to do - implement middleware instead of gate for company_was_selected
+
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/', 'HomeController@index')->name('home');
+
+    Route::get('/', 'CompanySelectorController@index');
+    Route::get('/set_company', 'CompanySelectorController@setCompany');
+
+    Route::get('/dashboard', 'HomeController@index')->name('home');
     Route::prefix('suppliers')->group(function() {
         Route::get('/', 'SuppliersController@index')->name('suppliers.index');
         Route::post('/add', 'SuppliersController@store');   

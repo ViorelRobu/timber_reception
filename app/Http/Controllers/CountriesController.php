@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Countries;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Gate;
 
 class CountriesController extends Controller
 {
@@ -22,7 +23,11 @@ class CountriesController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('countries.index');
+        if (Gate::allows('company_was_selected')) {
+            return view('countries.index');
+        } else {
+            return redirect('/');
+        }
     }
 
     public function store(Countries $countries)

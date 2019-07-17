@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\SupplierStatus;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Gate;
 
 class SupplierStatusController extends Controller
 {
@@ -22,7 +23,11 @@ class SupplierStatusController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('supplier_status.index');
+        if (Gate::allows('company_was_selected')) {
+            return view('supplier_status.index');
+        } else {
+            return redirect('/');
+        }
     }
 
     public function store(SupplierStatus $supplierStatus)

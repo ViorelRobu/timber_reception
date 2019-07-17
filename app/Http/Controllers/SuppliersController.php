@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Countries;
 use App\SupplierGroup;
 use App\SupplierStatus;
+use Illuminate\Support\Facades\Gate;
 
 class SuppliersController extends Controller
 {
@@ -35,7 +36,12 @@ class SuppliersController extends Controller
         $supplier_groups = SupplierGroup::orderBy('name')->get();
         $supplier_statuses = SupplierStatus::orderBy('name')->get();
 
-        return view('suppliers.index', ['countries' => $countries, 'supplier_groups' => $supplier_groups, 'supplier_statuses' => $supplier_statuses]);
+        if (Gate::allows('company_was_selected')) {
+            return view('suppliers.index', ['countries' => $countries, 'supplier_groups' => $supplier_groups, 'supplier_statuses' => $supplier_statuses]);
+        } else {
+            return redirect('/');
+        }
+        
     }
 
     public function store(Suppliers $suppliers)

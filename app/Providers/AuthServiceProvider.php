@@ -25,6 +25,11 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('company_was_selected', function() {
+            if (request()->session()->get('company_was_selected')) {
+                return true;
+            }
+                return false;
+        });
     }
 }

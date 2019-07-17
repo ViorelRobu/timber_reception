@@ -6,6 +6,7 @@ use App\CompanyInfo;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\CompanyAssignment;
+use Illuminate\Support\Facades\Gate;
 
 class CompanyInfoController extends Controller
 {
@@ -29,7 +30,11 @@ class CompanyInfoController extends Controller
                 ->make(true);
         }
 
-        return view('info.index');
+        if (Gate::allows('company_was_selected')) {
+            return view('info.index');
+        } else {
+            return redirect('/');
+        }
     }
 
     public function loadUnassignedCompanies(Request $request)
