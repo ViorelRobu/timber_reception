@@ -116,12 +116,12 @@ return [
         // ],
         [
             'text'        => 'Dashboard',
-            'url'         => '',
+            'url'         => 'dashboard',
             'icon'        => 'dashboard',
         ],
         [
             'text'        => 'NIR-uri',
-            'url'         => '#',
+            'url'         => 'nir',
             'icon'        => 'list',
         ],
         [
@@ -156,6 +156,14 @@ return [
                 [
                     'text' => 'Tari',
                     'url'  => 'countries',
+                ],
+                [
+                    'text' => 'Mijloace de transport',
+                    'url'  => 'vehicles',
+                ],
+                [
+                    'text' => 'Certificari',
+                    'url'  => 'certifications',
                 ],
                 [
                     'text' => 'Grup furnizori',

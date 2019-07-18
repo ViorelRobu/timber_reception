@@ -52,6 +52,21 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('/loadCompanies', 'CompanyInfoController@loadUnassignedCompanies')->name('loadUnassignedCompanies');
             });
         });
+        Route::prefix('vehicles')->group(function() {
+            Route::get('/', 'VehiclesController@index')->name('vehicles.index');
+            Route::get('/fetch', 'VehiclesController@fetchVehicle')->name('vehicles.fetch');
+            Route::post('/add', 'VehiclesController@store');
+            Route::patch('/{vechiles}/update', 'VehiclesController@update');
+        });
+        Route::prefix('certifications')->group(function () {
+            Route::get('/', 'CertificationsController@index')->name('certifications.index');
+            Route::get('/fetch', 'CertificationsController@fetchCertifications')->name('certifications.fetch');
+            Route::post('/add', 'CertificationsController@store');
+            Route::patch('/{certifications}/update', 'CertificationsController@update');
+        });
+        Route::prefix('nir')->group(function () {
+            Route::get('/', 'NIRController@index')->name('nir.index');
+        });
     });
 });
 

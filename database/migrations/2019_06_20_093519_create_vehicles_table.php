@@ -15,8 +15,8 @@ class CreateVehiclesTable extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('type');
-            $table->string('type_en');
+            $table->string('name');
+            $table->string('name_en');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();

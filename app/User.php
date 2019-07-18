@@ -10,6 +10,9 @@ use App\SupplierGroup;
 use App\SupplierStatus;
 use App\Suppliers;
 use App\CompanyInfo;
+use App\Vehicle;
+use App\Certification;
+use App\NIR;
 
 class User extends Authenticatable
 {
@@ -65,5 +68,20 @@ class User extends Authenticatable
     public function companyCreator()
     {
         return $this->hasMany(CompanyInfo::class, 'user_id');
+    }
+
+    public function vehicleCreator()
+    {
+        return $this->hasMany(Vehicle::class, 'user_id');
+    }
+
+    public function certificationCreator()
+    {
+        return $this->hasMany(Certification::class, 'user_id');
+    }
+
+    public function nirCreator()
+    {
+        return $this->hasMany(NIR::class, 'user_id');
     }
 }
