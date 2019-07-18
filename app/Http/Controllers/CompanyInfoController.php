@@ -29,12 +29,7 @@ class CompanyInfoController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-
-        if (Gate::allows('company_was_selected')) {
-            return view('info.index');
-        } else {
-            return redirect('/');
-        }
+        return view('info.index');
     }
 
     public function loadUnassignedCompanies(Request $request)

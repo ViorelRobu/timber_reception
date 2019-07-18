@@ -25,10 +25,6 @@ class HomeController extends Controller
     public function index()
     {
         $company_name = CompanyInfo::where('id', session()->get('company_was_selected'))->pluck('name');
-        if (Gate::allows('company_was_selected')) {
-            return view('home', ['company_name' => $company_name]);
-        } else {
-            return redirect('/');
-        }
+        return view('home', ['company_name' => $company_name]);
     }
 }

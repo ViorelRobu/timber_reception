@@ -36,11 +36,7 @@ class CompanyAssignmentsController extends Controller
 
         $users = User::orderBy('name')->get();
         $companies = CompanyInfo::orderBy('name')->get();
-        if (Gate::allows('company_was_selected')) {
-            return view('company_assignment.index', compact(['users', 'companies']));
-        } else {
-            return redirect('/');
-        }
+        return view('company_assignment.index', compact(['users', 'companies']));
     }
 
     /**

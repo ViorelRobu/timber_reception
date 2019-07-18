@@ -23,11 +23,7 @@ class CountriesController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        if (Gate::allows('company_was_selected')) {
-            return view('countries.index');
-        } else {
-            return redirect('/');
-        }
+        return view('countries.index');
     }
 
     public function store(Countries $countries)

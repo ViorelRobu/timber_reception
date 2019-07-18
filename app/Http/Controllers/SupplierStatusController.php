@@ -23,11 +23,7 @@ class SupplierStatusController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        if (Gate::allows('company_was_selected')) {
-            return view('supplier_status.index');
-        } else {
-            return redirect('/');
-        }
+        return view('supplier_status.index');
     }
 
     public function store(SupplierStatus $supplierStatus)

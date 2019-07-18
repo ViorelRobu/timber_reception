@@ -36,11 +36,7 @@ class SuppliersController extends Controller
         $supplier_groups = SupplierGroup::orderBy('name')->get();
         $supplier_statuses = SupplierStatus::orderBy('name')->get();
 
-        if (Gate::allows('company_was_selected')) {
-            return view('suppliers.index', ['countries' => $countries, 'supplier_groups' => $supplier_groups, 'supplier_statuses' => $supplier_statuses]);
-        } else {
-            return redirect('/');
-        }
+        return view('suppliers.index', ['countries' => $countries, 'supplier_groups' => $supplier_groups, 'supplier_statuses' => $supplier_statuses]);
         
     }
 

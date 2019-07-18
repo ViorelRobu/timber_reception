@@ -23,11 +23,7 @@ class SupplierGroupController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        if (Gate::allows('company_was_selected')) {
-            return view('supplier_group.index');
-        } else {
-            return redirect('/');
-        }
+        return view('supplier_group.index');
     }
 
     public function store(SupplierGroup $supplierGroup)
