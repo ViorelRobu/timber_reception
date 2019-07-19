@@ -63,5 +63,42 @@
           ]
       });
     });
+
+    $('#vehiclesForm').on('hidden.bs.modal', function() {
+      $(this).find('form')[0].reset();
+      $('form').attr('action', '/suppliers/add');
+      $('.modal-title').text('Adauga furnizor');
+      $('#id').val('');
+      $(document).off('submit');
+    });
+
+    $(document).on('click', '.edit', function() {
+      var id = $(this).attr("id");
+      $.ajax({
+        url: "{{ route('suppliers.fetch') }}",
+        method: 'get',
+        data: {id:id},
+        dataType:'json',
+        success: function(data)
+            {
+                $('.modal-title').text('Editeaza furnizorul');
+                $('#id').val(id);
+                $('#fibu').val(data.fibu);
+                $('#name').val(data.name);
+                $('#cui').val(data.cui);
+                $('#j').val(data.j);
+                $('#address').val(data.address);
+                $('#country_id').val(data.country_id);
+                $('#supplier_group_id').val(data.supplier_group_id);
+                $('#supplier_status_id').val(data.supplier_status_id);
+            }
+      });
+
+      $(document).on('submit', function() {
+        var id = $('#id').val();
+        $('form').attr('action', 'suppliers/' + id + '/update');
+        $("input[name='_method']").val('PATCH');
+      });
+    });
   </script>
 @endsection

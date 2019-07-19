@@ -51,7 +51,6 @@ class VehiclesController extends Controller
      */
     public function update(Vehicle $vehicle)
     {
-        // dd($this->validateRequest());
         $vehicle->update($this->validateRequest());
 
         return redirect('/vehicles');
@@ -59,10 +58,10 @@ class VehiclesController extends Controller
 
     public function fetchVehicle(Request $request)
     {
-        $country = Vehicle::findOrFail($request->id);
+        $vehicle = Vehicle::findOrFail($request->id);
         $output = [
-            'name' => $country->name,
-            'name_en' => $country->name_en
+            'name' => $vehicle->name,
+            'name_en' => $vehicle->name_en
         ];
 
         return json_encode($output);

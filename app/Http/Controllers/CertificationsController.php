@@ -58,10 +58,10 @@ class CertificationsController extends Controller
 
     public function fetchCertifications(Request $request)
     {
-        $country = Certification::findOrFail($request->id);
+        $certification = Certification::findOrFail($request->id);
         $output = [
-            'name' => $country->name,
-            'name_en' => $country->name_en
+            'name' => $certification->name,
+            'name_en' => $certification->name_en
         ];
 
         return json_encode($output);

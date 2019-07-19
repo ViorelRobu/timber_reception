@@ -20,7 +20,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('dashboard', 'HomeController@index')->name('home');
         Route::prefix('suppliers')->group(function() {
             Route::get('/', 'SuppliersController@index')->name('suppliers.index');
+            Route::get('/fetch', 'SuppliersController@fetchSuppliers')->name('suppliers.fetch');
             Route::post('/add', 'SuppliersController@store');   
+            Route::patch('/{suppliers}/update', 'SuppliersController@update');
         });
         Route::prefix('countries')->group(function() {
             Route::get('/', 'CountriesController@index')->name('countries.index');

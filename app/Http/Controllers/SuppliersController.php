@@ -24,8 +24,8 @@ class SuppliersController extends Controller
                 'supplier_status.name as supplier_status'])->get();
 
             return DataTables::of($suppliers)
-                ->addColumn('action', function () {
-                    $edit = '<a href="#"><i class="fa fa-edit"></i></a>';
+                ->addColumn('action', function ($suppliers) {
+                    $edit = '<a href="#" class="edit" id="' . $suppliers->id . '"data-toggle="modal" data-target="#supplierForm"><i class="fa fa-edit"></i></a>';
                     return $edit;
                 })
                 ->rawColumns(['action'])
@@ -44,6 +44,30 @@ class SuppliersController extends Controller
     {
         $suppliers = auth()->user()->supplierCreator()->create($this->validateRequest());
         return redirect('suppliers');
+    }
+
+    public function update(Suppliers $suppliers)
+    {
+        $suppliers->update($this->validateRequest());
+
+        return redirect('/suppliers');
+    }
+
+    public function fetchSuppliers(Request $request)
+    {
+        $supplier = Suppliers::findOrFail($request->id);
+        $output = [
+            'fibu' => $supplier->fibu,
+            'name' => $supplier->name,
+            'cui' => $supplier->cui,
+            'j' => $supplier->j,
+            'address' => $supplier->address,
+            'country_id' => $supplier->country_id,
+            'supplier_group_id' => $supplier->supplier_group_id,
+            'supplier_status_id' => $supplier->supplier_status_id
+        ];
+
+        return json_encode($output);
     }
 
     public function validateRequest()
