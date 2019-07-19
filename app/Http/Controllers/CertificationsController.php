@@ -21,7 +21,7 @@ class CertificationsController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
 
-                    $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#countriesForm"><i class="fa fa-edit"></i></a>';
+                    $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#certificationsForm"><i class="fa fa-edit"></i></a>';
                     return $edit;
                 })
                 ->rawColumns(['action'])
@@ -49,9 +49,22 @@ class CertificationsController extends Controller
      * @param  \App\Certification  $certification
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Certification $certification)
+    public function update(Certification $certification)
     {
-        //
+        $certification->update($this->validateRequest());
+
+        return redirect('/certifications');
+    }
+
+    public function fetchCertifications(Request $request)
+    {
+        $country = Certification::findOrFail($request->id);
+        $output = [
+            'name' => $country->name,
+            'name_en' => $country->name_en
+        ];
+
+        return json_encode($output);
     }
 
     public function validateRequest()

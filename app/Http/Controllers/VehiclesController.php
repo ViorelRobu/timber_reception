@@ -21,7 +21,7 @@ class VehiclesController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
 
-                    $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#countriesForm"><i class="fa fa-edit"></i></a>';
+                    $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#vehiclesForm"><i class="fa fa-edit"></i></a>';
                     return $edit;
                 })
                 ->rawColumns(['action'])
@@ -49,9 +49,23 @@ class VehiclesController extends Controller
      * @param  \App\Vehicle  $vehicle
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Vehicle $vehicle)
+    public function update(Vehicle $vehicle)
     {
-        //
+        // dd($this->validateRequest());
+        $vehicle->update($this->validateRequest());
+
+        return redirect('/vehicles');
+    }
+
+    public function fetchVehicle(Request $request)
+    {
+        $country = Vehicle::findOrFail($request->id);
+        $output = [
+            'name' => $country->name,
+            'name_en' => $country->name_en
+        ];
+
+        return json_encode($output);
     }
 
     public function validateRequest()
