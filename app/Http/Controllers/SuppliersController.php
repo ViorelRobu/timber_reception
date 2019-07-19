@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 use App\Countries;
 use App\SupplierGroup;
 use App\SupplierStatus;
-use Illuminate\Support\Facades\Gate;
 
 class SuppliersController extends Controller
 {

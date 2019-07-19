@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\CompanyInfo;
-use Illuminate\Support\Facades\Gate;
 
 class HomeController extends Controller
 {

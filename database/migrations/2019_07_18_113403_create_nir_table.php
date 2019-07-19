@@ -18,19 +18,20 @@ class CreateNirTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->integer('numar_nir');
             $table->date('data_nir');
-            $table->string('numar_we');
+            $table->string('numar_we')->nullable();
             $table->unsignedBigInteger('supplier_id');
-            $table->string('dvi');
-            $table->date('data_dvi');
-            $table->decimal('greutate_bruta', 8, 2);
-            $table->decimal('greutate_neta', 8, 2);
+            $table->string('dvi')->nullable();
+            $table->date('data_dvi')->nullable();
+            $table->decimal('greutate_bruta', 8, 2)->nullable();
+            $table->decimal('greutate_neta', 8, 2)->nullable();
             $table->string('serie_aviz');
             $table->string('numar_aviz');
             $table->date('data_aviz');
-            $table->string('specificatie');
+            $table->string('specificatie')->nullable();
             $table->unsignedBigInteger('vehicle_id');
             $table->string('numar_inmatriculare');
             $table->unsignedBigInteger('certification_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
 
@@ -38,6 +39,7 @@ class CreateNirTable extends Migration
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('restrict');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('restrict');
             $table->foreign('certification_id')->references('id')->on('certifications')->onDelete('restrict');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
         });
     }
 

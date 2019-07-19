@@ -6,7 +6,6 @@ use App\CompanyInfo;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\CompanyAssignment;
-use Illuminate\Support\Facades\Gate;
 
 class CompanyInfoController extends Controller
 {

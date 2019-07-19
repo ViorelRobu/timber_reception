@@ -8,7 +8,6 @@ use App\CompanyInfo;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Gate;
 
 class CompanyAssignmentsController extends Controller
 {

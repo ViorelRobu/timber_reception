@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Countries;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Gate;
 
 class CountriesController extends Controller
 {

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\SupplierGroup;
 use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Gate;
 
 class SupplierGroupController extends Controller
 {
