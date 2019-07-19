@@ -28,6 +28,11 @@
                     <button type="submit" class="form-control btn btn-primary">Continua</button>
                 </div>
             </form>
+            <form action="/logout" method="post">
+                @csrf
+                @method('POST')
+                <button type="submit" class="form-control btn btn-danger">Anuleaza</button>
+            </form>
         </div>
     </div>
 @stop
