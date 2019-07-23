@@ -27,10 +27,10 @@ class CreateSuppliersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('country_id')->references('id')->on('countries');
-            $table->foreign('supplier_group_id')->references('id')->on('supplier_group');
-            $table->foreign('supplier_status_id')->references('id')->on('supplier_status');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('restrict');
+            $table->foreign('supplier_group_id')->references('id')->on('supplier_group')->onDelete('restrict');
+            $table->foreign('supplier_status_id')->references('id')->on('supplier_status')->onDelete('restrict');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
         });
     }
 
