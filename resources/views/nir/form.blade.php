@@ -91,6 +91,19 @@
                 <div class="form-group col-md-8">
                     <input type="text" class="form-control" id="numar_inmatriculare" name="numar_inmatriculare" placeholder="Numar inmatriculare" required>
                 </div>
+                {{-- <div class="details d-flex flex-row">
+                    <div class="group-nir">
+                        <div class="form-group col-md-5">
+                            <input type="text" class="form-control" id="test1" name="test1[]" placeholder="Test 1">
+                        </div>
+                        <div class="form-group col-md-5">
+                            <input type="text" class="form-control" id="test2" name="test2[]" placeholder="Test 2">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <button type="button" class="addBtn btn btn-secondary">Adauga</button>
+                    </div>
+                </div> --}}
             </div>
       </div>
       <div class="modal-footer">

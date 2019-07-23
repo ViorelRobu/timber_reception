@@ -47,7 +47,7 @@ class NIRController extends Controller
             return DataTables::of($nir)
                 ->addColumn('action', function ($nir) {
                     $view = '<a href="#"><i class="fa fa-eye"></i></a>';
-                    $edit = '<a href="#" class="edit" id="' . $nir->id . '"data-toggle="modal" data-target="#nirForm"><i class="fa fa-edit"></i></a>';
+                    $edit = '<a href="#" class="edit" id="' . $nir->id . '"data-toggle="modal" data-target="#nirForm"><i class="fa fa-edit">' . $nir->id . '</i></a>';
                     return $view . ' ' . $edit;
                 })
                 ->rawColumns(['action'])
@@ -69,25 +69,33 @@ class NIRController extends Controller
      */
     public function store(NIR $nir)
     {
-        // dd($this->validateRequest());
+        // dd(request());
         $nir = auth()->user()->nirCreator()->create($this->validateRequest());
         return redirect('/nir');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\NIR  $nIR
-     * @return \Illuminate\Http\Response
-     */
-    public function show(NIR $nIR)
+    public function fetchNIR(Request $request)
     {
-        //
-    }
+        $nir = NIR::findOrFail($request->id);
+        $output = [
+            'numar_nir' => $nir->numar_nir,
+            'data_nir' => $nir->data_nir,
+            'numar_we' => $nir->numar_we,
+            'supplier_id' => $nir->supplier_id,
+            'dvi' => $nir->dvi,
+            'data_dvi' => $nir->data_dvi,
+            'greutate_bruta' => $nir->greutate_bruta,
+            'greutate_neta' => $nir->greutate_neta,
+            'serie_aviz' => $nir->serie_aviz,
+            'numar_aviz' => $nir->numar_aviz,
+            'data_aviz' => $nir->data_aviz,
+            'specificatie' => $nir->specificatie,
+            'vehicle_id' => $nir->vehicle_id,
+            'numar_inmatriculare' => $nir->numar_inmatriculare,
+            'certification_id' => $nir->certification_id,
+        ];
 
-    public function fetchNIR()
-    {
-        
+        return json_encode($output);
     }
 
     /**
@@ -97,9 +105,11 @@ class NIRController extends Controller
      * @param  \App\NIR  $nIR
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, NIR $nIR)
+    public function update(NIR $nir)
     {
-        //
+        $nir->update($this->validateRequest());
+
+        return redirect('/nir');
     }
 
     public function validateRequest()

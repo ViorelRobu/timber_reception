@@ -85,31 +85,61 @@
     });
 
     $('#nirForm').on('shown.bs.modal', function() {
-      var company_id = document.querySelector('#company_id').value();
-      alert('test');
+      var company_id = document.querySelector('#company_id').value;
     });
 
-    // $(document).on('click', '.edit', function() {
-    //   var id = $(this).attr("id");
-    //   $.ajax({
-    //     url: "{{ route('countries.fetch') }}",
-    //     method: 'get',
-    //     data: {id:id},
-    //     dataType:'json',
-    //     success: function(data)
-    //         {
-    //             $('.modal-title').text('Editeaza tara');
-    //             $('#id').val(id);
-    //             $('#name').val(data.name);
-    //             $('#name_en').val(data.name_en);
-    //         }
+    // // add / remove inputs to add nir form
+    // $(document).ready(function() {
+    //   var limit = 10;
+    //   var x = 1;
+    //   $('.addBtn').click(function(e) {
+    //     e.preventDefault();
+    //     if (x < limit) {
+    //       $('.details').append('<div class="group-nir"><div class="form-group col-md-5"><input type="text" class="form-control" id="test1" name="test1[]" placeholder="Test 1"></div><div class="form-group col-md-5"><input type="text" class="form-control" id="test2" name="test2[]" placeholder="Test 2"></div><div class="form-group col-md-2"><button type="button" class="remBtn btn btn-danger">Sterge</button></div></div>');
+    //       x++
+    //     } 
     //   });
-
-    //   $(document).on('submit', function() {
-    //     var id = $('#id').val();
-    //     $('form').attr('action', 'countries/' + id + '/update');
-    //     $("input[name='_method']").val('PATCH');
+    //   $('.details').on('click', '.remBtn', function(e) {
+    //     e.preventDefault();
+    //     $(this).parent('div').parent('div').remove();
+    //     x--;
     //   });
     // });
+
+    $(document).on('click', '.edit', function() {
+      var id = $(this).attr("id");
+      $.ajax({
+        url: "{{ route('nir.fetch') }}",
+        method: 'get',
+        data: {id:id},
+        dataType:'json',
+        success: function(data)
+            {
+                $('.modal-title').text('Editeaza NIR');
+                $('#id').val(id);
+                $('#numar_nir').val(data.numar_nir);
+                $('#data_nir').val(data.data_nir);
+                $('#numar_we').val(data.numar_we);
+                $('#supplier_id').val(data.supplier_id);
+                $('#dvi').val(data.dvi);
+                $('#data_dvi').val(data.data_dvi);
+                $('#greutate_bruta').val(data.greutate_bruta);
+                $('#greutate_neta').val(data.greutate_neta);
+                $('#serie_aviz').val(data.serie_aviz);
+                $('#numar_aviz').val(data.numar_aviz);
+                $('#data_aviz').val(data.data_aviz);
+                $('#specificatie').val(data.specificatie);
+                $('#vehicle_id').val(data.vehicle_id);
+                $('#numar_inmatriculare').val(data.numar_inmatriculare);
+                $('#certification_id').val(data.certification_id);
+            }
+      });
+      
+      $(document).on('submit', function() {
+        var id = $('#id').val();
+        $('form').attr('action', 'nir/' + id + '/update');
+        $("input[name='_method']").val('PATCH');
+      });
+    });
   </script>
 @endsection
