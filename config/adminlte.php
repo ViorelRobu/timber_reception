@@ -174,6 +174,18 @@ return [
                     'url'  => 'supplier_status',
                 ],
                 [
+                    'text' => 'Articole',
+                    'url'  => 'articles',
+                ],
+                [
+                    'text' => 'Specii',
+                    'url'  => 'species',
+                ],
+                [
+                    'text' => 'Umiditati',
+                    'url'  => 'moisture',
+                ],
+                [
                     'text'    => 'Deseuri',
                     'url'     => '#',
                     'submenu' => [

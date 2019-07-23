@@ -72,6 +72,24 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/add', 'NIRController@store');
             Route::patch('/{nir}/update', 'NIRController@update');
         });
+        Route::prefix('articles')->group(function () {
+            Route::get('/', 'ArticlesController@index')->name('articles.index');
+            Route::get('/fetch', 'ArticlesController@fetchArticle')->name('articles.fetch');
+            Route::post('/add', 'ArticlesController@store');
+            Route::patch('/{article}/update', 'ArticlesController@update');
+        });
+        Route::prefix('species')->group(function () {
+            Route::get('/', 'SpeciesController@index')->name('species.index');
+            Route::get('/fetch', 'SpeciesController@fetchSpecies')->name('species.fetch');
+            Route::post('/add', 'SpeciesController@store');
+            Route::patch('/{species}/update', 'SpeciesController@update');
+        });
+        Route::prefix('moisture')->group(function () {
+            Route::get('/', 'MoistureController@index')->name('moisture.index');
+            Route::get('/fetch', 'MoistureController@fetchMoisture')->name('moisture.fetch');
+            Route::post('/add', 'MoistureController@store');
+            Route::patch('/{moisture}/update', 'MoistureController@update');
+        });
     });
 });
 

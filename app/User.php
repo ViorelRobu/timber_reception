@@ -84,4 +84,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(NIR::class, 'user_id');
     }
+
+    public function articleCreator()
+    {
+        return $this->hasMany(Article::class, 'user_id');
+    }
+
+    public function moistureCreator()
+    {
+        return $this->hasMany(Moisture::class, 'user_id');
+    }
+
+    public function speciesCreator()
+    {
+        return $this->hasMany(Species::class, 'user_id');
+    }
 }
