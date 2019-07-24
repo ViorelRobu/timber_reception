@@ -1,16 +1,16 @@
 <!-- Modal -->
-<div class="modal fade" id="nirForm" tabindex="-1" role="dialog" aria-labelledby="countriesForm" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal fade" id="nirFormAdd" tabindex="-1" role="dialog" aria-labelledby="countriesForm" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title d-inline" id="exampleModalLongTitle">Editeaza NIR
+        <h3 class="modal-title d-inline" id="exampleModalLongTitle">Adauga NIR
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
         </h3>
       </div>
       <div class="modal-body">
-        <form action="" method="POST">
+        <form action="/nir/add" method="POST">
             @method('POST')
             @csrf
             <input type="hidden" name="id" id="id">
@@ -90,6 +90,55 @@
                 </div>
                 <div class="form-group col-md-8">
                     <input type="text" class="form-control" id="numar_inmatriculare" name="numar_inmatriculare" placeholder="Numar inmatriculare" required>
+                </div>
+                <div class="fom-group col-md-12">
+                    <h4 class="text-center">Adauga pozitii</h4>
+                    <hr>
+                </div>
+                <div class="details d-flex flex-row">
+
+                    <div class="group-nir">
+                        <div class="form-group col-md-4">
+                            <select class="custom-select form-control" name="article_id[]" id="article_id" required>
+                                <option value="" selected>--- Articol ---</option>
+                                @foreach ($articles as $article)
+                                    <option value="{{ $article->id }}">{{ $article->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select class="custom-select form-control" name="species_id[]" id="species_id" required>
+                                <option value="" selected>--- Specie ---</option>
+                                @foreach ($species as $species)
+                                    <option value="{{ $species->id }}">{{ $species->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select class="custom-select form-control" name="moisture_id[]" id="moisture_id" required>
+                                <option value="" selected>--- Grup ---</option>
+                                @foreach ($moistures as $moisture)
+                                    <option value="{{ $moisture->id }}">{{ $moisture->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                        <button type="button" class="addBtn btn btn-secondary">Adauga</button>
+                    </div>
+                        <div class="form-group col-md-3">
+                            <input type="text" class="form-control" id="volum_aviz" name="volum_aviz[]" placeholder="Volum aviz" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input type="text" class="form-control" id="volum_receptionat" name="volum_receptionat[]" placeholder="Volum factura" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input type="text" class="form-control" id="pachete" name="pachete[]" placeholder="Numar pachete" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input type="text" class="form-control" id="total_ml" name="total_ml[]" placeholder="Total lungimi pachete" required>
+                        </div>
+                        <div class="col-md-12"><hr></div>
+                    </div>
                 </div>
             </div>
       </div>

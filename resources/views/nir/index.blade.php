@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 
 @section('content_header')
-  <h1 class="d-inline"><strong>Lista NIR</strong> - {{ $company_name[0] }} <button id="addCountry" class="btn btn-primary pull-right" data-toggle="modal" data-target="#nirForm">Adauga NIR</button></h1>
+  <h1 class="d-inline"><strong>Lista NIR</strong> - {{ $company_name[0] }} <button id="addCountry" class="btn btn-primary pull-right" data-toggle="modal" data-target="#nirFormAdd">Adauga NIR</button></h1>
 @stop
 
 @section('content')
@@ -42,6 +42,7 @@
     </div>
   </div>
 @include('nir.form')
+@include('nir.add')
 @stop
 
 
@@ -76,35 +77,70 @@
       });
     });
 
-    $('#nirForm').on('hidden.bs.modal', function() {
-      $(this).find('form')[0].reset();
-      $('form').attr('action', '/nir/add');
-      $('.modal-title').text('Adauga NIR');
-      $('#id').val('');
-      $(document).off('submit');
-    });
-
     $('#nirForm').on('shown.bs.modal', function() {
       var company_id = document.querySelector('#company_id').value;
     });
 
-    // // add / remove inputs to add nir form
-    // $(document).ready(function() {
-    //   var limit = 10;
-    //   var x = 1;
-    //   $('.addBtn').click(function(e) {
-    //     e.preventDefault();
-    //     if (x < limit) {
-    //       $('.details').append('<div class="group-nir"><div class="form-group col-md-5"><input type="text" class="form-control" id="test1" name="test1[]" placeholder="Test 1"></div><div class="form-group col-md-5"><input type="text" class="form-control" id="test2" name="test2[]" placeholder="Test 2"></div><div class="form-group col-md-2"><button type="button" class="remBtn btn btn-danger">Sterge</button></div></div>');
-    //       x++
-    //     } 
-    //   });
-    //   $('.details').on('click', '.remBtn', function(e) {
-    //     e.preventDefault();
-    //     $(this).parent('div').parent('div').remove();
-    //     x--;
-    //   });
-    // });
+    // add / remove inputs to add nir form
+    $(document).ready(function() {
+      var limit = 10;
+      var x = 1;
+      $('.addBtn').click(function(e) {
+        e.preventDefault();
+        if (x < limit) {
+          $('.details').append(`
+            <div class="group-nir">
+              <div class="form-group col-md-4">
+                  <select class="custom-select form-control" name="article_id[]" id="article_id" required>
+                      <option value="" selected>--- Articol ---</option>
+                      @foreach ($articles as $article)
+                          <option value="{{ $article->id }}">{{ $article->name }}</option>
+                      @endforeach
+                  </select>
+              </div>
+              <div class="form-group col-md-3">
+                  <select class="custom-select form-control" name="species_id[]" id="species_id" required>
+                      <option value="" selected>--- Specie ---</option>
+                      @foreach ($species as $species)
+                          <option value="{{ $species->id }}">{{ $species->name }}</option>
+                      @endforeach
+                  </select>
+              </div>
+              <div class="form-group col-md-3">
+                  <select class="custom-select form-control" name="moisture_id[]" id="moisture_id" required>
+                      <option value="" selected>--- Grup ---</option>
+                      @foreach ($moistures as $moisture)
+                          <option value="{{ $moisture->id }}">{{ $moisture->name }}</option>
+                      @endforeach
+                  </select>
+              </div>
+              <div class="form-group col-md-2">
+                  <button type="button" class="remBtn btn btn-danger">Sterge</button>
+              </div>
+              <div class="form-group col-md-3">
+                  <input type="text" class="form-control" id="volum_aviz" name="volum_aviz[]" placeholder="Volum aviz" required>
+              </div>
+              <div class="form-group col-md-3">
+                  <input type="text" class="form-control" id="volum_receptionat" name="volum_receptionat[]" placeholder="Volum factura" required>
+              </div>
+              <div class="form-group col-md-3">
+                  <input type="text" class="form-control" id="pachete" name="pachete[]" placeholder="Numar pachete" required>
+              </div>
+              <div class="form-group col-md-3">
+                  <input type="text" class="form-control" id="total_ml" name="total_ml[]" placeholder="Total lungimi pachete" required>
+              </div>
+              <div class="col-xs-12"><hr></div>
+          </div>`
+        );
+          x++
+        } 
+      });
+      $('.details').on('click', '.remBtn', function(e) {
+        e.preventDefault();
+        $(this).parent('div').parent('div').remove();
+        x--;
+      });
+    });
 
     $(document).on('click', '.edit', function() {
       var id = $(this).attr("id");
@@ -115,7 +151,6 @@
         dataType:'json',
         success: function(data)
             {
-                $('.modal-title').text('Editeaza NIR');
                 $('#id').val(id);
                 $('#numar_nir').val(data.numar_nir);
                 $('#data_nir').val(data.data_nir);

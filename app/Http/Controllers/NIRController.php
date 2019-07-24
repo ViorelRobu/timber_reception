@@ -10,6 +10,10 @@ use Yajra\DataTables\DataTables;
 use App\Suppliers;
 use App\Certification;
 use App\Vehicle;
+use App\Article;
+use App\Species;
+use App\Moisture;
+use App\NIRDetails;
 
 class NIRController extends Controller
 {
@@ -47,7 +51,7 @@ class NIRController extends Controller
             return DataTables::of($nir)
                 ->addColumn('action', function ($nir) {
                     $view = '<a href="#"><i class="fa fa-eye"></i></a>';
-                    $edit = '<a href="#" class="edit" id="' . $nir->id . '"data-toggle="modal" data-target="#nirForm"><i class="fa fa-edit">' . $nir->id . '</i></a>';
+                    $edit = '<a href="#" class="edit" id="' . $nir->id . '"data-toggle="modal" data-target="#nirForm"><i class="fa fa-edit"></i></a>';
                     return $view . ' ' . $edit;
                 })
                 ->rawColumns(['action'])
@@ -58,7 +62,11 @@ class NIRController extends Controller
         $suppliers = Suppliers::all()->sortBy('name');
         $certifications = Certification::all()->sortBy('name');
         $vehicles = Vehicle::all()->sortBy('name');
-        return view('nir.index', ['company_name' => $company_name, 'suppliers' => $suppliers, 'certifications' => $certifications, 'vehicles' => $vehicles]);
+        $articles = Article::all()->sortBy('name');
+        $species = Species::all()->sortBy('name');
+        $moistures = Moisture::all()->sortBy('name');
+        return view('nir.index', ['company_name' => $company_name, 'suppliers' => $suppliers, 'certifications' => $certifications, 'vehicles' => $vehicles, 
+        'articles' => $articles, 'species' => $species, 'moistures' => $moistures]);
     }
 
     /**
@@ -67,10 +75,27 @@ class NIRController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(NIR $nir)
+    public function store(NIR $nir, NIRDetails $nirDetails, Request $request)
     {
-        // dd(request());
+        // dd($request->request);
         $nir = auth()->user()->nirCreator()->create($this->validateRequest());
+        // get the id of the created record
+        $nir_id = $nir->id;
+
+        for ($i=0; $i < count($request->article_id); $i++) { 
+            $nirDetails->create([
+                'nir_id' => $nir_id,
+                'article_id' => $request->article_id[$i],
+                'species_id' => $request->species_id[$i],
+                'volum_aviz' => $request->volum_aviz[$i],
+                'volum_receptionat' => $request->volum_receptionat[$i],
+                'moisture_id' => $request->moisture_id[$i],
+                'pachete' => $request->pachete[$i],
+                'total_ml' => $request->total_ml[$i],
+                'user_id' => auth()->user()->id
+            ]);
+        }
+
         return redirect('/nir');
     }
 
@@ -150,6 +175,29 @@ class NIRController extends Controller
             'vehicle_id' => 'required',
             'numar_inmatriculare' => 'required',
             'certification_id' => 'required'
+        ], $error_messages);
+    }
+
+    public function validateRequestDetails()
+    {
+        $error_messages = [
+            'article_id.required' => 'Selectati un articol!',
+            'species_id.required' => 'Selectati o specie!',
+            'volum_aviz.required' => 'Completati volumul de pe aviz!',
+            'volum_receptionat.required' => 'Completati volumul de pe factura!',
+            'moisture_id.required' => 'Selectati o umiditate!',
+            'pachete.required' => 'Completati numarul de pachete!',
+            'total_ml.required' => 'Completati lungimea totala pachete!',
+        ];
+
+        return request()->validate([
+            'article_id' => 'required',
+            'species_id' => 'required',
+            'volum_aviz' => 'required',
+            'volum_receptionat' => 'required',
+            'moisture_id' => 'required',
+            'pachete' => 'required',
+            'total_ml' => 'required',
         ], $error_messages);
     }
 }

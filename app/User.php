@@ -13,6 +13,7 @@ use App\CompanyInfo;
 use App\Vehicle;
 use App\Certification;
 use App\NIR;
+use App\NIRDetails;
 
 class User extends Authenticatable
 {
@@ -98,5 +99,10 @@ class User extends Authenticatable
     public function speciesCreator()
     {
         return $this->hasMany(Species::class, 'user_id');
+    }
+
+    public function nirDetailsCreator() 
+    {
+        return $this->hasMany(NIRDetails::class, 'user_id');
     }
 }

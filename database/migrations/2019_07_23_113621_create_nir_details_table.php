@@ -23,6 +23,7 @@ class CreateNirDetailsTable extends Migration
             $table->unsignedBigInteger('moisture_id');
             $table->integer('pachete');
             $table->double('total_ml', 6, 2);
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
 
@@ -30,6 +31,7 @@ class CreateNirDetailsTable extends Migration
             $table->foreign('article_id')->references('id')->on('articles')->onDelete('restrict');
             $table->foreign('species_id')->references('id')->on('species')->onDelete('restrict');
             $table->foreign('moisture_id')->references('id')->on('moisture')->onDelete('restrict');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
         });
     }
 
