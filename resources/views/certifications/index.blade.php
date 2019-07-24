@@ -30,9 +30,8 @@
       </table>
     </div>
   </div>
-@stop
-
 @include('certifications.form')
+@stop
 
 @section('footer')
     @include('footer')

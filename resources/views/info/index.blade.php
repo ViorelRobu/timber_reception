@@ -35,9 +35,9 @@
         </table>
       </div>
     </div>        
+@include('info.form')
 @stop
 
-@include('info.form')
 
 @section('footer')
     @include('footer')

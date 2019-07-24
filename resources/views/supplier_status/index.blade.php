@@ -30,9 +30,9 @@
       </table>
     </div>
   </div>
+@include('supplier_status.form')
 @stop
 
-@include('supplier_status.form')
 
 @section('footer')
     @include('footer')

@@ -30,9 +30,9 @@
       </table>
     </div>
   </div>
+@include('species.form')
 @stop
 
-@include('species.form')
 
 @section('footer')
     @include('footer')

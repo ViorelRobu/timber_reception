@@ -41,9 +41,9 @@
       </table>
     </div>
   </div>
+@include('nir.form')
 @stop
 
-@include('nir.form')
 
 @section('footer')
     @include('footer')
