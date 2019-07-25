@@ -81,10 +81,16 @@
       var company_id = document.querySelector('#company_id').value;
     });
 
-    // add / remove inputs to add nir form
+    $(document).ready(function(e) {
+      
+    });
+
+    // add / remove nir details to add nir form
     $(document).ready(function() {
       var limit = 10;
+      var limit_invoice = 1;
       var x = 1;
+      var x_invoice = 0;
       $('.addBtn').click(function(e) {
         e.preventDefault();
         if (x < limit) {
@@ -132,13 +138,54 @@
               <div class="col-xs-12"><hr></div>
           </div>`
         );
-          x++
+          x++;
         } 
       });
       $('.details').on('click', '.remBtn', function(e) {
         e.preventDefault();
         $(this).parent('div').parent('div').remove();
         x--;
+      });
+
+      $('.addInvBtn').click(function(e) {
+        e.preventDefault();
+        if (x_invoice < limit_invoice) {
+          $('.factura').append(`
+            <div class="grup-factura">
+              <div class="fom-group col-md-12">
+                <h4 class="text-center">Factura</h4>
+                <hr>
+              </div>
+              <div class="form-group col-md-3">
+                <input type="text" class="form-control pull-right" id="numar_factura" name="numar_factura" placeholder="Numar factura" autocomplete="off" required>
+              </div>
+              <div class="form-group col-md-3">
+                <div class="input-group date">
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input type="text" class="form-control pull-right" id="data_factura" name="data_factura" data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Data Factura" autocomplete="off">
+                </div>
+              </div>
+              <div class="form-group col-md-2">
+                <input type="text" class="form-control pull-right" id="valoare_factura" name="valoare_factura" placeholder="Valoare factura" autocomplete="off" required>
+              </div>
+              <div class="form-group col-md-2">
+                <input type="text" class="form-control pull-right" id="valoare_transport" name="valoare_transport" placeholder="Valoare transport" autocomplete="off" required>
+              </div>
+              <div class="form-group col-md-2">
+                <button type="button" class="remInvBtn btn btn-danger">Sterge factura</button>
+              </div>
+            </div>`
+            );
+          x_invoice++;
+        }
+      });
+
+      $('.factura').on('click', '.remInvBtn', function(e) {
+        e.preventDefault();
+        $(this).parent('div').parent('div').remove();
+        x_invoice--;
       });
     });
 

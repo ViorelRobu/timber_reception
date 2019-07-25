@@ -24,7 +24,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right" id="data_nir" name="data_nir" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off" required>
+                        <input type="text" class="form-control pull-right" id="data_nir" name="data_nir" placeholder="Data NIR" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="form-group col-md-12">
@@ -46,7 +46,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right" id="data_dvi" name="data_dvi" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off">
+                        <input type="text" class="form-control pull-right" id="data_dvi" name="data_dvi" placeholder="Data DVI" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off">
                     </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -66,7 +66,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right" id="data_aviz" name="data_aviz" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off">
+                        <input type="text" class="form-control pull-right" id="data_aviz" name="data_aviz" placeholder="Data aviz" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="form-group col-md-6">

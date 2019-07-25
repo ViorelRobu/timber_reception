@@ -16,18 +16,18 @@
             <input type="hidden" name="id" id="id">
             <input type="hidden" name="company_id" id="company_id" value="{{ session()->get('company_was_selected') }}">
             <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <input type="text" class="form-control" id="numar_nir" name="numar_nir" placeholder="Numar NIR" required>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <div class="input-group date">
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right" id="data_nir" name="data_nir" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off" required>
+                        <input type="text" class="form-control pull-right" id="data_nir" name="data_nir" placeholder="Data NIR" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off" required>
                     </div>
                 </div>
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-4">
                     <input type="text" class="form-control" id="numar_we" name="numar_we" placeholder="Numar WE">
                 </div>
                 <div class="form-group col-md-12">
@@ -38,21 +38,21 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     <input type="text" class="form-control" id="dvi" name="dvi" placeholder="DVI">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     <div class="input-group date">
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right" id="data_dvi" name="data_dvi" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off">
+                        <input type="text" class="form-control pull-right" id="data_dvi" name="data_dvi" placeholder="Data DVI" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off">
                     </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     <input type="text" class="form-control" id="greutate_bruta" name="greutate_bruta" placeholder="Greutate bruta">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     <input type="text" class="form-control" id="greutate_neta" name="greutate_neta" placeholder="Greutate neta">
                 </div>
                 <div class="form-group col-md-4">
@@ -66,7 +66,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right" id="data_aviz" name="data_aviz" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off">
+                        <input type="text" class="form-control pull-right" id="data_aviz" name="data_aviz" data-provide="datepicker" placeholder="Data aviz" data-date-format="yyyy-mm-dd" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -88,11 +88,17 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group col-md-8">
+                <div class="form-group col-md-6">
                     <input type="text" class="form-control" id="numar_inmatriculare" name="numar_inmatriculare" placeholder="Numar inmatriculare" required>
                 </div>
+                <div class="form-group col-md-2">
+                    <button type="button" class="addInvBtn btn btn-secondary">Adauga factura</button>
+                </div>
+                <div class="factura">
+                    <!-- Add the invoice here -->
+                </div>
                 <div class="fom-group col-md-12">
-                    <h4 class="text-center">Adauga pozitii</h4>
+                    <h4 class="text-center">Detalii NIR</h4>
                     <hr>
                 </div>
                 <div class="details d-flex flex-row">

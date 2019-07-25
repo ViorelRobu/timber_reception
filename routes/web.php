@@ -69,6 +69,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('nir')->group(function () {
             Route::get('/', 'NIRController@index')->name('nir.index');
             Route::get('/fetch', 'NIRController@fetchNIR')->name('nir.fetch');
+            Route::get('/{nir}/show', 'NIRController@show');
             Route::post('/add', 'NIRController@store');
             Route::patch('/{nir}/update', 'NIRController@update');
         });

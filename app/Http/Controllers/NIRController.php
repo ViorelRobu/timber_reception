@@ -14,6 +14,7 @@ use App\Article;
 use App\Species;
 use App\Moisture;
 use App\NIRDetails;
+use App\Invoice;
 
 class NIRController extends Controller
 {
@@ -50,7 +51,7 @@ class NIRController extends Controller
 
             return DataTables::of($nir)
                 ->addColumn('action', function ($nir) {
-                    $view = '<a href="#"><i class="fa fa-eye"></i></a>';
+                    $view = '<a href="/nir/' . $nir->id . '/show"><i class="fa fa-eye"></i></a>';
                     $edit = '<a href="#" class="edit" id="' . $nir->id . '"data-toggle="modal" data-target="#nirForm"><i class="fa fa-edit"></i></a>';
                     return $view . ' ' . $edit;
                 })
@@ -96,7 +97,69 @@ class NIRController extends Controller
             ]);
         }
 
+        if ($request->numar_factura && $request->data_factura) {
+            $invoice = new Invoice();
+            $invoice->nir_id = $nir_id;
+            $invoice->numar_factura = $request->numar_factura;
+            $invoice->data_factura = $request->data_factura;
+            $invoice->valoare_factura = $request->valoare_factura;
+            $invoice->valoare_transport = $request->valoare_transport;
+            $invoice->user_id = auth()->user()->id;
+            $invoice->save();
+        }
+
         return redirect('/nir');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\NIR  $nir
+     * @return \Illuminate\Http\Response
+     */
+    public function show(NIR $nir)
+    {
+        $nir_details = DB::table('nir_details')->join('articles', 'nir_details.article_id', '=', 'articles.id')
+            ->join('species', 'nir_details.species_id', '=', 'species.id')
+            ->join('moisture', 'nir_details.moisture_id', '=', 'moisture.id')
+            ->where('nir_id', $nir->id)
+            ->select([
+                'nir_details.id as id',
+                'articles.name as article',
+                'species.name as species',
+                'moisture.name as moisture',
+                'nir_details.volum_aviz as volum_aviz',
+                'nir_details.volum_receptionat as volum_receptionat'
+            ])->get();
+
+        $total_aviz = 0;
+        $total_receptionat = 0;
+
+        foreach ($nir_details as $details) {
+            $total_aviz += $details->volum_aviz;
+        }
+
+        foreach ($nir_details as $details) {
+            $total_receptionat += $details->volum_receptionat;
+        }
+
+        $company = CompanyInfo::where('id', $nir->company_id)->value('name');
+        $invoice = Invoice::where('nir_id', $nir->id)->get();
+        $supplier = Suppliers::where('id', $nir->supplier_id)->value('name');
+        $vehicle = Vehicle::where('id', $nir->vehicle_id)->value('name');
+        $certification = Certification::where('id', $nir->certification_id)->value('name');
+        return view('nir.nir', 
+                    [
+                        'nir' => $nir, 
+                        'company' => $company, 
+                        'invoice' => $invoice, 
+                        'supplier' => $supplier, 
+                        'vehicle' => $vehicle, 
+                        'certification' => $certification,
+                        'nir_details' =>$nir_details,
+                        'total_aviz' => $total_aviz,
+                        'total_receptionat' => $total_receptionat
+                    ]);
     }
 
     public function fetchNIR(Request $request)
