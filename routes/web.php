@@ -70,8 +70,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/', 'NIRController@index')->name('nir.index');
             Route::get('/fetch', 'NIRController@fetchNIR')->name('nir.fetch');
             Route::get('/{nir}/show', 'NIRController@show');
+            Route::get('/invoice/fetch', 'InvoicesController@fetchInvoice')->name('invoice.fetch');
             Route::post('/add', 'NIRController@store');
+            Route::post('/invoice/add', 'InvoicesController@store');
             Route::patch('/{nir}/update', 'NIRController@update');
+            Route::patch('/invoice/{invoice}/update', 'InvoicesController@update');
+            Route::delete('/invoice/delete', 'InvoicesController@destroy');
         });
         Route::prefix('articles')->group(function () {
             Route::get('/', 'ArticlesController@index')->name('articles.index');
