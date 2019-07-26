@@ -62,6 +62,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'verify.company' => \App\Http\Middleware\CheckSelectedCompany::class,
         'verify.invoice' => \App\Http\Middleware\CheckNumberOfInvoicesSaved::class,
+        'nir.rights' => \App\Http\Middleware\CheckRightsToViewAndEditNIR::class,
     ];
 
     /**
@@ -80,5 +81,6 @@ class Kernel extends HttpKernel
         \Illuminate\Auth\Middleware\Authorize::class,
         \App\Http\Middleware\CheckSelectedCompany::class,
         \App\Http\Middleware\CheckNumberOfInvoicesSaved::class,
+        \App\Http\Middleware\CheckRightsToViewAndEditNIR::class,
     ];
 }

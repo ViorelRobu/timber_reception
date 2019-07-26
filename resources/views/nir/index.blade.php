@@ -32,8 +32,6 @@
     <div class="box-body">
       <table id="nir" class="table table-bordered table-hover">
         <thead>
-          <tr>
-              <th>Company ID</th>
               <th>NIR</th>
               <th>Data NIR</th>
               <th>Numar WE</th>
@@ -70,7 +68,6 @@
           serverSide: true,
           ajax: "{{ route('nir.index') }}",
           columns: [
-              {data: 'company_id', name: 'company_id'},
               {data: 'numar_nir', name: 'numar_nir'},
               {data: 'data_nir', name: 'data_nir'},
               {data: 'numar_we', name: 'numar_we'},
@@ -180,10 +177,10 @@
                 </div>
               </div>
               <div class="form-group col-md-2">
-                <input type="number" class="form-control pull-right" id="valoare_factura" name="valoare_factura" placeholder="Valoare factura" autocomplete="off" required>
+                <input type="number" class="form-control pull-right" id="valoare_factura" name="valoare_factura" step="0.01" placeholder="Valoare factura" autocomplete="off" required>
               </div>
               <div class="form-group col-md-2">
-                <input type="number" class="form-control pull-right" id="valoare_transport" name="valoare_transport" placeholder="Valoare transport" autocomplete="off" required>
+                <input type="number" class="form-control pull-right" id="valoare_transport" name="valoare_transport" step="0.01" placeholder="Valoare transport" autocomplete="off" required>
               </div>
               <div class="form-group col-md-2">
                 <button type="button" class="remInvBtn btn btn-danger">Sterge factura</button>

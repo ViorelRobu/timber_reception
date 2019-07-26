@@ -69,19 +69,21 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('nir')->group(function () {
             Route::get('/', 'NIRController@index')->name('nir.index');
             Route::get('/fetch', 'NIRController@fetchNIR')->name('nir.fetch');
-            Route::get('/{nir}/show', 'NIRController@show');
             Route::get('/invoice/fetch', 'InvoicesController@fetchInvoice')->name('invoice.fetch');
             Route::get('/details/fetch', 'NIRDetailsController@fetchDetails')->name('details.fetch');
             Route::post('/add', 'NIRController@store');
-            Route::group(['middleware' => 'verify.invoice'], function() {
+            Route::post('/details/add', 'NIRDetailsController@store');
+            Route::group(['middleware' => 'verify.invoice'], function () {
                 Route::post('/invoice/add', 'InvoicesController@store');
             });
-            Route::post('/details/add', 'NIRDetailsController@store');
-            Route::patch('/{nir}/update', 'NIRController@update');
             Route::patch('/invoice/{invoice}/update', 'InvoicesController@update');
             Route::patch('/details/{nir_details}/update', 'NIRDetailsController@update');
             Route::delete('/invoice/delete', 'InvoicesController@destroy');
             Route::delete('/details/delete', 'NIRDetailsController@destroy');
+            Route::group(['middleware' => 'nir.rights'], function () {
+                Route::get('/{nir}/show', 'NIRController@show');
+                Route::patch('/{nir}/update', 'NIRController@update');
+            });
         });
         Route::prefix('articles')->group(function () {
             Route::get('/', 'ArticlesController@index')->name('articles.index');

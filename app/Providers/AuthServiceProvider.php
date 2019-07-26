@@ -31,5 +31,10 @@ class AuthServiceProvider extends ServiceProvider
             }
                 return false;
         });
+
+        Gate::define('view_and_edit', function($user, $company) {
+            $session_company = intval(request()->session()->get('company_was_selected'), 10);
+            return $session_company === $company;
+        });
     }
 }

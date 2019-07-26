@@ -15,6 +15,7 @@ use App\Species;
 use App\Moisture;
 use App\NIRDetails;
 use App\Invoice;
+use Illuminate\Support\Facades\Gate;
 
 class NIRController extends Controller
 {
@@ -26,9 +27,11 @@ class NIRController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            $company = $request->session()->get('company_was_selected');
             $nir = DB::table('nir')->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
                 ->join('vehicles', 'nir.vehicle_id', '=', 'vehicles.id')
                 ->join('certifications', 'nir.certification_id', '=', 'certifications.id')
+                ->where('company_id', $company)
                 ->select([
                     'nir.id as id',
                     'nir.company_id as company_id', 
@@ -85,7 +88,7 @@ class NIRController extends Controller
 
         // dd($request->article_id);
 
-        if ($request->article_id[0] !== null  && $request->species_id[0] !== null && $request[0] !== null) {
+        if ($request->article_id[0] !== null && $request->species_id[0] !== null && $request->moisture_id[0] !== null) {
             for ($i=0; $i < count($request->article_id); $i++) { 
                 $nirDetails->create([
                     'nir_id' => $nir_id,
@@ -143,7 +146,7 @@ class NIRController extends Controller
                 'nir_details.pachete as pachete',
                 'nir_details.total_ml as total_ml'
             ])->get();
-
+            
         $total_aviz = 0;
         $total_receptionat = 0;
         $total_pachete = 0;
