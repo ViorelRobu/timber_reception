@@ -12,7 +12,7 @@
 */
 
 Route::group(['middleware' => 'auth'], function () {
-
+    Route::get('/test', 'InvoicesController@test');
     Route::get('/', 'CompanySelectorController@index');
     Route::get('/set_company', 'CompanySelectorController@setCompany');
 
@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('nir')->group(function () {
             Route::get('/', 'NIRController@index')->name('nir.index');
+            Route::get('/invoices', 'InvoicesController@index')->name('invoices.index');
             Route::get('/fetch', 'NIRController@fetchNIR')->name('nir.fetch');
             Route::get('/invoice/fetch', 'InvoicesController@fetchInvoice')->name('invoice.fetch');
             Route::get('/details/fetch', 'NIRDetailsController@fetchDetails')->name('details.fetch');

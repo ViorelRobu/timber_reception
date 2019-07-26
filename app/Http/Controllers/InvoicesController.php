@@ -4,9 +4,43 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Invoice;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
+use App\CompanyInfo;
 
 class InvoicesController extends Controller
 {
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            $company = $request->session()->get('company_was_selected');
+            $nir = DB::table('invoices')->join('nir', 'invoices.nir_id', '=', 'nir.id')
+                ->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
+                ->join('certifications', 'nir.certification_id', '=', 'certifications.id')
+                ->where('company_id', $company)
+                ->select([
+                    'invoices.id as id',
+                    'nir.numar_nir as nir',
+                    'nir.data_nir as data_nir',
+                    'suppliers.name as supplier',
+                    'invoices.numar_factura as numar_factura',
+                    'invoices.data_factura as data_factura',
+                    'invoices.valoare_factura as valoare_factura',
+                    'invoices.valoare_transport as valoare_transport'
+                ])->get();
+
+            return DataTables::of($nir)
+                ->addColumn('action', function ($nir) {
+                    $edit = '<a href="#" class="edit" id="' . $nir->id . '"data-toggle="modal" data-target="#invoiceForm"><i class="fa fa-edit"></i></a>';
+                    return $edit;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        $company_name = CompanyInfo::where('id', session()->get('company_was_selected'))->value('name');
+        return view('invoices.index', ['company_name' => $company_name]);
+    }
 
     public function store(Request $request)
     {
@@ -47,6 +81,7 @@ class InvoicesController extends Controller
     {
         $invoice = Invoice::findOrFail($request->id);
         $output = [
+            'nir_id' => $invoice->nir_id,
             'numar_factura' => $invoice->numar_factura,
             'data_factura' => $invoice->data_factura,
             'valoare_factura' => $invoice->valoare_factura,

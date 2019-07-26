@@ -14,7 +14,7 @@
             @method('POST')
             @csrf
             <input type="hidden" name="id" id="id">
-            <input type="hidden" name="nir_id" id="nir_id" value="{{ $nir->id }}">
+            <input type="hidden" name="nir_id" id="nir_id" value="{{ isset($nir->id) ? $nir->id : '' }}">
             <div class="form-row">
                 <div class="grup-factura">
                     <div class="form-group col-md-6">

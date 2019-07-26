@@ -126,7 +126,7 @@ return [
         ],
         [
             'text'        => 'Facturi',
-            'url'         => '#',
+            'url'         => '/nir/invoices',
             'icon'        => 'file',
         ],
         [
