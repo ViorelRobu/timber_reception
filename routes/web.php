@@ -72,7 +72,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/{nir}/show', 'NIRController@show');
             Route::get('/invoice/fetch', 'InvoicesController@fetchInvoice')->name('invoice.fetch');
             Route::post('/add', 'NIRController@store');
-            Route::post('/invoice/add', 'InvoicesController@store');
+            Route::group(['middleware' => 'verify.invoice'], function() {
+                Route::post('/invoice/add', 'InvoicesController@store');
+            });
             Route::patch('/{nir}/update', 'NIRController@update');
             Route::patch('/invoice/{invoice}/update', 'InvoicesController@update');
             Route::delete('/invoice/delete', 'InvoicesController@destroy');
