@@ -46,7 +46,7 @@
           @endif
         </div>
         <div class="col-sm-11 d-inline mx-2">
-          <button type="button" class="btn btn-primary pull-right">Adauga detalii</button>
+          <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#nirDetailsForm">Adauga detalii</button>
         </div>
         @if (count($invoice) === 0)
           <div class="col-sm-1 d-inline mx-2">
@@ -67,6 +67,8 @@
               <th>Umiditate</th>
               <th>Volum aviz</th>
               <th>Volum receptionat</th>
+              <th>Numar pachete</th>
+              <th>Total ml pachete</th>
               <th>Actiuni</th>
           </tr>
         </thead>
@@ -78,13 +80,17 @@
               <td class="text-center">{{ $detail->moisture }}</td>
               <td class="text-center">{{ $detail->volum_aviz }}</td>
               <td class="text-center">{{ $detail->volum_receptionat }}</td>
-              <td class="text-center"><i class="fa fa-edit"></i> <i class="fa fa-trash"></i></td>
+              <td class="text-center">{{ $detail->pachete }}</td>
+              <td class="text-center">{{ $detail->total_ml }}</td>
+              <td class="text-center"><a href="#" id="{{ $detail->id }}" class="editDet" data-toggle="modal" data-target="#nirDetailsForm"><i class="fa fa-edit"></i></a> <a href="#" id="{{ $detail->id }}" class="delete_details" data-toggle="modal" data-target="#deleteDetailsForm"><i class="fa fa-trash"></i></a></td>
             </tr>
           @endforeach
-          <tr>
+          <tr style="background: lightgrey">
             <td class="text-center" colspan="3"><strong>TOTAL</strong></td>
             <td class="text-center"><strong>{{ $total_aviz }}</strong></td>
             <td class="text-center"><strong>{{ $total_receptionat }}</strong></td>
+            <td class="text-center"><strong>{{ $total_pachete }}</strong></td>
+            <td class="text-center"><strong>{{ $total_ml }}</strong></td>
             <td class="text-center"><strong></strong></td>
           </tr>
         </tbody>
@@ -92,7 +98,9 @@
     </div>
   </div>
 @include('nir.invoice')
+@include('nir.details')
 @include('nir.delete_invoice')
+@include('nir.delete_detail')
 @stop
 
 
@@ -139,5 +147,46 @@
       const id = $(this).attr("id");
       $('#delete_id').val(id);
     });
+
+    $('.editDet').on('click', function() {
+        var id = $(this).attr("id");
+        $.ajax({
+          url: "{{ route('details.fetch') }}",
+          method: 'get',
+          data: {id:id},
+          dataType:'json',
+          success: function(data)
+              {
+                  $('.modal-title').text('Editeaza pozitie');
+                  $('#id').val(id);
+                  $('#article_id').val(data.article_id);
+                  $('#species_id').val(data.species_id);
+                  $('#moisture_id').val(data.moisture_id);
+                  $('#volum_aviz').val(data.volum_aviz);
+                  $('#volum_receptionat').val(data.volum_receptionat);
+                  $('#pachete').val(data.pachete);
+                  $('#total_ml').val(data.total_ml);
+              }
+        });
+        $(document).on('submit', function() {
+          var id = $('#id').val();
+          $('form').attr('action', '/nir/details/' + id + '/update');
+          $("input[name='_method']").val('PATCH');
+      });
+    });
+
+    $('#nirDetailsForm').on('hidden.bs.modal', function() {
+      $(this).find('form')[0].reset();
+      $('form').attr('action', '/nir/details/add');
+      $('.modal-title').text('Adauga detalii');
+      $('#id').val('');
+      $(document).off('submit');
+    });
+
+    $('.delete_details').on('click', function() {
+      const id = $(this).attr("id");
+      $('#delete_detail_id').val(id);
+    });
+
   </script>
 @endsection

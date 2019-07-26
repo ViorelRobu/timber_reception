@@ -5,15 +5,27 @@
 @stop
 
 @section('content')
+@if (session()->get('details_error'))
+  <div class="alert alert-danger alert-block">
+    <button type="button" class="close" data-dismiss="alert">×</button>	
+      <strong>{{ session()->get('details_error') }}</strong>
+  </div>
+@endif
+
+@if (session()->get('invoice_error'))
+  <div class="alert alert-danger alert-block">
+    <button type="button" class="close" data-dismiss="alert">×</button>	
+      <strong>{{ session()->get('invoice_error') }}</strong>
+  </div>
+@endif
 
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+  @foreach ($errors->all() as $error)
+    <div class="alert alert-danger alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+        <strong>{{ $error }}</strong>
     </div>
+  @endforeach
 @endif
 
   <div class="box">
@@ -124,16 +136,16 @@
                   <button type="button" class="remBtn btn btn-danger">Sterge</button>
               </div>
               <div class="form-group col-md-3">
-                  <input type="text" class="form-control" id="volum_aviz" name="volum_aviz[]" placeholder="Volum aviz" required>
+                  <input type="number" class="form-control" id="volum_aviz" step="0.01" name="volum_aviz[]" placeholder="Volum aviz" required>
               </div>
               <div class="form-group col-md-3">
-                  <input type="text" class="form-control" id="volum_receptionat" name="volum_receptionat[]" placeholder="Volum factura" required>
+                  <input type="number" class="form-control" id="volum_receptionat" step="0.001" name="volum_receptionat[]" placeholder="Volum factura" required>
               </div>
               <div class="form-group col-md-3">
-                  <input type="text" class="form-control" id="pachete" name="pachete[]" placeholder="Numar pachete" required>
+                  <input type="number" class="form-control" id="pachete" name="pachete[]" placeholder="Numar pachete" required>
               </div>
               <div class="form-group col-md-3">
-                  <input type="text" class="form-control" id="total_ml" name="total_ml[]" placeholder="Total lungimi pachete" required>
+                  <input type="number" class="form-control" id="total_ml" step="0.01" name="total_ml[]" placeholder="Total lungimi pachete" required>
               </div>
               <div class="col-xs-12"><hr></div>
           </div>`
@@ -164,14 +176,14 @@
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </div>
-                  <input type="text" class="form-control pull-right" id="data_factura" name="data_factura" data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Data Factura" autocomplete="off">
+                  <input type="text" class="form-control pull-right" id="data_factura" name="data_factura" data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Data Factura" autocomplete="off" required>
                 </div>
               </div>
               <div class="form-group col-md-2">
-                <input type="text" class="form-control pull-right" id="valoare_factura" name="valoare_factura" placeholder="Valoare factura" autocomplete="off" required>
+                <input type="number" class="form-control pull-right" id="valoare_factura" name="valoare_factura" placeholder="Valoare factura" autocomplete="off" required>
               </div>
               <div class="form-group col-md-2">
-                <input type="text" class="form-control pull-right" id="valoare_transport" name="valoare_transport" placeholder="Valoare transport" autocomplete="off" required>
+                <input type="number" class="form-control pull-right" id="valoare_transport" name="valoare_transport" placeholder="Valoare transport" autocomplete="off" required>
               </div>
               <div class="form-group col-md-2">
                 <button type="button" class="remInvBtn btn btn-danger">Sterge factura</button>

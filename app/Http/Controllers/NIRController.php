@@ -83,21 +83,28 @@ class NIRController extends Controller
         // get the id of the created record
         $nir_id = $nir->id;
 
-        for ($i=0; $i < count($request->article_id); $i++) { 
-            $nirDetails->create([
-                'nir_id' => $nir_id,
-                'article_id' => $request->article_id[$i],
-                'species_id' => $request->species_id[$i],
-                'volum_aviz' => $request->volum_aviz[$i],
-                'volum_receptionat' => $request->volum_receptionat[$i],
-                'moisture_id' => $request->moisture_id[$i],
-                'pachete' => $request->pachete[$i],
-                'total_ml' => $request->total_ml[$i],
-                'user_id' => auth()->user()->id
-            ]);
+        // dd($request->article_id);
+
+        if ($request->article_id[0] !== null  && $request->species_id[0] !== null && $request[0] !== null) {
+            for ($i=0; $i < count($request->article_id); $i++) { 
+                $nirDetails->create([
+                    'nir_id' => $nir_id,
+                    'article_id' => $request->article_id[$i],
+                    'species_id' => $request->species_id[$i],
+                    'volum_aviz' => $request->volum_aviz[$i],
+                    'volum_receptionat' => $request->volum_receptionat[$i],
+                    'moisture_id' => $request->moisture_id[$i],
+                    'pachete' => $request->pachete[$i],
+                    'total_ml' => $request->total_ml[$i],
+                    'user_id' => auth()->user()->id
+                ]);
+            }
+        } else {
+            $request->session()->flash('details_error', 'Nu au fost adaugate detalii la NIR deoarece campurile necesare nu au fost completate!');
+            return back();
         }
 
-        if ($request->numar_factura && $request->data_factura) {
+        if ($request->numar_factura && $request->data_factura && $request->valoare_factura && $request->valoare_transport) {
             $invoice = new Invoice();
             $invoice->nir_id = $nir_id;
             $invoice->numar_factura = $request->numar_factura;
@@ -106,6 +113,9 @@ class NIRController extends Controller
             $invoice->valoare_transport = $request->valoare_transport;
             $invoice->user_id = auth()->user()->id;
             $invoice->save();
+        } else {
+            $request->session()->flash('invoice_error', 'Deoarece nu au fost completate toate campurile factura nu a fost adaugata pe NIR!');
+            return back();
         }
 
         return redirect('/nir');
@@ -129,11 +139,15 @@ class NIRController extends Controller
                 'species.name as species',
                 'moisture.name as moisture',
                 'nir_details.volum_aviz as volum_aviz',
-                'nir_details.volum_receptionat as volum_receptionat'
+                'nir_details.volum_receptionat as volum_receptionat',
+                'nir_details.pachete as pachete',
+                'nir_details.total_ml as total_ml'
             ])->get();
 
         $total_aviz = 0;
         $total_receptionat = 0;
+        $total_pachete = 0;
+        $total_ml = 0;
 
         foreach ($nir_details as $details) {
             $total_aviz += $details->volum_aviz;
@@ -143,6 +157,18 @@ class NIRController extends Controller
             $total_receptionat += $details->volum_receptionat;
         }
 
+        foreach ($nir_details as $details) {
+            $total_pachete += $details->pachete;
+        }
+
+        foreach ($nir_details as $details) {
+            $total_ml += $details->total_ml;
+        }
+
+
+        $articles = Article::all()->sortBy('name');
+        $species = Species::all()->sortBy('name');
+        $moistures = Moisture::all()->sortBy('name');
         $company = CompanyInfo::where('id', $nir->company_id)->value('name');
         $invoice = Invoice::where('nir_id', $nir->id)->get();
         $supplier = Suppliers::where('id', $nir->supplier_id)->value('name');
@@ -158,7 +184,12 @@ class NIRController extends Controller
                         'certification' => $certification,
                         'nir_details' =>$nir_details,
                         'total_aviz' => $total_aviz,
-                        'total_receptionat' => $total_receptionat
+                        'total_receptionat' => $total_receptionat,
+                        'total_pachete' => $total_pachete,
+                        'total_ml' => $total_ml,
+                        'articles' => $articles,
+                        'species' => $species,
+                        'moistures' => $moistures
                     ]);
     }
 

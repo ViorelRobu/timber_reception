@@ -50,10 +50,10 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <input type="text" class="form-control" id="greutate_bruta" name="greutate_bruta" placeholder="Greutate bruta">
+                    <input type="number" class="form-control" id="greutate_bruta" step="0.01" name="greutate_bruta" placeholder="Greutate bruta">
                 </div>
                 <div class="form-group col-md-6">
-                    <input type="text" class="form-control" id="greutate_neta" name="greutate_neta" placeholder="Greutate neta">
+                    <input type="number" class="form-control" id="greutate_neta" step="0.01" name="greutate_neta" placeholder="Greutate neta">
                 </div>
                 <div class="form-group col-md-4">
                     <input type="text" class="form-control" id="serie_aviz" name="serie_aviz" placeholder="Serie aviz" required>

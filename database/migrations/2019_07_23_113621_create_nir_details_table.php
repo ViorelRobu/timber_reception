@@ -18,8 +18,8 @@ class CreateNirDetailsTable extends Migration
             $table->unsignedBigInteger('nir_id');
             $table->unsignedBigInteger('article_id');
             $table->unsignedBigInteger('species_id');
-            $table->double('volum_aviz', 6, 2);
-            $table->double('volum_receptionat', 6, 2);
+            $table->double('volum_aviz', 6, 3);
+            $table->double('volum_receptionat', 6, 3);
             $table->unsignedBigInteger('moisture_id');
             $table->integer('pachete');
             $table->double('total_ml', 6, 2);

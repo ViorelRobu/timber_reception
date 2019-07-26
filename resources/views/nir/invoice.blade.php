@@ -29,10 +29,10 @@
                         </div>
                     </div>
                     <div class="form-group col-md-6">
-                        <input type="text" class="form-control pull-right" id="valoare_factura" name="valoare_factura" placeholder="Valoare factura" autocomplete="off" required>
+                        <input type="number" class="form-control pull-right" id="valoare_factura" step="0.01" name="valoare_factura" placeholder="Valoare factura" autocomplete="off" required>
                     </div>
                     <div class="form-group col-md-6">
-                        <input type="text" class="form-control pull-right" id="valoare_transport" name="valoare_transport" placeholder="Valoare transport" autocomplete="off" required>
+                        <input type="number" class="form-control pull-right" id="valoare_transport" step="0.01" name="valoare_transport" placeholder="Valoare transport" autocomplete="off" required>
                     </div>
                 </div>
             </div>

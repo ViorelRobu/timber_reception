@@ -50,10 +50,10 @@
                     </div>
                 </div>
                 <div class="form-group col-md-3">
-                    <input type="text" class="form-control" id="greutate_bruta" name="greutate_bruta" placeholder="Greutate bruta">
+                    <input type="number" class="form-control" id="greutate_bruta" step="0.01" name="greutate_bruta" placeholder="Greutate bruta">
                 </div>
                 <div class="form-group col-md-3">
-                    <input type="text" class="form-control" id="greutate_neta" name="greutate_neta" placeholder="Greutate neta">
+                    <input type="number" class="form-control" id="greutate_neta" step="0.01" name="greutate_neta" placeholder="Greutate neta">
                 </div>
                 <div class="form-group col-md-4">
                     <input type="text" class="form-control" id="serie_aviz" name="serie_aviz" placeholder="Serie aviz" required>
@@ -105,7 +105,7 @@
 
                     <div class="group-nir">
                         <div class="form-group col-md-4">
-                            <select class="custom-select form-control" name="article_id[]" id="article_id" required>
+                            <select class="custom-select form-control" name="article_id[]" id="article_id" value="" required>
                                 <option value="" selected>--- Articol ---</option>
                                 @foreach ($articles as $article)
                                     <option value="{{ $article->id }}">{{ $article->name }}</option>
@@ -113,7 +113,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="custom-select form-control" name="species_id[]" id="species_id" required>
+                            <select class="custom-select form-control" name="species_id[]" id="species_id" value="" required>
                                 <option value="" selected>--- Specie ---</option>
                                 @foreach ($species as $species)
                                     <option value="{{ $species->id }}">{{ $species->name }}</option>
@@ -121,7 +121,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="custom-select form-control" name="moisture_id[]" id="moisture_id" required>
+                            <select class="custom-select form-control" name="moisture_id[]" id="moisture_id" value="" required>
                                 <option value="" selected>--- Grup ---</option>
                                 @foreach ($moistures as $moisture)
                                     <option value="{{ $moisture->id }}">{{ $moisture->name }}</option>
@@ -132,16 +132,16 @@
                         <button type="button" class="addBtn btn btn-secondary">Adauga</button>
                     </div>
                         <div class="form-group col-md-3">
-                            <input type="text" class="form-control" id="volum_aviz" name="volum_aviz[]" placeholder="Volum aviz" required>
+                            <input type="number" class="form-control" id="volum_aviz" step="0.01" name="volum_aviz[]" placeholder="Volum aviz" value="" required>
                         </div>
                         <div class="form-group col-md-3">
-                            <input type="text" class="form-control" id="volum_receptionat" name="volum_receptionat[]" placeholder="Volum factura" required>
+                            <input type="number" class="form-control" id="volum_receptionat" step="0.001" name="volum_receptionat[]" placeholder="Volum factura" value="" required>
                         </div>
                         <div class="form-group col-md-3">
-                            <input type="text" class="form-control" id="pachete" name="pachete[]" placeholder="Numar pachete" required>
+                            <input type="number" class="form-control" id="pachete" name="pachete[]" placeholder="Numar pachete" value="" required>
                         </div>
                         <div class="form-group col-md-3">
-                            <input type="text" class="form-control" id="total_ml" name="total_ml[]" placeholder="Total lungimi pachete" required>
+                            <input type="number" class="form-control" id="total_ml" step="0.01" name="total_ml[]" placeholder="Total lungimi pachete" value="" required>
                         </div>
                         <div class="col-md-12"><hr></div>
                     </div>
