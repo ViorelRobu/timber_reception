@@ -105,4 +105,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(NIRDetails::class, 'user_id');
     }
+
+    public function nirNumberCreator()
+    {
+        return $this->hasMany(Number::class, 'user_id');
+    }
 }

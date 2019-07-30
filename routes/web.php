@@ -104,6 +104,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/add', 'MoistureController@store');
             Route::patch('/{moisture}/update', 'MoistureController@update');
         });
+        Route::prefix('numbers')->group(function () {
+            Route::get('/', 'NumbersController@index')->name('numbers.index');
+            Route::post('/add', 'NumbersController@store');
+        });
     });
 });
 

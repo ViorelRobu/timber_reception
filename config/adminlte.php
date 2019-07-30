@@ -154,6 +154,10 @@ return [
                     'url'  => 'companies',
                 ],
                 [
+                    'text' => 'Numere NIR',
+                    'url'  => 'numbers',
+                ],
+                [
                     'text' => 'Tari',
                     'url'  => 'countries',
                 ],
