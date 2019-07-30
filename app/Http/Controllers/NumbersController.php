@@ -37,7 +37,7 @@ class NumbersController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Number  $number
      * @return \Illuminate\Http\Response
      */
     public function store(Number $number)
@@ -47,17 +47,10 @@ class NumbersController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Number  $number
+     * Validate request and output custom error messages
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Number $number)
-    {
-        //
-    }
-
     public function validateRequest()
     {
         $error_messages = [
