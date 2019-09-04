@@ -21,8 +21,9 @@ use Illuminate\Support\Facades\Gate;
 class NIRController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all the NIR's
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -75,9 +76,12 @@ class NIRController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created NIR into the database including the coresponding details and invoice.
      *
+     * @param  \App\NIR  $nir
+     * @param  \App\NIRDetails  $nirDetails
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Number  $number
      * @return \Illuminate\Http\Response
      */
     public function store(NIR $nir, NIRDetails $nirDetails, Request $request, Number $number)
@@ -88,11 +92,11 @@ class NIRController extends Controller
         $last_set_number = $number::latest()->where('company_id', $company)->first(['numar_nir', 'created_at']);
         $last_nir_number = $nir::latest()->where('company_id', $company)->first(['numar_nir', 'created_at']);
         if ($last_set_number->created_at->gt($last_nir_number->created_at)) {
-            $new_nir = $last_set_number->numar_nir + 1;
+            $new_nir = $last_set_number->numar_nir;
         } else {
             $new_nir = $last_nir_number->numar_nir + 1;
         }
-        // Create the new nir
+        // Create the new NIR
         $nir = new NIR();
         $nir->company_id = $company;
         $nir->numar_nir = $new_nir;
@@ -115,8 +119,7 @@ class NIRController extends Controller
         // get the id of the created record
         $nir_id = $nir->id;
 
-        // dd($request->article_id);
-
+        // Add details to the NIR
         if ($request->article_id[0] !== null && $request->species_id[0] !== null && $request->moisture_id[0] !== null) {
             for ($i=0; $i < count($request->article_id); $i++) { 
                 $nirDetails->create([
@@ -136,6 +139,7 @@ class NIRController extends Controller
             return back();
         }
 
+        // Add the invoice to the NIR
         if ($request->numar_factura && $request->data_factura && $request->valoare_factura && $request->valoare_transport) {
             $invoice = new Invoice();
             $invoice->nir_id = $nir_id;
@@ -154,7 +158,7 @@ class NIRController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified NIR.
      *
      * @param  \App\NIR  $nir
      * @return \Illuminate\Http\Response
@@ -225,6 +229,12 @@ class NIRController extends Controller
                     ]);
     }
 
+    /**
+     * Fetch the NIR data in JSON format.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function fetchNIR(Request $request)
     {
         $nir = NIR::findOrFail($request->id);
@@ -252,8 +262,7 @@ class NIRController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\NIR  $nIR
+     * @param  \App\NIR  $nir
      * @return \Illuminate\Http\Response
      */
     public function update(NIR $nir)
@@ -263,6 +272,11 @@ class NIRController extends Controller
         return redirect('/nir');
     }
 
+    /**
+     * Validate NIR data before submission
+     * 
+     * @return array
+     */
     public function validateRequest()
     {
         $error_messages = [
@@ -303,6 +317,11 @@ class NIRController extends Controller
         ], $error_messages);
     }
 
+    /**
+     * Validate NIR details data before submission
+     * 
+     * @return array
+     */
     public function validateRequestDetails()
     {
         $error_messages = [
