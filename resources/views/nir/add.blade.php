@@ -17,7 +17,7 @@
             <input type="hidden" name="company_id" id="company_id" value="{{ session()->get('company_was_selected') }}">
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <input type="text" class="form-control" id="numar_nir" name="numar_nir" placeholder="Numar NIR" required>
+                    <input type="text" class="form-control" id="numar_nir" name="numar_nir" placeholder="Numar NIR" disabled>
                 </div>
                 <div class="form-group col-md-4">
                     <div class="input-group date">

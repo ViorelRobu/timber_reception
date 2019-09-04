@@ -208,7 +208,7 @@
         success: function(data)
             {
                 $('#id').val(id);
-                $('#numar_nir').val(data.numar_nir);
+                $('#numar_nir').val(data.numar_nir).prop('disabled', true);
                 $('#data_nir').val(data.data_nir);
                 $('#numar_we').val(data.numar_we);
                 $('#supplier_id').val(data.supplier_id);

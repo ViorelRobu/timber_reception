@@ -15,6 +15,7 @@ use App\Species;
 use App\Moisture;
 use App\NIRDetails;
 use App\Invoice;
+use App\Number;
 use Illuminate\Support\Facades\Gate;
 
 class NIRController extends Controller
@@ -79,10 +80,38 @@ class NIRController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(NIR $nir, NIRDetails $nirDetails, Request $request)
+    public function store(NIR $nir, NIRDetails $nirDetails, Request $request, Number $number)
     {
-        // dd($request->request);
-        $nir = auth()->user()->nirCreator()->create($this->validateRequest());
+        // Get the company_id with which the user logged in
+        $company = $request->session()->get('company_was_selected');
+        // Check to see which nir number to use next
+        $last_set_number = $number::latest()->where('company_id', $company)->first(['numar_nir', 'created_at']);
+        $last_nir_number = $nir::latest()->where('company_id', $company)->first(['numar_nir', 'created_at']);
+        if ($last_set_number->created_at->gt($last_nir_number->created_at)) {
+            $new_nir = $last_set_number->numar_nir + 1;
+        } else {
+            $new_nir = $last_nir_number->numar_nir + 1;
+        }
+        // Create the new nir
+        $nir = new NIR();
+        $nir->company_id = $company;
+        $nir->numar_nir = $new_nir;
+        $nir->data_nir = $request->data_nir;
+        $nir->numar_we = $request->numar_we;
+        $nir->supplier_id = $request->supplier_id;
+        $nir->dvi = $request->dvi;
+        $nir->data_dvi = $request->data_dvi;
+        $nir->greutate_bruta = $request->greutate_bruta;
+        $nir->greutate_neta = $request->greutate_neta;
+        $nir->serie_aviz = $request->serie_aviz;
+        $nir->numar_aviz = $request->numar_aviz;
+        $nir->data_aviz = $request->data_aviz;
+        $nir->specificatie = $request->specificatie;
+        $nir->vehicle_id = $request->vehicle_id;
+        $nir->numar_inmatriculare = $request->numar_inmatriculare;
+        $nir->certification_id = $request->certification_id;
+        $nir->user_id = auth()->user()->id;
+        $nir->save();
         // get the id of the created record
         $nir_id = $nir->id;
 
@@ -238,7 +267,6 @@ class NIRController extends Controller
     {
         $error_messages = [
             'company_id.required' => 'ID-ul companiei este necesar. Reincarcati pagina si incercati din nou!',
-            'numar_nir.required' => 'Completati numarul NIR!',
             'data_nir.required' => 'Completati data NIR!',
             'numar_we.sometimes' => 'Verificati numarul WE!',
             'supplier_id.required' => 'Selectati furnizorul din lista!',
