@@ -140,7 +140,7 @@ class NIRController extends Controller
         }
 
         // Add the invoice to the NIR
-        if ($request->numar_factura && $request->data_factura && $request->valoare_factura && $request->valoare_transport) {
+        if ($request->has('numar_factura', 'data_factura', 'valoare_factura', 'valoare_transport')) {
             $invoice = new Invoice();
             $invoice->nir_id = $nir_id;
             $invoice->numar_factura = $request->numar_factura;
