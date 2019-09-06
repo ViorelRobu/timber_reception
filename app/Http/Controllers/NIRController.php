@@ -11,6 +11,7 @@ use App\Suppliers;
 use App\Certification;
 use App\Vehicle;
 use App\Article;
+use App\Countries;
 use App\Species;
 use App\Moisture;
 use App\NIRDetails;
@@ -282,9 +283,24 @@ class NIRController extends Controller
      * @param null
      * @return mixed
      */
-    public function printNIR()
+    public function printNIR(NIR $nir)
     {
-        $pdf = PDF::loadHTML('<h1>test</h1>');
+        $company = CompanyInfo::where('id', $nir->company_id)->get();
+        $supplier = Suppliers::where('id', $nir->supplier_id)->get();
+        $country = Countries::where('id', $supplier[0]->country_id)->value('name');
+        $vehicle = Vehicle::where('id', $nir->vehicle_id)->value('name');
+        $invoice = Invoice::where('nir_id', $nir->id)->get();
+
+        $data = [
+            'company' => $company,
+            'supplier' => $supplier,
+            'country' => $country,
+            'nir' => $nir,
+            'vehicle' => $vehicle,
+            'invoice' => $invoice,
+        ];
+
+        $pdf = PDF::loadView('nir.print', $data);
         return $pdf->inline();
     }
 
