@@ -166,6 +166,7 @@
                 <hr>
               </div>
               <div class="form-group col-md-3">
+                <input type="hidden" name="invoice_to_add" value="true">
                 <input type="text" class="form-control pull-right" id="numar_factura" name="numar_factura" placeholder="Numar factura" autocomplete="off" required>
               </div>
               <div class="form-group col-md-3">

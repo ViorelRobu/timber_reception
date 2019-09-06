@@ -86,6 +86,7 @@ class NIRController extends Controller
      */
     public function store(NIR $nir, NIRDetails $nirDetails, Request $request, Number $number)
     {
+        // // dd($this->validateRequestDetails()['article_id'][0]);
         // Get the company_id with which the user logged in
         $company = $request->session()->get('company_was_selected');
         // Check to see which nir number to use next
@@ -100,20 +101,20 @@ class NIRController extends Controller
         $nir = new NIR();
         $nir->company_id = $company;
         $nir->numar_nir = $new_nir;
-        $nir->data_nir = $request->data_nir;
-        $nir->numar_we = $request->numar_we;
-        $nir->supplier_id = $request->supplier_id;
-        $nir->dvi = $request->dvi;
-        $nir->data_dvi = $request->data_dvi;
-        $nir->greutate_bruta = $request->greutate_bruta;
-        $nir->greutate_neta = $request->greutate_neta;
-        $nir->serie_aviz = $request->serie_aviz;
-        $nir->numar_aviz = $request->numar_aviz;
-        $nir->data_aviz = $request->data_aviz;
-        $nir->specificatie = $request->specificatie;
-        $nir->vehicle_id = $request->vehicle_id;
-        $nir->numar_inmatriculare = $request->numar_inmatriculare;
-        $nir->certification_id = $request->certification_id;
+        $nir->data_nir = $this->validateRequest()['data_nir'];
+        $nir->numar_we = $this->validateRequest()['numar_we'];
+        $nir->supplier_id = $this->validateRequest()['supplier_id'];
+        $nir->dvi = $this->validateRequest()['dvi'];
+        $nir->data_dvi = $this->validateRequest()['data_dvi'];
+        $nir->greutate_bruta = $this->validateRequest()['greutate_bruta'];
+        $nir->greutate_neta = $this->validateRequest()['greutate_neta'];
+        $nir->serie_aviz = $this->validateRequest()['serie_aviz'];
+        $nir->numar_aviz = $this->validateRequest()['numar_aviz'];
+        $nir->data_aviz = $this->validateRequest()['data_aviz'];
+        $nir->specificatie = $this->validateRequest()['specificatie'];
+        $nir->vehicle_id = $this->validateRequest()['vehicle_id'];
+        $nir->numar_inmatriculare = $this->validateRequest()['numar_inmatriculare'];
+        $nir->certification_id = $this->validateRequest()['certification_id'];
         $nir->user_id = auth()->user()->id;
         $nir->save();
         // get the id of the created record
@@ -124,13 +125,13 @@ class NIRController extends Controller
             for ($i=0; $i < count($request->article_id); $i++) { 
                 $nirDetails->create([
                     'nir_id' => $nir_id,
-                    'article_id' => $request->article_id[$i],
-                    'species_id' => $request->species_id[$i],
-                    'volum_aviz' => $request->volum_aviz[$i],
-                    'volum_receptionat' => $request->volum_receptionat[$i],
-                    'moisture_id' => $request->moisture_id[$i],
-                    'pachete' => $request->pachete[$i],
-                    'total_ml' => $request->total_ml[$i],
+                    'article_id' => $this->validateRequestDetails()['article_id'][$i],
+                    'species_id' => $this->validateRequestDetails()['species_id'][$i],
+                    'volum_aviz' => $this->validateRequestDetails()['volum_aviz'][$i],
+                    'volum_receptionat' => $this->validateRequestDetails()['volum_receptionat'][$i],
+                    'moisture_id' => $this->validateRequestDetails()['moisture_id'][$i],
+                    'pachete' => $this->validateRequestDetails()['pachete'][$i],
+                    'total_ml' => $this->validateRequestDetails()['total_ml'][$i],
                     'user_id' => auth()->user()->id
                 ]);
             }
@@ -140,7 +141,10 @@ class NIRController extends Controller
         }
 
         // Add the invoice to the NIR
-        if ($request->has('numar_factura', 'data_factura', 'valoare_factura', 'valoare_transport')) {
+        if (!$request->invoice_to_add) {
+            // Do nothing, no validation required
+        } elseif ($request->filled('numar_factura', 'data_factura', 'valoare_factura', 'valoare_transport')) {
+            // Save the invoice data
             $invoice = new Invoice();
             $invoice->nir_id = $nir_id;
             $invoice->numar_factura = $request->numar_factura;
@@ -299,7 +303,6 @@ class NIRController extends Controller
 
         return request()->validate([
             'company_id' => 'required',
-            'numar_nir' => 'required',
             'data_nir' => 'required',
             'numar_we' => 'sometimes',
             'supplier_id' => 'required',
