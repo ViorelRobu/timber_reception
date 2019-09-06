@@ -17,6 +17,7 @@ use App\NIRDetails;
 use App\Invoice;
 use App\Number;
 use Illuminate\Support\Facades\Gate;
+use PDF;
 
 class NIRController extends Controller
 {
@@ -274,6 +275,17 @@ class NIRController extends Controller
         $nir->update($this->validateRequest());
 
         return redirect('/nir');
+    }
+    /**
+     * Print the NIR page
+     * 
+     * @param null
+     * @return mixed
+     */
+    public function printNIR()
+    {
+        $pdf = PDF::loadHTML('<h1>test</h1>');
+        return $pdf->inline();
     }
 
     /**

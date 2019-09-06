@@ -81,6 +81,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::patch('/details/{nir_details}/update', 'NIRDetailsController@update');
             Route::delete('/invoice/delete', 'InvoicesController@destroy');
             Route::delete('/details/delete', 'NIRDetailsController@destroy');
+            Route::get('/print', 'NIRController@printNIR');
             Route::group(['middleware' => 'nir.rights'], function () {
                 Route::get('/{nir}/show', 'NIRController@show');
                 Route::patch('/{nir}/update', 'NIRController@update');
