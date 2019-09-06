@@ -285,11 +285,52 @@ class NIRController extends Controller
      */
     public function printNIR(NIR $nir)
     {
+        $nir_details = DB::table('nir_details')->join('articles', 'nir_details.article_id', '=', 'articles.id')
+            ->join('species', 'nir_details.species_id', '=', 'species.id')
+            ->join('moisture', 'nir_details.moisture_id', '=', 'moisture.id')
+            ->where('nir_id', $nir->id)
+            ->select([
+                'nir_details.id as id',
+                'articles.name as article',
+                'species.name as species',
+                'moisture.name as moisture',
+                'nir_details.volum_aviz as volum_aviz',
+                'nir_details.volum_receptionat as volum_receptionat',
+                'nir_details.pachete as pachete',
+                'nir_details.total_ml as total_ml'
+            ])->get();
+
+        $total_aviz = 0;
+        $total_receptionat = 0;
+        $total_pachete = 0;
+        $total_ml = 0;
+
+        foreach ($nir_details as $details) {
+            $total_aviz += $details->volum_aviz;
+        }
+
+        foreach ($nir_details as $details) {
+            $total_receptionat += $details->volum_receptionat;
+        }
+
+        foreach ($nir_details as $details) {
+            $total_pachete += $details->pachete;
+        }
+
+        foreach ($nir_details as $details) {
+            $total_ml += $details->total_ml;
+        }
+
         $company = CompanyInfo::where('id', $nir->company_id)->get();
         $supplier = Suppliers::where('id', $nir->supplier_id)->get();
         $country = Countries::where('id', $supplier[0]->country_id)->value('name');
         $vehicle = Vehicle::where('id', $nir->vehicle_id)->value('name');
         $invoice = Invoice::where('nir_id', $nir->id)->get();
+        $invoice_count = Invoice::where('nir_id', $nir->id)->count();
+
+        if($invoice_count === 0) {
+            $invoice = null;
+        }
 
         $data = [
             'company' => $company,
@@ -298,6 +339,11 @@ class NIRController extends Controller
             'nir' => $nir,
             'vehicle' => $vehicle,
             'invoice' => $invoice,
+            'nir_details' => $nir_details,
+            'total_aviz' => $total_aviz,
+            'total_receptionat' => $total_receptionat,
+            'total_pachete' => $total_pachete,
+            'total_ml' => $total_ml
         ];
 
         $pdf = PDF::loadView('nir.print', $data);

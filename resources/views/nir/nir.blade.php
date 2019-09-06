@@ -40,7 +40,7 @@
         </div>
         <div class="col-sm-4">
           @if ($invoice->count() !== 0)
-            <h4><strong>Factura:</strong>   {{ $invoice[0]->numar_factura }} / {{ $invoice[0]->data_factura }} <a href="" id="{{ $invoice[0]->id }}" class="editInvoice" data-toggle="modal" data-target="#invoiceForm"><i class="fa fa-edit pull-right"></i></a><a href="" id="{{ $invoice[0]->id }}" class="delete" data-toggle="modal" data-target="#deleteInvoiceForm"><i class="fa fa-trash pull-right"></i></a></h4>
+            <h4><strong>Factura:</strong>   {{ $invoice[0]->numar_factura }} / {{ $invoice[0]->data_factura }} <a href="" id="{{ $invoice[0]->id }}" class="delete" data-toggle="modal" data-target="#deleteInvoiceForm"><i class="fa fa-trash pull-right"></i></a><a href="" id="{{ $invoice[0]->id }}" class="editInvoice" data-toggle="modal" data-target="#invoiceForm"><i class="fa fa-edit pull-right"></i></a><a href="/nir/{{ $nir->id }}/print" target="_blank" ><i class="fa fa-print pull-right"></i></a></h4>
             <h4><strong>Valoare:</strong> &euro; {{ $invoice[0]->valoare_factura }}</h4>
             <h4><strong>Transport:</strong> &euro; {{ $invoice[0]->valoare_transport }}</h4>
           @endif
