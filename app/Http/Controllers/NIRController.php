@@ -94,7 +94,9 @@ class NIRController extends Controller
         // Check to see which nir number to use next
         $last_set_number = $number::latest()->where('company_id', $company)->first(['numar_nir', 'created_at']);
         $last_nir_number = $nir::latest()->where('company_id', $company)->first(['numar_nir', 'created_at']);
-        if ($last_set_number->created_at->gt($last_nir_number->created_at)) {
+        if ($last_nir_number === null) {
+            $new_nir = $last_set_number->numar_nir;
+        }else if ($last_set_number->created_at->gt($last_nir_number->created_at)) {
             $new_nir = $last_set_number->numar_nir;
         } else {
             $new_nir = $last_nir_number->numar_nir + 1;
