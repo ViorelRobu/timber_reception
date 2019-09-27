@@ -18,7 +18,7 @@ use App\NIRDetails;
 use App\Invoice;
 use App\Number;
 use Illuminate\Support\Facades\Gate;
-use PDF;
+use domPDF;
 
 class NIRController extends Controller
 {
@@ -348,8 +348,12 @@ class NIRController extends Controller
             'total_ml' => $total_ml
         ];
 
-        $pdf = PDF::loadView('nir.print', $data);
-        return $pdf->inline();
+        $pdf = domPDF::loadView('nir.print', $data);
+        return $pdf->stream();
+
+        // $pdf = \App::make('dompdf.wrapper');
+        // $pdf->loadView('nir.print', $data);
+        // return $pdf->stream();
     }
 
     /**

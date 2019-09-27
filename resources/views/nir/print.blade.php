@@ -7,7 +7,7 @@
         <style>
             body {
                 font-family: arial;
-                font-size: 20px;
+                font-size: 15px;
             }
             p {
                 margin: 0;
@@ -20,14 +20,19 @@
             }
             .headings {
                 width: 100%;
+                height: 200px;
+            }
+            .headings div {
+                display: inline-block;
             }
             #furnizor {
-                float: left;
                 width: 50%;
+                height: 200px;
             }
             #cumparator {
-                float: right;
+                padding-top: 53px;
                 width: 50%;
+                height: 200px;
             }
             .content {
                 width: 100%;
@@ -60,6 +65,17 @@
         <br>
         <br>
         <div class="headings">
+            <div id="cumparator">
+                <p><strong>Cumparator</strong></p>
+                <br>
+                <p>{{ $company[0]->name }}</p>
+                <p>{{ $company[0]->address }}</p>
+                <br>
+                <p>{{ $company[0]->j }}</p>
+                <p>{{ $company[0]->cui }}</p>
+                <p>{{ $company[0]->account_number }}</p>
+                <p>{{ $company[0]->bank }}</p>
+            </div>
             <div id="furnizor">
                 <p><strong>Furnizor</strong></p>
                 <br>
@@ -72,19 +88,6 @@
                 <br>
                 <p>FIBU: {{ $supplier[0]->fibu }}</p>                
             </div>
-            <div id="cumparator">
-                <p><strong>Cumparator</strong></p>
-                <br>
-                <p>{{ $company[0]->name }}</p>
-                <p>{{ $company[0]->address }}</p>
-                <br>
-                <p>{{ $company[0]->j }}</p>
-                <p>{{ $company[0]->cui }}</p>
-                <p>{{ $company[0]->account_number }}</p>
-                <p>{{ $company[0]->bank }}</p>
-                <br>
-            </div>
-
         </div>
         <p></p>
         <hr>
