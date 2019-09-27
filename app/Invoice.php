@@ -6,7 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-    protected $dates = [
-        'data_factura'
-    ];
+    //
 }
