@@ -35,7 +35,7 @@
                 height: 200px;
             }
             .content {
-                width: 100%;
+                width: auto;
             }
             #nir_details {
                 border-collapse: collapse;
@@ -130,25 +130,23 @@
             </table>
             <hr>
             <table id="nir_details">
-                <thead>
-                    <td><strong>Sortiment</strong></td>
-                    <td><strong>Volum aviz (m&sup3;)</strong></td>
-                    <td><strong>Volum receptionat (m&sup3;)</strong></td>
-                </thead>
-                <tbody>
-                    @foreach ($nir_details as $detail)
-                        <tr>
-                            <td>{{ $detail->article . ' ' .$detail->species }}, {{ $detail->moisture }}</td>
-                            <td>{{ $detail->volum_aviz }}</td>
-                            <td>{{ $detail->volum_receptionat }}</td>
-                        </tr>
-                    @endforeach
+                <tr>
+                    <th><strong>Sortiment</strong></th>
+                    <th><strong>Volum aviz (m&sup3;)</strong></th>
+                    <th><strong>Volum receptionat (m&sup3;)</strong></th>
+                </tr>
+                @foreach ($nir_details as $detail)
                     <tr>
-                        <td><strong>TOTAL</strong></td>
-                        <td><strong>{{ $total_aviz }}</strong></td>
-                        <td><strong>{{ $total_receptionat }}</strong></td>
+                        <td>{{ $detail->article . ' ' .$detail->species }}, {{ $detail->moisture }}</td>
+                        <td>{{ $detail->volum_aviz }}</td>
+                        <td>{{ $detail->volum_receptionat }}</td>
                     </tr>
-                </tbody>
+                @endforeach
+                <tr>
+                    <td><strong>TOTAL</strong></td>
+                    <td><strong>{{ $total_aviz }}</strong></td>
+                    <td><strong>{{ $total_receptionat }}</strong></td>
+                </tr>
             </table>
             <br>
             <br>
