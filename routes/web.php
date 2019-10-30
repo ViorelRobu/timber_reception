@@ -109,6 +109,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/', 'NumbersController@index')->name('numbers.index');
             Route::post('/add', 'NumbersController@store');
         });
+        Route::prefix('reception')->group(function () {
+            Route::get('/', 'ReceptionCommitteeController@index')->name('reception.index');
+            Route::post('/add', 'ReceptionCommitteeController@store');
+        });
     });
 });
 
