@@ -101,7 +101,7 @@ class User extends Authenticatable
         return $this->hasMany(Species::class, 'user_id');
     }
 
-    public function nirDetailsCreator() 
+    public function nirDetailsCreator()
     {
         return $this->hasMany(NIRDetails::class, 'user_id');
     }
@@ -109,5 +109,10 @@ class User extends Authenticatable
     public function nirNumberCreator()
     {
         return $this->hasMany(Number::class, 'user_id');
+    }
+
+    public function receptionCommitteeCreator()
+    {
+        return $this->hasMany(ReceptionCommittee::class, 'user_id');
     }
 }

@@ -24,8 +24,9 @@
               <th>ID</th>
               <th>Fabrica</th>
               <th>Nume membru comisie de receptie</th>
-              <th>Valabil pana la</th>
-        
+              <th>Activ</th>
+              <th>Actiuni</th>
+
           </tr>
         </thead>
       </table>
@@ -49,10 +50,35 @@
           columns: [
               {data: 'id', name: 'id'},
               {data: 'company', name: 'company'},
-              {data: 'user', name: 'user'},
-              {data: 'active_until', name: 'active_until'},
+              {data: 'member', name: 'member'},
+              {data: 'active', name: 'active'},
+              {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
       });
+    });
+
+    $(document).on('click', '.edit', function() {
+      var id = $(this).attr("id");
+      $.ajax({
+        url: "{{ route('reception_committee.fetch') }}",
+        method: 'get',
+        data: {id:id},
+        dataType:'json',
+        success: function(data)
+            {
+                $('.modal-title').text('Editeaza date membru');
+                $('#id').val(id);
+                $("#member").val(data.member);
+                $('#active').val(data.active);
+            }
+      });
+
+      $(document).on('submit', function() {
+        var id = $('#id').val();
+        $('form').attr('action', 'reception/' + id + '/update');
+        $("input[name='_method']").val('PATCH');
+      });
+
     });
   </script>
 @endsection

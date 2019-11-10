@@ -190,6 +190,10 @@ return [
                     'url'  => 'moisture',
                 ],
                 [
+                    'text' => 'Comisii de receptie',
+                    'url'  => 'reception',
+                ],
+                [
                     'text'    => 'Deseuri',
                     'url'     => '#',
                     'submenu' => [

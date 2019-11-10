@@ -20,37 +20,21 @@ class ReceptionCommitteeController extends Controller
     {
         if ($request->ajax()) {
             $data = DB::table('reception_committee')->join('company_info', 'reception_committee.company_id', '=', 'company_info.id')
-                ->join('users', 'reception_committee.user_id', '=', 'users.id')
                 ->select([
                     'reception_committee.id as id',
                     'company_info.name as company',
-                    'users.name as user',
-                    'reception_committee.active_until as active_until'
+                    'reception_committee.member as member',
+                    'reception_committee.active as active',
                 ])->get();
             return DataTables::of($data)
-                ->addIndexColumn()
+                ->addColumn('action', function($data) {
+                    $edit = '<a href="#" class="edit" id="' . $data->id . '"data-toggle="modal" data-target="#receptionCommitteeForm"><i class="fa fa-edit"></i></a>';
+                return $edit;
+                })
                 ->rawColumns(['action'])
                 ->make(true);
         }
-
-        $company_id = $request->session()->get('company_was_selected');
-        // get the user id's for all the users in the reception_committee table
-        $reception_members = ReceptionCommittee::all()->pluck('user_id')->toArray();
-        // get all the users assigned to the mill for which you are logged in
-        $assigned_users = CompanyAssignment::where('company_id', $company_id)->pluck('user_id')->toArray();
-        // get all the users with rights to the current mill that are not yet assigned
-        $users = User::orderBy('name')->whereIn('id', $assigned_users)->whereNotIn('id', $reception_members)->get();
-        return view('reception_committee.index', compact(['users']));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return view('reception_committee.index');
     }
 
     /**
@@ -59,31 +43,28 @@ class ReceptionCommitteeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ReceptionCommittee $receptionCommittee)
     {
-        //
+        $receptionCommittee = auth()->user()->receptionCommitteeCreator()->create($this->validateRequest());
+        return redirect('/reception');
     }
 
     /**
-     * Display the specified resource.
+     * Fetch the data for the requested resource for populating the edit form
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\ReceptionCommittee  $receptionCommittee
-     * @return \Illuminate\Http\Response
+     * @return json
      */
-    public function show(ReceptionCommittee $receptionCommittee)
+    public function fetchCommitteeMemberDetails(Request $request)
     {
-        //
-    }
+        $receptionCommittee = ReceptionCommittee::findOrFail($request->id);
+        $output = [
+            'member' => $receptionCommittee->member,
+            'active' => $receptionCommittee->active
+        ];
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ReceptionCommittee  $receptionCommittee
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ReceptionCommittee $receptionCommittee)
-    {
-        //
+        return json_encode($output);
     }
 
     /**
@@ -93,19 +74,28 @@ class ReceptionCommitteeController extends Controller
      * @param  \App\ReceptionCommittee  $receptionCommittee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ReceptionCommittee $receptionCommittee)
+    public function update(ReceptionCommittee $receptionCommittee)
     {
-        //
+        // dd($this->validateRequest());
+        $receptionCommittee->update($this->validateRequest());
+        return back();
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Validate request and output custom error messages
      *
-     * @param  \App\ReceptionCommittee  $receptionCommittee
-     * @return \Illuminate\Http\Response
+     * @return array
      */
-    public function destroy(ReceptionCommittee $receptionCommittee)
+    public function validateRequest()
     {
-        //
+        $error_messages = [
+            'member.required' => 'Nici un utilizator selectat!',
+        ];
+
+        return request()->validate([
+            'member' => 'required',
+            'company_id' => 'required',
+            'active' => 'required',
+        ], $error_messages);
     }
 }

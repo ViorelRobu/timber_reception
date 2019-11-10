@@ -21,7 +21,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('suppliers')->group(function() {
             Route::get('/', 'SuppliersController@index')->name('suppliers.index');
             Route::get('/fetch', 'SuppliersController@fetchSuppliers')->name('suppliers.fetch');
-            Route::post('/add', 'SuppliersController@store');   
+            Route::post('/add', 'SuppliersController@store');
             Route::patch('/{suppliers}/update', 'SuppliersController@update');
         });
         Route::prefix('countries')->group(function() {
@@ -34,7 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/', 'SupplierGroupController@index')->name('supplier_group.index');
             Route::get('/fetch', 'SupplierGroupController@fetchSupplierGroup')->name('supplier_group.fetch');
             Route::post('/add', 'SupplierGroupController@store');
-            Route::patch('/{supplier_group}/update', 'SupplierGroupController@update'); 
+            Route::patch('/{supplier_group}/update', 'SupplierGroupController@update');
         });
         Route::prefix('supplier_status')->group(function() {
             Route::get('/', 'SupplierStatusController@index')->name('supplier_status.index');
@@ -111,7 +111,9 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('reception')->group(function () {
             Route::get('/', 'ReceptionCommitteeController@index')->name('reception.index');
+            Route::get('/fetch', 'ReceptionCommitteeController@fetchCommitteeMemberDetails')->name('reception_committee.fetch');
             Route::post('/add', 'ReceptionCommitteeController@store');
+            Route::patch('/{reception_committee}/update', 'ReceptionCommitteeController@update');
         });
     });
 });
