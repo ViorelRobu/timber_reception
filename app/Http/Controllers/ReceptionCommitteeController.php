@@ -25,12 +25,13 @@ class ReceptionCommitteeController extends Controller
                     'company_info.name as company',
                     'reception_committee.member as member',
                     'reception_committee.active as active',
+                    'reception_committee.img_url as img_url'
                 ])->get();
             return DataTables::of($data)
                 ->addColumn('action', function($data) {
                     $edit = '<a href="#" class="edit" id="' . $data->id . '"data-toggle="modal" data-target="#receptionCommitteeForm"><i class="fa fa-edit"></i></a>';
                     $upload = '<a href="#" class="upload" id="' . $data->id . '"data-toggle="modal" data-target="#uploadSignatureForm"><i class="fa fa-plus"></i></a>';
-                    $image = '<a href="#" class="show_signature" id="' . $data->id . '"data-toggle="modal" data-target="#showSignature"><i class="fa fa-eye"></i></a>';
+                    $image = '<a href="#" class="show_signature" data-link="storage/signatures/' . $data->img_url . '"data-toggle="modal" data-target="#showSignature"><i class="fa fa-eye"></i></a>';
                 return $edit . " " . $upload . " " . $image;
                 })
                 ->rawColumns(['action'])

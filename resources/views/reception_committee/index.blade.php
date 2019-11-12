@@ -105,5 +105,10 @@
       });
 
     });
+
+    $(document).on('click', '.show_signature', function() {
+      var link = $(this).attr("data-link");
+      $('#signature_image').attr('src', link);
+      });
   </script>
 @endsection
