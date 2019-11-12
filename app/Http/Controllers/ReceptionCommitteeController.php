@@ -29,7 +29,8 @@ class ReceptionCommitteeController extends Controller
             return DataTables::of($data)
                 ->addColumn('action', function($data) {
                     $edit = '<a href="#" class="edit" id="' . $data->id . '"data-toggle="modal" data-target="#receptionCommitteeForm"><i class="fa fa-edit"></i></a>';
-                return $edit;
+                    $upload = '<a href="#" class="upload" id="' . $data->id . '"data-toggle="modal" data-target="#uploadSignatureForm"><i class="fa fa-plus"></i></a>';
+                return $edit . " " . $upload;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -82,6 +83,27 @@ class ReceptionCommitteeController extends Controller
     }
 
     /**
+     * Upload a signature for the specific reception committee member
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\ReceptionCommittee  $receptionCommittee
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadSignature(ReceptionCommittee $receptionCommittee, Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+            'signature'  => 'required|mimes:jpeg,png',
+        ]);
+        $extension = "." . $request->signature->getClientOriginalExtension();
+        $filename = $request->id . $extension;
+        $request->signature->storeAs('signatures', $filename, ['disk' => 'public']);
+        $receptionCommittee->img_url = $filename;
+        $receptionCommittee->update();
+        return back();
+    }
+
+    /**
      * Validate request and output custom error messages
      *
      * @return array
@@ -89,7 +111,7 @@ class ReceptionCommitteeController extends Controller
     public function validateRequest()
     {
         $error_messages = [
-            'member.required' => 'Nici un utilizator selectat!',
+            'member.required' => 'Nici un utilizator selectat!'
         ];
 
         return request()->validate([

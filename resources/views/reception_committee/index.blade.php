@@ -33,6 +33,7 @@
     </div>
   </div>
 @include('reception_committee.form')
+@include('reception_committee.upload')
 @stop
 
 
@@ -76,6 +77,29 @@
       $(document).on('submit', function() {
         var id = $('#id').val();
         $('form').attr('action', 'reception/' + id + '/update');
+        $("input[name='_method']").val('PATCH');
+      });
+
+    });
+
+    $(document).on('click', '.upload', function() {
+      var id = $(this).attr("id");
+      $.ajax({
+        url: "{{ route('reception_committee.fetch') }}",
+        method: 'get',
+        data: {id:id},
+        dataType:'json',
+        success: function(data)
+            {
+                $('#id_upload').val(id);
+                $("#member_upload").val(data.member);
+                $('#active_upload').val(data.active);
+            }
+      });
+
+      $(document).on('submit', function() {
+        var id = $('#id_upload').val();
+        $('form').attr('action', 'reception/' + id + '/upload');
         $("input[name='_method']").val('PATCH');
       });
 

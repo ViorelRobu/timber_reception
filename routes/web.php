@@ -114,6 +114,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/fetch', 'ReceptionCommitteeController@fetchCommitteeMemberDetails')->name('reception_committee.fetch');
             Route::post('/add', 'ReceptionCommitteeController@store');
             Route::patch('/{reception_committee}/update', 'ReceptionCommitteeController@update');
+            Route::patch('/{reception_committee}/upload', 'ReceptionCommitteeController@uploadSignature');
         });
     });
 });
