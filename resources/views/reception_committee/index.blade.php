@@ -34,6 +34,7 @@
   </div>
 @include('reception_committee.form')
 @include('reception_committee.upload')
+@include('reception_committee.signature')
 @stop
 
 

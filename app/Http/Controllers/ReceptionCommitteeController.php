@@ -30,7 +30,8 @@ class ReceptionCommitteeController extends Controller
                 ->addColumn('action', function($data) {
                     $edit = '<a href="#" class="edit" id="' . $data->id . '"data-toggle="modal" data-target="#receptionCommitteeForm"><i class="fa fa-edit"></i></a>';
                     $upload = '<a href="#" class="upload" id="' . $data->id . '"data-toggle="modal" data-target="#uploadSignatureForm"><i class="fa fa-plus"></i></a>';
-                return $edit . " " . $upload;
+                    $image = '<a href="#" class="show_signature" id="' . $data->id . '"data-toggle="modal" data-target="#showSignature"><i class="fa fa-eye"></i></a>';
+                return $edit . " " . $upload . " " . $image;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
