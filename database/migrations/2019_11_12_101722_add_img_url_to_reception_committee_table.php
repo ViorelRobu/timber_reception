@@ -14,7 +14,7 @@ class AddImgUrlToReceptionCommitteeTable extends Migration
     public function up()
     {
         Schema::table('reception_committee', function (Blueprint $table) {
-            $table->text('img_url');
+            $table->text('img_url')->nullable();
         });
     }
 

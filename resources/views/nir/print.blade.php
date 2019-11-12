@@ -51,6 +51,19 @@
             .basic_title {
                 font-style: italic;
             }
+            .signatures_block {
+                width: 100%;
+            }
+            .signature {
+                width:32%;
+                display: inline-block;
+                padding-top: 100px;
+            }
+
+            .signature-image {
+                height:100px;
+                width: auto;
+            }
         </style>
         <title>NIR</title>
     </head>
@@ -86,7 +99,7 @@
                 <p>{{ $supplier[0]->j }}</p>
                 <p>{{ $supplier[0]->cui }}</p>
                 <br>
-                <p>FIBU: {{ $supplier[0]->fibu }}</p>                
+                <p>FIBU: {{ $supplier[0]->fibu }}</p>
             </div>
         </div>
         <p></p>
@@ -155,7 +168,21 @@
         </div>
         <div class="reception">
             <p>COMISIA DE RECEPTIE</p>
-
+            <div class="signatures_block">
+                 @foreach ($reception_committee as $member)
+                 <div class="signature">
+                     {{ $member->member }}
+                     <br>
+                     @if ($member->img_url != null)
+                        <img class="signature-image" src="storage/signatures/{{ $member->img_url }}" alt="signature">
+                     @else
+                        <div class="signature-image">
+                            &nbsp;
+                        </div>
+                     @endif
+                 </div>
+                @endforeach
+            </div>
         </div>
     </body>
 </html>

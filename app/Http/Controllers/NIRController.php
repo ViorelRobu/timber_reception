@@ -17,6 +17,7 @@ use App\Moisture;
 use App\NIRDetails;
 use App\Invoice;
 use App\Number;
+use App\ReceptionCommittee;
 use Illuminate\Support\Facades\Gate;
 use domPDF;
 
@@ -38,7 +39,7 @@ class NIRController extends Controller
                 ->where('company_id', $company)
                 ->select([
                     'nir.id as id',
-                    'nir.company_id as company_id', 
+                    'nir.company_id as company_id',
                     'nir.numar_nir as numar_nir',
                     'nir.data_nir as data_nir',
                     'nir.numar_we as numar_we',
@@ -46,7 +47,7 @@ class NIRController extends Controller
                     'nir.dvi as dvi',
                     'nir.data_dvi as data_dvi',
                     'nir.greutate_bruta as greutate_bruta',
-                    'nir.greutate_neta as greutate_neta', 
+                    'nir.greutate_neta as greutate_neta',
                     'nir.serie_aviz as serie_aviz',
                     'nir.numar_aviz as numar_aviz',
                     'nir.data_aviz as data_aviz',
@@ -73,7 +74,7 @@ class NIRController extends Controller
         $articles = Article::all()->sortBy('name');
         $species = Species::all()->sortBy('name');
         $moistures = Moisture::all()->sortBy('name');
-        return view('nir.index', ['company_name' => $company_name, 'suppliers' => $suppliers, 'certifications' => $certifications, 'vehicles' => $vehicles, 
+        return view('nir.index', ['company_name' => $company_name, 'suppliers' => $suppliers, 'certifications' => $certifications, 'vehicles' => $vehicles,
         'articles' => $articles, 'species' => $species, 'moistures' => $moistures]);
     }
 
@@ -126,7 +127,7 @@ class NIRController extends Controller
 
         // Add details to the NIR
         if ($request->article_id[0] !== null && $request->species_id[0] !== null && $request->moisture_id[0] !== null) {
-            for ($i=0; $i < count($request->article_id); $i++) { 
+            for ($i=0; $i < count($request->article_id); $i++) {
                 $nirDetails->create([
                     'nir_id' => $nir_id,
                     'article_id' => $this->validateRequestDetails()['article_id'][$i],
@@ -187,7 +188,7 @@ class NIRController extends Controller
                 'nir_details.pachete as pachete',
                 'nir_details.total_ml as total_ml'
             ])->get();
-            
+
         $total_aviz = 0;
         $total_receptionat = 0;
         $total_pachete = 0;
@@ -218,13 +219,13 @@ class NIRController extends Controller
         $supplier = Suppliers::where('id', $nir->supplier_id)->value('name');
         $vehicle = Vehicle::where('id', $nir->vehicle_id)->value('name');
         $certification = Certification::where('id', $nir->certification_id)->value('name');
-        return view('nir.nir', 
+        return view('nir.nir',
                     [
-                        'nir' => $nir, 
-                        'company' => $company, 
-                        'invoice' => $invoice, 
-                        'supplier' => $supplier, 
-                        'vehicle' => $vehicle, 
+                        'nir' => $nir,
+                        'company' => $company,
+                        'invoice' => $invoice,
+                        'supplier' => $supplier,
+                        'vehicle' => $vehicle,
                         'certification' => $certification,
                         'nir_details' =>$nir_details,
                         'total_aviz' => $total_aviz,
@@ -281,7 +282,7 @@ class NIRController extends Controller
     }
     /**
      * Print the NIR page
-     * 
+     *
      * @param null
      * @return mixed
      */
@@ -329,6 +330,8 @@ class NIRController extends Controller
         $vehicle = Vehicle::where('id', $nir->vehicle_id)->value('name');
         $invoice = Invoice::where('nir_id', $nir->id)->get();
         $invoice_count = Invoice::where('nir_id', $nir->id)->count();
+        // get the active reception committee for the current mill
+        $reception_committee = ReceptionCommittee::where('company_id', session()->get('company_was_selected'))->where('active', 1)->get();
 
         if($invoice_count === 0) {
             $invoice = null;
@@ -345,7 +348,8 @@ class NIRController extends Controller
             'total_aviz' => $total_aviz,
             'total_receptionat' => $total_receptionat,
             'total_pachete' => $total_pachete,
-            'total_ml' => $total_ml
+            'total_ml' => $total_ml,
+            'reception_committee' => $reception_committee
         ];
 
         $pdf = domPDF::loadView('nir.print', $data);
@@ -358,7 +362,7 @@ class NIRController extends Controller
 
     /**
      * Validate NIR data before submission
-     * 
+     *
      * @return array
      */
     public function validateRequest()
@@ -378,7 +382,7 @@ class NIRController extends Controller
             'specificatie.sometimes' => 'Verificati specificatia!',
             'vehicle_id.required' => 'Selectati mijlocul de tranport din lista!',
             'numar_inmatriculare.required' => 'Completati numarul numarul de inmatriculare!',
-            'certification_id.required' => 'Selectati certificarea marfii livrata!'            
+            'certification_id.required' => 'Selectati certificarea marfii livrata!'
         ];
 
         return request()->validate([
@@ -402,7 +406,7 @@ class NIRController extends Controller
 
     /**
      * Validate NIR details data before submission
-     * 
+     *
      * @return array
      */
     public function validateRequestDetails()
