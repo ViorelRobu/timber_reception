@@ -5,6 +5,40 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
         <style>
+            /*  SECTIONS  */
+            .section {
+                clear: both;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            /*  COLUMN SETUP  */
+            .col {
+                display: block;
+                float:left;
+                margin: 1% 0 1% 0%;
+            }
+            .col:first-child { margin-left: 0; }
+
+            /*  GROUPING  */
+            .group:before,
+            .group:after { content:""; display:table; }
+            .group:after { clear:both;}
+            .group { zoom:1; /* For IE 6/7 */ }
+
+            /*  GRID OF THREE  */
+            .span_3_of_3 { width: 100%; }
+            .span_2_of_3 { width: 66.66%; }
+            .span_1_of_3 { width: 33.33%; }
+
+            /*  GO FULL WIDTH BELOW 480 PIXELS */
+            @media only screen and (max-width: 480px) {
+                .col {  margin: 1% 0 1% 0%; }
+                .span_3_of_3, .span_2_of_3, .span_1_of_3 { width: 100%; }
+            }
+
+            /* Custom CSS */
+
             body {
                 font-family: arial;
                 font-size: 15px;
@@ -57,7 +91,7 @@
             .signature {
                 width:32%;
                 display: inline-block;
-                padding-top: 100px;
+                padding-top: 10px;
             }
 
             .signature-image {
@@ -168,9 +202,9 @@
         </div>
         <div class="reception">
             <p>COMISIA DE RECEPTIE</p>
-            <div class="signatures_block">
+            <div class="signatures_block section group">
                  @foreach ($reception_committee as $member)
-                 <div class="signature">
+                 <div class="col span_1_of_3 signature">
                      {{ $member->member }}
                      <br>
                      @if ($member->img_url != null)
