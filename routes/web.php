@@ -115,6 +115,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/add', 'ReceptionCommitteeController@store');
             Route::patch('/{reception_committee}/update', 'ReceptionCommitteeController@update');
             Route::patch('/{reception_committee}/upload', 'ReceptionCommitteeController@uploadSignature');
+            Route::patch('/{reception_committee}/delete', 'ReceptionCommitteeController@deleteSignature');
         });
     });
 });

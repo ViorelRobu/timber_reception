@@ -35,6 +35,7 @@
 @include('reception_committee.form')
 @include('reception_committee.upload')
 @include('reception_committee.signature')
+@include('reception_committee.delete')
 @stop
 
 
@@ -100,7 +101,7 @@
 
       $(document).on('submit', function() {
         var id = $('#id_upload').val();
-        $('form').attr('action', 'reception/' + id + '/upload');
+        $('form').attr('action', '/reception/' + id + '/upload');
         $("input[name='_method']").val('PATCH');
       });
 
@@ -109,6 +110,14 @@
     $(document).on('click', '.show_signature', function() {
       var link = $(this).attr("data-link");
       $('#signature_image').attr('src', link);
-      });
+    });
+
+    $(document).on('click', '.delete_signature', function() {
+      var id = $(this).attr("data-delete");
+      console.log(id);
+      var link = $(this).attr("data-link");
+      $('#path').val(link);
+      $('form').attr('action', '/reception/' + id + '/delete');
+    });
   </script>
 @endsection

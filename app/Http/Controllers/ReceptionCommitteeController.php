@@ -7,6 +7,7 @@ use App\ReceptionCommittee;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
 class ReceptionCommitteeController extends Controller
@@ -31,8 +32,9 @@ class ReceptionCommitteeController extends Controller
                 ->addColumn('action', function($data) {
                     $edit = '<a href="#" class="edit" id="' . $data->id . '"data-toggle="modal" data-target="#receptionCommitteeForm"><i class="fa fa-edit"></i></a>';
                     $upload = '<a href="#" class="upload" id="' . $data->id . '"data-toggle="modal" data-target="#uploadSignatureForm"><i class="fa fa-plus"></i></a>';
-                    $image = '<a href="#" class="show_signature" data-link="storage/signatures/' . $data->img_url . '"data-toggle="modal" data-target="#showSignature"><i class="fa fa-eye"></i></a>';
-                return $edit . " " . $upload . " " . $image;
+                    $image = '<a href="#" class="show_signature" data-link="/storage/signatures/' . $data->img_url . '"data-toggle="modal" data-target="#showSignature"><i class="fa fa-eye"></i></a>';
+                    $delete = '<a href="#" class="delete_signature" data-delete="' . $data->id . '" data-link="signatures/' . $data->img_url . '"data-toggle="modal" data-target="#deleteSignature"><i class="fa fa-trash"></i></a>';
+                return $edit . " " . $upload . " " . $image . " " . $delete;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -89,7 +91,7 @@ class ReceptionCommitteeController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\ReceptionCommittee  $receptionCommittee
-     * @return \Illuminate\Http\Response
+     * @return redirect
      */
     public function uploadSignature(ReceptionCommittee $receptionCommittee, Request $request)
     {
@@ -103,6 +105,22 @@ class ReceptionCommitteeController extends Controller
         $receptionCommittee->img_url = $filename;
         $receptionCommittee->update();
         return back();
+    }
+
+    /**
+     * Delete the signature for the specific reception committee member
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\ReceptionCommittee  $receptionCommittee
+     * @return redirect
+     */
+    public function deleteSignature(ReceptionCommittee $receptionCommittee, Request $request)
+    {
+        Storage::disk('public')->delete($request->path);
+        $receptionCommittee->img_url = null;
+        $receptionCommittee->update();
+        return back();
+        
     }
 
     /**
