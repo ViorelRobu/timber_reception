@@ -119,9 +119,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::patch('/{reception_committee}/upload', 'ReceptionCommitteeController@uploadSignature');
             Route::patch('/{reception_committee}/delete', 'ReceptionCommitteeController@deleteSignature');
         });
+        Route::prefix('users')->group(function () {
+            Route::get('/', 'UsersController@index')->name('users.index');
+            Route::post('/add', 'UsersController@store');
+        });
     });
 });
 
-Auth::routes();
+Auth::routes(['verify' => false, 'register' => false, 'reset' => false]);
 
 

@@ -120,12 +120,12 @@ return [
             'icon'        => 'dashboard',
         ],
         [
-            'text'        => 'NIR-uri',
+            'text'        => 'NIR',
             'url'         => 'nir',
             'icon'        => 'list',
         ],
         [
-            'text'        => 'Printeaza NIR-uri',
+            'text'        => 'Printeaza NIR',
             'url'         => '/nir/print_multiple',
             'icon'        => 'print',
         ],
@@ -221,6 +221,11 @@ return [
             'text'    => 'Management utilizatori',
             'icon'    => 'users',
             'submenu' => [
+                [
+                    'text' => 'Lista utilizatori',
+                    'url'  => '/users/',
+                    'icon' => 'check',
+                ],
                 [
                     'text' => 'Drepturi acces companie',
                     'url'  => '/companies/assign/',
