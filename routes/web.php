@@ -72,6 +72,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/fetch', 'NIRController@fetchNIR')->name('nir.fetch');
             Route::get('/invoice/fetch', 'InvoicesController@fetchInvoice')->name('invoice.fetch');
             Route::get('/details/fetch', 'NIRDetailsController@fetchDetails')->name('details.fetch');
+            Route::get('/print_multiple', 'NIRController@showPrintNIRPage');
+            Route::post('/print', 'NIRController@printMultipleNIR');
             Route::post('/add', 'NIRController@store');
             Route::post('/details/add', 'NIRDetailsController@store');
             Route::group(['middleware' => 'verify.invoice'], function () {

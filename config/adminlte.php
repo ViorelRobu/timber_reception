@@ -125,6 +125,11 @@ return [
             'icon'        => 'list',
         ],
         [
+            'text'        => 'Printeaza NIR-uri',
+            'url'         => '/nir/print_multiple',
+            'icon'        => 'print',
+        ],
+        [
             'text'        => 'Facturi',
             'url'         => '/nir/invoices',
             'icon'        => 'file',

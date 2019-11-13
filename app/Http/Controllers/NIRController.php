@@ -283,7 +283,7 @@ class NIRController extends Controller
     /**
      * Print the NIR page
      *
-     * @param null
+     * @param App\NIR
      * @return mixed
      */
     public function printNIR(NIR $nir)
@@ -354,10 +354,105 @@ class NIRController extends Controller
 
         $pdf = domPDF::loadView('nir.print', $data);
         return $pdf->stream();
+    }
 
-        // $pdf = \App::make('dompdf.wrapper');
-        // $pdf->loadView('nir.print', $data);
-        // return $pdf->stream();
+    /**
+     * Display page to select nir to print
+     *
+     * @param  null
+     * @return \Illuminate\Http\Response
+     */
+    public function showPrintNIRPage()
+    {
+        return view('nir.selection');
+    }
+
+    /**
+     * Generate PDF's for multiple NIR
+     *
+     * @param Illuminate\Http\Request
+     * @return mixed
+     */
+    public function printMultipleNIR(Request $request)
+    {
+        $company_id = session()->get('company_was_selected');
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+        $nir = DB::table('nir')
+            ->join('company_info', 'nir.company_id', '=', 'company_info.id')
+            ->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
+            ->join('countries', 'suppliers.country_id', '=', 'countries.id')
+            ->join('vehicles', 'nir.vehicle_id', '=', 'vehicles.id')
+            ->leftJoin('invoices', 'invoices.nir_id', '=', 'nir.id')
+            ->where('company_id', $company_id)
+            ->whereBetween('data_nir', [$from_date, $to_date])
+            ->select([
+                'nir.id as id',
+                'nir.numar_nir as numar_nir',
+                'company_info.name',
+                'company_info.cui',
+                'company_info.j',
+                'company_info.address',
+                'company_info.account_number',
+                'company_info.bank',
+                'nir.numar_nir',
+                'nir.data_nir',
+                'nir.numar_we',
+                'suppliers.fibu as fibu',
+                'suppliers.name as supplier',
+                'suppliers.cui as supplier_cui',
+                'suppliers.j as supplier_j',
+                'suppliers.address as supplier_address',
+                'countries.name as supplier_country',
+                'nir.dvi',
+                'nir.data_dvi',
+                'nir.serie_aviz',
+                'nir.numar_aviz',
+                'nir.data_aviz',
+                'nir.specificatie',
+                'vehicles.name as vehicle',
+                'nir.numar_inmatriculare',
+                'invoices.numar_factura',
+                'invoices.data_factura',
+            ])->get()->toArray();
+ 
+        $nir_count = count($nir);
+
+        for ($i=0; $i < $nir_count; $i++) {
+            $nir_details = DB::table('nir_details')->join('articles', 'nir_details.article_id', '=', 'articles.id')
+                ->join('species', 'nir_details.species_id', '=', 'species.id')
+                ->join('moisture', 'nir_details.moisture_id', '=', 'moisture.id')
+                ->where('nir_id', $nir[$i]->id)
+                ->select([
+                    'nir_details.id as id',
+                    'articles.name as article',
+                    'species.name as species',
+                    'moisture.name as moisture',
+                    'nir_details.volum_aviz as volum_aviz',
+                    'nir_details.volum_receptionat as volum_receptionat',
+                    'nir_details.pachete as pachete',
+                    'nir_details.total_ml as total_ml'
+                ])->get();
+            $totals = DB::table('nir_details')
+                ->where('nir_id', $nir[$i]->id)
+                ->select([
+                    DB::raw('SUM(volum_aviz) as volum_aviz'),
+                    DB::raw('SUM(volum_receptionat) as volum_receptionat'),
+                ])->get();
+            $nir[$i]->details = $nir_details;
+            $nir[$i]->totals = $totals;
+        }
+
+        // get the active reception committee for the current mill
+        $reception_committee = ReceptionCommittee::where('company_id', session()->get('company_was_selected'))->where('active', 1)->get();
+
+        $data = [
+            'nir' => $nir,
+            'reception_committee' => $reception_committee
+        ];
+
+        $pdf = domPDF::loadView('nir.multiple', $data);
+        return $pdf->stream();
     }
 
     /**
