@@ -99,15 +99,19 @@
                 width: auto;
             }
 
-            .page:last-of-type {
-                page-break-after: auto;
+            .page {
+                page-break-after: always;
+            }
+
+            .page:last-child {
+                page-break-after: avoid;
             }
         </style>
         <title>NIR</title>
     </head>
     <body>
     @foreach ($nir as $nir)
-        <div class="page" style="page-break-after:always">
+        <div class="page">
             <br>
             <br>
             <br>
