@@ -1,7 +1,10 @@
 @extends('adminlte::page')
 
 @section('content_header')
-  <h1 class="d-inline"><strong>Lista NIR</strong> - {{ $company_name[0] }} <button id="addCountry" class="btn btn-primary pull-right" data-toggle="modal" data-target="#nirFormAdd">Adauga NIR</button></h1>
+  <h1 class="d-inline"><strong>Lista NIR</strong> - {{ $company_name[0] }} 
+  @can('user')
+    <button id="addCountry" class="btn btn-primary pull-right" data-toggle="modal" data-target="#nirFormAdd">Adauga NIR</button></h1>
+  @endcan
 @stop
 
 @section('content')
@@ -51,8 +54,12 @@
       </table>
     </div>
   </div>
-@include('nir.form')
-@include('nir.add')
+  
+@can('user')
+  @include('nir.form')
+  @include('nir.add')
+@endcan
+
 @stop
 
 

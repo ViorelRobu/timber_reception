@@ -69,9 +69,13 @@ class NIRController extends Controller
                     return $nir->data_aviz ? with(new Carbon($nir->data_aviz))->format('d.m.Y') : '';
                 })
                 ->addColumn('action', function ($nir) {
-                    $view = '<a href="/nir/' . $nir->id . '/show"><i class="fa fa-eye"></i></a>';
-                    $edit = '<a href="#" class="edit" id="' . $nir->id . '"data-toggle="modal" data-target="#nirForm"><i class="fa fa-edit"></i></a>';
-                    return $view . ' ' . $edit;
+                    if(Gate::allows('user')) {
+                        $view = '<a href="/nir/' . $nir->id . '/show"><i class="fa fa-eye"></i></a>';
+                        $edit = '<a href="#" class="edit" id="' . $nir->id . '"data-toggle="modal" data-target="#nirForm"><i class="fa fa-edit"></i></a>';
+                        return $view . ' ' . $edit;
+                    } else {
+                        return '<a href="/nir/' . $nir->id . '/show"><i class="fa fa-eye"></i></a>';
+                    }
                 })
                 ->rawColumns(['action'])
                 ->make(true);

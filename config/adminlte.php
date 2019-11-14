@@ -118,89 +118,109 @@ return [
             'text'        => 'Dashboard',
             'url'         => 'dashboard',
             'icon'        => 'dashboard',
+            'can'         => 'viewer',
         ],
         [
             'text'        => 'NIR',
             'url'         => 'nir',
             'icon'        => 'list',
+            'can'         => 'viewer',
         ],
         [
             'text'        => 'Printeaza NIR',
             'url'         => '/nir/print_multiple',
             'icon'        => 'print',
+            'can'         => 'user',
         ],
         [
             'text'        => 'Facturi',
             'url'         => '/nir/invoices',
             'icon'        => 'file',
+            'can'         => 'user',
         ],
         [
             'text'        => 'Deseuri',
             'url'         => '#',
             'icon'        => 'recycle',
+            'can'         => 'user',
         ],
         [
             'text'        => 'Furnizori',
             'url'         => 'suppliers',
             'icon'        => 'tree',
+            'can'         => 'user',
         ],
         'SETARI',
         [
             'text' => 'Profil utilizator',
             'url'  => '#',
             'icon' => 'user',
+            'can'  => 'viewer',
         ],
         [
             'text'    => 'Nomenclator',
             'icon'    => 'cogs',
+            'can' => 'user',
             'submenu' => [
                 [
                     'text' => 'Date firma',
                     'url'  => 'companies',
+                    'can'  => 'admin',
                 ],
                 [
                     'text' => 'Numere NIR',
                     'url'  => 'numbers',
+                    'can'  => 'admin',
                 ],
                 [
                     'text' => 'Tari',
                     'url'  => 'countries',
+                    'can'  => 'user',
                 ],
                 [
                     'text' => 'Mijloace de transport',
                     'url'  => 'vehicles',
+                    'can'  => 'admin',
                 ],
                 [
                     'text' => 'Certificari',
                     'url'  => 'certifications',
+                    'can'  => 'admin',
                 ],
                 [
                     'text' => 'Grup furnizori',
                     'url'  => 'supplier_group',
+                    'can'  => 'admin',
                 ],
                 [
                     'text' => 'Status furnizori',
                     'url'  => 'supplier_status',
+                    'can'  => 'admin',
                 ],
                 [
                     'text' => 'Articole',
                     'url'  => 'articles',
+                    'can'  => 'admin',
                 ],
                 [
                     'text' => 'Specii',
                     'url'  => 'species',
+                    'can'  => 'admin',
                 ],
                 [
                     'text' => 'Umiditati',
                     'url'  => 'moisture',
+                    'can'  => 'admin',
                 ],
                 [
                     'text' => 'Comisii de receptie',
                     'url'  => 'reception',
+                    'can'  => 'admin',
                 ],
                 [
                     'text'    => 'Deseuri',
                     'url'     => '#',
+                    'can'  => 'admin',
                     'submenu' => [
                         [
                             'text' => 'Grupa principala',
@@ -220,11 +240,13 @@ return [
         [
             'text'    => 'Management utilizatori',
             'icon'    => 'users',
+            'can' => 'admin',
             'submenu' => [
                 [
                     'text' => 'Lista utilizatori',
                     'url'  => '/users/',
                     'icon' => 'check',
+                    'can'  => 'superadmin',
                 ],
                 [
                     'text' => 'Drepturi acces companie',

@@ -115,4 +115,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(ReceptionCommittee::class, 'user_id');
     }
+
+    /*
+    * Get the user class
+    */
+    public function role()
+    {
+        return $this->hasOne(UserGroup::class, 'user_id');
+    }
 }

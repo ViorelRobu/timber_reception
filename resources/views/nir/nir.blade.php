@@ -40,13 +40,18 @@
         </div>
         <div class="col-sm-4">
           @if ($invoice->count() !== 0)
-            <h4><strong>Factura:</strong>   {{ $invoice[0]->numar_factura }} / {{ date("d.m.Y", strtotime($invoice[0]->data_factura)) }} <a href="" id="{{ $invoice[0]->id }}" class="delete" data-toggle="modal" data-target="#deleteInvoiceForm"><i class="fa fa-trash pull-right"></i></a><a href="" id="{{ $invoice[0]->id }}" class="editInvoice" data-toggle="modal" data-target="#invoiceForm"><i class="fa fa-edit pull-right"></i></a><a href="/nir/{{ $nir->id }}/print" target="_blank" ><i class="fa fa-print pull-right"></i></a></h4>
-            <h4><strong>Valoare:</strong> &euro; {{ $invoice[0]->valoare_factura }}</h4>
+            <h4><strong>Factura:</strong>   {{ $invoice[0]->numar_factura }} / {{ date("d.m.Y", strtotime($invoice[0]->data_factura)) }} 
+              @can('user')
+              <a href="" id="{{ $invoice[0]->id }}" class="delete" data-toggle="modal" data-target="#deleteInvoiceForm"><i class="fa fa-trash pull-right"></i></a><a href="" id="{{ $invoice[0]->id }}" class="editInvoice" data-toggle="modal" data-target="#invoiceForm"><i class="fa fa-edit pull-right"></i></a><a href="/nir/{{ $nir->id }}/print" target="_blank" ><i class="fa fa-print pull-right"></i></a></h4>
+              @endcan
+              <h4><strong>Valoare:</strong> &euro; {{ $invoice[0]->valoare_factura }}</h4>
             <h4><strong>Transport:</strong> &euro; {{ $invoice[0]->valoare_transport }}</h4>
           @endif
         </div>
         <div class="col-sm-11 d-inline mx-2">
-          <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#nirDetailsForm">Adauga detalii</button>
+          @can('user')
+            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#nirDetailsForm">Adauga detalii</button>
+          @endcan
         </div>
         @if (count($invoice) === 0)
           <div class="col-sm-1 d-inline mx-2">
@@ -69,7 +74,9 @@
               <th>Volum receptionat</th>
               <th>Numar pachete</th>
               <th>Total ml pachete</th>
-              <th>Actiuni</th>
+              @can('user')
+                <th>Actiuni</th>
+              @endcan
           </tr>
         </thead>
         <tbody>
@@ -82,7 +89,9 @@
               <td class="text-center">{{ $detail->volum_receptionat }}</td>
               <td class="text-center">{{ $detail->pachete }}</td>
               <td class="text-center">{{ $detail->total_ml }}</td>
-              <td class="text-center"><a href="#" id="{{ $detail->id }}" class="editDet" data-toggle="modal" data-target="#nirDetailsForm"><i class="fa fa-edit"></i></a> <a href="#" id="{{ $detail->id }}" class="delete_details" data-toggle="modal" data-target="#deleteDetailsForm"><i class="fa fa-trash"></i></a></td>
+              @can('user')
+                <td class="text-center"><a href="#" id="{{ $detail->id }}" class="editDet" data-toggle="modal" data-target="#nirDetailsForm"><i class="fa fa-edit"></i></a> <a href="#" id="{{ $detail->id }}" class="delete_details" data-toggle="modal" data-target="#deleteDetailsForm"><i class="fa fa-trash"></i></a></td>
+              @endcan
             </tr>
           @endforeach
           <tr style="background: lightgrey">
@@ -91,16 +100,22 @@
             <td class="text-center"><strong>{{ $total_receptionat }}</strong></td>
             <td class="text-center"><strong>{{ $total_pachete }}</strong></td>
             <td class="text-center"><strong>{{ $total_ml }}</strong></td>
-            <td class="text-center"><strong></strong></td>
+            @can('user')
+              <td class="text-center"><strong></strong></td>
+            @endcan
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-@include('nir.invoice')
-@include('nir.details')
-@include('nir.delete_invoice')
-@include('nir.delete_detail')
+
+@can('user')
+  @include('nir.invoice')
+  @include('nir.details')
+  @include('nir.delete_invoice')
+  @include('nir.delete_detail')
+@endcan
+
 @stop
 
 
