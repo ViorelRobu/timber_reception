@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -18,6 +19,9 @@ class UsersController extends Controller
         if ($request->ajax()) {
             $data = User::latest()->get();
             return DataTables::of($data)
+                ->editColumn('created_at', function ($data) {
+                    return $data->created_at ? with(new Carbon($data->created_at))->format('d.m.Y h:m:s') : '';
+                })
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
 

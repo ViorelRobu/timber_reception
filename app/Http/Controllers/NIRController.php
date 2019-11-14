@@ -18,6 +18,7 @@ use App\NIRDetails;
 use App\Invoice;
 use App\Number;
 use App\ReceptionCommittee;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Gate;
 use domPDF;
 
@@ -58,6 +59,15 @@ class NIRController extends Controller
                 ])->get();
 
             return DataTables::of($nir)
+                ->editColumn('data_nir', function ($nir) {
+                    return $nir->data_nir ? with(new Carbon($nir->data_nir))->format('d.m.Y') : '';
+                })
+                ->editColumn('data_dvi', function ($nir) {
+                    return $nir->data_dvi ? with(new Carbon($nir->data_dvi))->format('d.m.Y') : '';
+                })
+                ->editColumn('data_aviz', function ($nir) {
+                    return $nir->data_aviz ? with(new Carbon($nir->data_aviz))->format('d.m.Y') : '';
+                })
                 ->addColumn('action', function ($nir) {
                     $view = '<a href="/nir/' . $nir->id . '/show"><i class="fa fa-eye"></i></a>';
                     $edit = '<a href="#" class="edit" id="' . $nir->id . '"data-toggle="modal" data-target="#nirForm"><i class="fa fa-edit"></i></a>';
