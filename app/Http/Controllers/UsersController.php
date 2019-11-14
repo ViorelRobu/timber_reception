@@ -56,13 +56,18 @@ class UsersController extends Controller
      * @param null
      * @return redirect
      */
-    public function store(User $user, Request $request)
+    public function store(User $user, Request $request, UserGroup $userGroup)
     {
         $data = $this->validateRequest();
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->password = bcrypt($data['password1']);
         $user->save();
+
+        $userGroup->class_id = 4;
+        $userGroup->user_id = $user->id;
+        $userGroup->save();
+        
         return back();
     }
 
