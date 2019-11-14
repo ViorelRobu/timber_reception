@@ -149,7 +149,7 @@
             <p></p>
             <hr>
             <div class="content">
-                <p><strong>Nota de receptie {{ $nir->numar_nir }} din {{ $nir->data_nir }}</strong></p>
+                <p><strong>Nota de receptie {{ $nir->numar_nir }} din {{ date("d.m.Y", strtotime($nir->data_nir)) }}</strong></p>
                 <hr>
                 <table class="basic_details">
                     @if ($nir->numar_we)
@@ -161,18 +161,18 @@
                     @if ($nir->dvi)
                     <tr>
                         <td class="basic_details basic_title">DVI: </td>
-                        <td class="basic_details basic_data">{{ $nir->dvi }} din {{ $nir->data_dvi }}</td>
+                        <td class="basic_details basic_data">{{ $nir->dvi }} din {{ date("d.m.Y", strtotime($nir->data_dvi)) }}</td>
                     </tr>
                     @endif
                     @if ($nir->numar_factura)
                     <tr>
                         <td class="basic_details basic_title">Factura: </td>
-                        <td class="basic_details basic_data">{{ $nir->numar_factura }} din {{ $nir->data_factura }}</td>
+                        <td class="basic_details basic_data">{{ $nir->numar_factura }} din {{ date("d.m.Y", strtotime($nir->data_factura)) }}</td>
                     </tr>
                     @endif
                     <tr>
                         <td class="basic_details basic_title">Aviz: </td>
-                        <td class="basic_details basic_data">{{ $nir->serie_aviz }} {{ $nir->numar_aviz }} din {{ $nir->data_nir }}</td>
+                        <td class="basic_details basic_data">{{ $nir->serie_aviz }} {{ $nir->numar_aviz }} din {{ date("d.m.Y", strtotime($nir->data_aviz)) }}</td>
                     </tr>
                     @if ($nir->specificatie)
                     <tr>
