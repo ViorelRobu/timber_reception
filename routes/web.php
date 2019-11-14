@@ -123,6 +123,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/fetch', 'UsersController@fetchUser')->name('users.fetch')->middleware('can:superadmin');
             Route::post('/add', 'UsersController@store')->middleware('can:superadmin');
             Route::patch('/{user}/update', 'UsersController@update')->middleware('can:superadmin');
+            Route::patch('/{user_group}/change', 'UsersController@changeRole')->middleware('can:superadmin');
         });
     });
 });

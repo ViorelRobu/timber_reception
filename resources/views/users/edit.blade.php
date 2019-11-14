@@ -11,7 +11,7 @@
       </div>
       <div class="modal-body">
         <form action="/users/add" method="POST">
-            @method('POST')
+            @method('PATCH')
             @csrf
             <input type="hidden" name="id" id="edit_id" value="">
             <div class="form-group">

@@ -24,6 +24,7 @@
               <th>Nume</th>
               <th>Email</th>
               <th>Activ</th>
+              <th>Rol</th>
               <th>Creat la</th>
               <th>Actiuni</th>
             </tr>
@@ -33,6 +34,7 @@
     </div>
 @include('users.form')
 @include('users.edit')
+@include('users.change')
 @stop
 
 
@@ -51,6 +53,7 @@
               {data: 'name', name: 'name'},
               {data: 'email', name: 'email'},
               {data: 'active', name: 'active'},
+              {data: 'role', name: 'role'},
               {data: 'created_at', name: 'created_at'},
               {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
@@ -96,7 +99,6 @@
         dataType:'json',
         success: function(data)
             {
-              console.log(data);
                 $('#edit_id').val(id);
                 $('#edit_name').val(data.name);
                 $('#edit_email').val(data.email);
@@ -107,6 +109,28 @@
       $(document).on('submit', function() {
         var id = $('#edit_id').val();
         $('form').attr('action', '/users/' + id + '/update');
+        $("input[name='_method']").val('PATCH');
+      });
+    });
+
+    $(document).on('click', '.role-form', function() {
+      var id = $(this).attr("id");
+      $.ajax({
+        url: "{{ route('users.fetch') }}",
+        method: 'get',
+        data: {id:id},
+        dataType:'json',
+        success: function(data)
+            {
+                $('#username').html(data.name);
+                $('#role').val(data.role);
+                $('#role_id').val(data.role_id);
+            }
+      });
+
+      $(document).on('submit', function() {
+        var id = $('#role_id').val();
+        $('form').attr('action', '/users/' + id + '/change');
         $("input[name='_method']").val('PATCH');
       });
     });
