@@ -22,16 +22,15 @@ class UsersController extends Controller
         // dd($role->class_id);
         if ($request->ajax()) {
             $users = DB::table('users')
-            ->join('user_groups', 'users.id', '=', 'user_groups.user_id')
-            ->join('user_classes', 'user_groups.class_id', '=', 'user_classes.id')
+            ->leftJoin('user_groups', 'users.id', '=', 'user_groups.user_id')
+            ->leftJoin('user_classes', 'user_groups.class_id', '=', 'user_classes.id')
             ->select([
                 'users.id as id',
                 'users.name as name',
                 'users.email as email',
                 'users.active as active',
                 'users.created_at as created_at',
-                'user_classes.class as role',
-                'user_groups.id as role_id'
+                'user_classes.class as role'
             ])
             ->get();
             return DataTables::of($users)
