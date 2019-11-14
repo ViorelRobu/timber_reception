@@ -23,6 +23,7 @@
             <tr>
               <th>Nume</th>
               <th>Email</th>
+              <th>Activ</th>
               <th>Creat la</th>
               <th>Actiuni</th>
             </tr>
@@ -31,6 +32,7 @@
       </div>
     </div>
 @include('users.form')
+@include('users.edit')
 @stop
 
 
@@ -48,6 +50,7 @@
           columns: [
               {data: 'name', name: 'name'},
               {data: 'email', name: 'email'},
+              {data: 'active', name: 'active'},
               {data: 'created_at', name: 'created_at'},
               {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
@@ -73,31 +76,37 @@
         if(error == true) {return false;}
     });
 
+    $(document).on('click', '.edit-user', function () {
+        var error = false
+        var pass1 = $('#edit_password1').val();
+        var pass2 = $('#edit_password2').val();
+        if(pass1 != pass2) {
+            $('#edit_password1').after('<span class="error">Parolele nu sunt identice!</span>');
+            error = true;
+        }
+        if(error == true) {return false;}
+    });
+
     $(document).on('click', '.edit', function() {
       var id = $(this).attr("id");
       $.ajax({
-        url: "{{ route('suppliers.fetch') }}",
+        url: "{{ route('users.fetch') }}",
         method: 'get',
         data: {id:id},
         dataType:'json',
         success: function(data)
             {
-                $('.modal-title').text('Editeaza utilizator');
-                $('#id').val(id);
-                $('#fibu').val(data.fibu);
-                $('#name').val(data.name);
-                $('#cui').val(data.cui);
-                $('#j').val(data.j);
-                $('#address').val(data.address);
-                $('#country_id').val(data.country_id);
-                $('#supplier_group_id').val(data.supplier_group_id);
-                $('#supplier_status_id').val(data.supplier_status_id);
+              console.log(data);
+                $('#edit_id').val(id);
+                $('#edit_name').val(data.name);
+                $('#edit_email').val(data.email);
+                $('#active').val(data.active);
             }
       });
 
       $(document).on('submit', function() {
-        var id = $('#id').val();
-        $('form').attr('action', 'suppliers/' + id + '/update');
+        var id = $('#edit_id').val();
+        $('form').attr('action', '/users/' + id + '/update');
         $("input[name='_method']").val('PATCH');
       });
     });

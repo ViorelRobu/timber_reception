@@ -21,7 +21,7 @@ class UsersController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
 
-                    $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#usersForm"><i class="fa fa-edit"></i></a>';
+                    $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#editUsersForm"><i class="fa fa-edit"></i></a>';
                     return $edit;
                 })
                 ->rawColumns(['action'])
@@ -47,10 +47,60 @@ class UsersController extends Controller
     }
 
     /**
+     * Fetch the user details via ajax request
+     *
+     * @param \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function fetchUser(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        $output = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'active' => $user->active
+        ];
+
+        return json_encode($output);
+    }
+
+    /**
+     * Update the data of the selected user
+     *
+     * @param \App\User $user
+     * @return redirect
+     */
+    public function update(User $user)
+    {
+        $data = request()->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'active' => 'required',
+            'password1' => 'sometimes',
+        ]);
+
+        if(!$data['password1']) {
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+            $user->active = $data['active'];
+            $user->update();
+        } else {
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+            $user->active = $data['active'];
+            $user->password = bcrypt($data['password1']);
+            $user->update();
+        }
+
+        return redirect('/users');
+    }
+
+    /**
      * Validates the data
      *
      * @param null
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function validateRequest()
     {

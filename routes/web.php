@@ -121,7 +121,9 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('users')->group(function () {
             Route::get('/', 'UsersController@index')->name('users.index');
+            Route::get('/fetch', 'UsersController@fetchUser')->name('users.fetch');
             Route::post('/add', 'UsersController@store');
+            Route::patch('/{user}/update', 'UsersController@update');
         });
     });
 });
