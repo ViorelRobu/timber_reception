@@ -14,9 +14,13 @@ use App\Vehicle;
 use App\Certification;
 use App\NIR;
 use App\NIRDetails;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+    
     use Notifiable;
 
     /**

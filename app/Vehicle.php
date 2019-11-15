@@ -3,8 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Vehicle extends Model
+class Vehicle extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+
     protected $guarded = [];
 }

@@ -6,9 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use App\Countries;
 use App\SupplierGroup;
 use App\SupplierStatus;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Suppliers extends Model
+
+class Suppliers extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+
     protected $guarded = [];
     
     public function countryOfResidence()

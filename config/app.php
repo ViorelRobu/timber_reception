@@ -164,6 +164,7 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         JeroenNoten\LaravelAdminLte\ServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        OwenIt\Auditing\AuditingServiceProvider::class,
 
         /*
          * Package Service Providers...

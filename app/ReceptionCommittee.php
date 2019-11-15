@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ReceptionCommittee extends Model
+class ReceptionCommittee extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+
     protected $guarded = [];
     protected $table = 'reception_committee';
 }
