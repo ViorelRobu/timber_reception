@@ -153,7 +153,7 @@ return [
         'SETARI',
         [
             'text' => 'Profil utilizator',
-            'url'  => '#',
+            'url'  => 'profile',
             'icon' => 'user',
             'can'  => 'viewer',
         ],

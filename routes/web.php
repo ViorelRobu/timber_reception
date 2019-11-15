@@ -125,6 +125,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::patch('/{user}/update', 'UsersController@update')->middleware('can:superadmin');
             Route::patch('/{user_group}/change', 'UsersController@changeRole')->middleware('can:superadmin');
         });
+        Route::prefix('profile')->group(function () {
+            Route::get('/', 'UserProfileController@index');
+            Route::patch('/change_name', 'UserProfileController@changeName');
+            Route::patch('/change_password', 'UserProfileController@changePassword');
+            Route::patch('/change_avatar', 'UserProfileController@changeAvatar');
+        });
     });
 });
 

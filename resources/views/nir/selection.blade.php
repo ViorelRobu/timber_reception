@@ -1,5 +1,9 @@
 @extends('adminlte::page')
 
+@section('content_header')
+    <h1 class="d-inline">Printeaza NIR</h1>
+@stop
+
 @section('content')
 
 @if ($errors->any())
@@ -11,7 +15,6 @@
         </ul>
     </div>
 @endif
-<h2>Printeaza NIR</h2>
   <div class="box">
     <div class="box-body">
         <div class="row">
