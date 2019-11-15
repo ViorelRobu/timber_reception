@@ -22,9 +22,9 @@
     <div class="box-body col-lg-2">
         <a href="#" data-toggle="modal" data-target="#changeUserImage">
             @if ($user->profile_picture === null)
-                <img style="width: 200px; height: 200px" class="img-fluid img-thumbnail img-circle" src="/storage/profile_pictures/user_dummy.png" alt="profile picture">
+                <img style="width: 200px; " class="img-fluid img-thumbnail" src="/storage/profile_pictures/user_dummy.png" alt="profile picture">
             @else
-                <img style="width: 300px; height: 300px" class="img-fluid img-thumbnail img-circle" src="/storage/profile_pictures/{{ $user->profile_picture }}" alt="profile picture" data-holder-rendered="true">
+                <img style="width: 300px; " class="img-fluid img-thumbnail" src="/storage/profile_pictures/{{ $user->profile_picture }}" alt="profile picture" data-holder-rendered="true">
             @endif
             
         </a>
