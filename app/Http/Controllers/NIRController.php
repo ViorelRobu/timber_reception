@@ -12,6 +12,7 @@ use App\Certification;
 use App\Vehicle;
 use App\Article;
 use App\Countries;
+use App\Exports\NIRExport;
 use App\Species;
 use App\Moisture;
 use App\NIRDetails;
@@ -21,6 +22,7 @@ use App\ReceptionCommittee;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Gate;
 use domPDF;
+use Maatwebsite\Excel\Facades\Excel;
 
 class NIRController extends Controller
 {
@@ -539,5 +541,88 @@ class NIRController extends Controller
             'pachete' => 'required',
             'total_ml' => 'required',
         ], $error_messages);
+    }
+
+    /**
+     * Show export
+     * 
+     * @return redirect;
+     */
+    public function showExport()
+    {
+       return view('nir.export');
+    }
+
+    /**
+     * Export the data in excel format
+     *
+     * @param Illuminate\Http\Request;
+     * @return App\Exports\NIRExport
+     */
+    public function export(Request $request)
+    {
+        $from = $request->from;
+        $to = $request->to;
+
+        $company = $request->session()->get('company_was_selected');
+        $nir = DB::table('nir')->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
+            ->join('vehicles', 'nir.vehicle_id', '=', 'vehicles.id')
+            ->join('certifications', 'nir.certification_id', '=', 'certifications.id')
+            ->join('nir_details', 'nir.id', '=', 'nir_details.nir_id')
+            ->join('species', 'nir_details.species_id', '=', 'species.id')
+            ->join('articles', 'nir_details.article_id', '=', 'articles.id')
+            ->join('moisture', 'nir_details.moisture_id', '=', 'moisture.id')
+            ->where('company_id', $company)
+            ->whereBetween('data_nir', [$from, $to])
+            ->select([
+                'nir.id as id',
+                'nir.company_id as company_id',
+                'nir.numar_nir as numar_nir',
+                'nir.data_nir as data_nir',
+                'nir.numar_we as numar_we',
+                'suppliers.name as supplier',
+                'nir.dvi as dvi',
+                'nir.data_dvi as data_dvi',
+                'nir.serie_aviz as serie_aviz',
+                'nir.numar_aviz as numar_aviz',
+                'nir.data_aviz as data_aviz',
+                'nir.specificatie as specificatie',
+                'vehicles.name as vehicle',
+                'nir.numar_inmatriculare as numar_inmatriculare',
+                'certifications.name as certificare',
+                'species.name as specie',
+                'articles.name as articol',
+                'nir_details.volum_aviz as volum_aviz',
+                'nir_details.volum_receptionat as volum_receptionat',
+                'moisture.name as moisture',
+            ])->get();
+
+        $data = [];
+
+        foreach ($nir as $nir) {
+            $array = [
+                'numar_nir' => $nir->numar_nir,
+                'data_nir' => date("d.m.Y", strtotime($nir->data_nir)),
+                'furnizor' => $nir->supplier,
+                'dvi' => $nir->dvi,
+                'data_dvi' => date("d.m.Y", strtotime($nir->data_dvi)),
+                'serie_aviz' => $nir->serie_aviz,
+                'numar_aviz' => $nir->numar_aviz,
+                'data_aviz' => date("d.m.Y", strtotime($nir->data_aviz)),
+                'specificatie' => $nir->specificatie,
+                'numar_we' => $nir->numar_we,
+                'vehicle' => $nir->vehicle,
+                'numar_inmatriculare' => $nir->numar_inmatriculare,
+                'specie' => $nir->specie,
+                'articol' => $nir->articol,
+                'volum_aviz' => $nir->volum_aviz,
+                'volum_receptionat' => $nir->volum_receptionat,
+                'moisture' => $nir->moisture,
+                'certificare' => $nir->certificare,
+            ];
+            array_push($data, $array);
+        }
+
+        return Excel::download(new NIRExport($data), 'nir.xlsx');
     }
 }

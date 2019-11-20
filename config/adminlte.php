@@ -133,13 +133,19 @@ return [
             'can'         => 'user',
         ],
         [
+            'text'        => 'Exporta NIR',
+            'url'         => '/nir/export',
+            'icon'        => 'table',
+            'can'         => 'user',
+        ],
+        [
             'text'        => 'Facturi',
             'url'         => '/nir/invoices',
             'icon'        => 'file',
             'can'         => 'user',
         ],
         [
-            'text'        => 'Deseuri',
+            'text'        => 'Ambalaje',
             'url'         => '#',
             'icon'        => 'recycle',
             'can'         => 'user',
