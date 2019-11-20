@@ -224,16 +224,16 @@ return [
                     'can'  => 'admin',
                 ],
                 [
-                    'text'    => 'Deseuri',
+                    'text'    => 'Ambalaje',
                     'url'     => '#',
                     'can'  => 'admin',
                     'submenu' => [
                         [
-                            'text' => 'Grupa principala',
+                            'text' => 'Grupa principala ambalaj',
                             'url'  => '#',
                         ],
                         [
-                            'text'    => 'Subgrupa deseu',
+                            'text'    => 'Subgrupa ambalaj',
                             'url'     => '#',
                         ],[
                             'text'    => 'Cantitati per furnizor',
