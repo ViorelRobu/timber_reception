@@ -19,6 +19,30 @@ class PackagingController extends Controller
      *
      * @return mixed
      */
+    public function index(Request $request)
+    {
+        // if ($request->ajax()) {
+        //     $main = DB::table('packaging_main_group')->get();
+
+        //     return DataTables::of($main)
+        //         ->addColumn('action', function ($main) {
+        //             if (Gate::allows('admin')) {
+        //                 $edit = '<a href="#" class="edit" id="' . $main->id . '"data-toggle="modal" data-target="#addMainForm"><i class="fa fa-edit"></i></a>';
+        //                 return $edit;
+        //             }
+        //         })
+        //         ->rawColumns(['action'])
+        //         ->make(true);
+        // }
+
+        return view('packaging.index');
+    }
+
+    /**
+     * Display a listing packaging_main_group.
+     *
+     * @return mixed
+     */
     public function indexMain(Request $request)
     {
         if ($request->ajax()) {

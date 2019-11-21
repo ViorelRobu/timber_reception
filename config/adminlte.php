@@ -146,7 +146,7 @@ return [
         ],
         [
             'text'        => 'Ambalaje',
-            'url'         => '#',
+            'url'         => 'packaging',
             'icon'        => 'recycle',
             'can'         => 'user',
         ],
