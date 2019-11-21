@@ -14,6 +14,9 @@ use App\Vehicle;
 use App\Certification;
 use App\NIR;
 use App\NIRDetails;
+use App\PackagingMain;
+use App\PackagingSub;
+use App\PackagingPerSupplier;
 use OwenIt\Auditing\Contracts\Auditable;
 
 
@@ -118,6 +121,21 @@ class User extends Authenticatable implements Auditable
     public function receptionCommitteeCreator()
     {
         return $this->hasMany(ReceptionCommittee::class, 'user_id');
+    }
+
+    public function packagingMainCreator()
+    {
+        return $this->hasMany(PackagingMain::class, 'user_id');
+    }
+
+    public function packagingSubCreator()
+    {
+        return $this->hasMany(PackagingSub::class, 'user_id');
+    }
+
+    public function packagingPerSupplierCreator()
+    {
+        return $this->hasMany(PackagingPerSupplier::class, 'user_id');
     }
 
     /*

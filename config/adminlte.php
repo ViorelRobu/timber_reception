@@ -226,18 +226,21 @@ return [
                 [
                     'text'    => 'Ambalaje',
                     'url'     => '#',
-                    'can'  => 'admin',
+                    'can'     => 'user',
                     'submenu' => [
                         [
                             'text' => 'Grupa principala ambalaj',
-                            'url'  => '#',
+                            'url'  => 'packaging/main',
+                            'can'  => 'superadmin',
                         ],
                         [
                             'text'    => 'Subgrupa ambalaj',
-                            'url'     => '#',
+                            'url'     => 'packaging/sub',
+                            'can'     => 'admin',
                         ],[
                             'text'    => 'Cantitati per furnizor',
-                            'url'     => '#',
+                            'url'     => 'packaging/supplier',
+                            'can'     => 'user',
                         ],
                     ],
                 ],

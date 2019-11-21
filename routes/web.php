@@ -133,9 +133,21 @@ Route::group(['middleware' => 'auth'], function () {
             Route::patch('/change_password', 'UserProfileController@changePassword');
             Route::patch('/change_avatar', 'UserProfileController@changeAvatar');
         });
+        Route::prefix('packaging')->group(function () {
+            Route::get('/main', 'PackagingController@indexMain')->name('packaging_main.index')->middleware('can:superadmin');
+            Route::get('/main/fetch', 'PackagingController@fetchMain')->name('packaging_main.fetch')->middleware('can:superadmin');
+            Route::post('/main/add', 'PackagingController@storeMain')->middleware('can:superadmin');
+            Route::patch('/main/{id}/update', 'PackagingController@updateMain')->middleware('can:superadmin');
+            Route::get('/sub', 'PackagingController@indexSub')->name('packaging_sub.index')->middleware('can:admin');
+            Route::get('/sub/fetch', 'PackagingController@fetchSub')->name('packaging_sub.fetch')->middleware('can:admin');
+            Route::post('/sub/add', 'PackagingController@storeSub')->middleware('can:admin');
+            Route::patch('/sub/{id}/update', 'PackagingController@updateSub')->middleware('can:admin');
+            Route::get('/supplier', 'PackagingController@indexSupplier')->name('packaging_supplier.index')->middleware('can:user');
+            Route::get('/supplier/fetch', 'PackagingController@fetchSupplier')->name('packaging_supplier.fetch')->middleware('can:user');
+            Route::post('/supplier/add', 'PackagingController@storeSupplier')->middleware('can:user');
+            Route::patch('/supplier/{id}/update', 'PackagingController@updateSupplier')->middleware('can:user');
+        });
     });
 });
 
 Auth::routes(['verify' => false, 'register' => false, 'reset' => false]);
-
-

@@ -15,6 +15,7 @@ class CreatePackagingPerSupplier extends Migration
     {
         Schema::create('packaging_per_supplier', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('subgroup_id');
             $table->text('unitate');
@@ -22,6 +23,7 @@ class CreatePackagingPerSupplier extends Migration
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
+            $table->foreign('company_id')->references('id')->on('company_info')->onDelete('restrict');
             $table->foreign('subgroup_id')->references('id')->on('packaging_subgroup')->onDelete('restrict');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('restrict');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
