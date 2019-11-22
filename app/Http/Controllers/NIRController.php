@@ -250,7 +250,7 @@ class NIRController extends Controller
         $supplier_id = $nir->supplier_id;
         $company = $request->session()->get('company_was_selected');
         $packaging = $packagingPerSupplier::where('company_id', $company)->where('supplier_id', $supplier_id)->get();
-        $nirData = $nirDetails::where('nir_id', $request->update_id)->get();
+        $nirData = $nirDetails::where('nir_id', $packagingData->nir_id)->get();
 
         $nirVolum = 0;
         $nirPachete = 0;
