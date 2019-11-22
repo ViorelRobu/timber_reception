@@ -22,6 +22,7 @@
           <thead>
             <tr>
               <th>Fibu</th>
+              <th>Calcul Ambalaj</th>
               <th>Nume</th>
               <th>Cod Unic Inregistrare</th>
               <th>Nr. Registru Comert</th>
@@ -52,6 +53,7 @@
           ajax: "{{ route('suppliers.index') }}",
           columns: [
               {data: 'fibu', name: 'fibu'},
+              {data: 'packaging_calculation', name: 'packaging_calculation'},
               {data: 'name', name: 'name'},
               {data: 'cui', name: 'cui'},
               {data: 'j', name: 'j'},
@@ -84,6 +86,7 @@
                 $('.modal-title').text('Editeaza furnizorul');
                 $('#id').val(id);
                 $('#fibu').val(data.fibu);
+                $('#packaging_calculation').val(data.packaging_calculation);
                 $('#name').val(data.name);
                 $('#cui').val(data.cui);
                 $('#j').val(data.j);

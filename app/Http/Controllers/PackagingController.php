@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Packaging;
 use App\PackagingMain;
 use App\PackagingPerSupplier;
 use App\PackagingSub;

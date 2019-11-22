@@ -18,6 +18,13 @@
                 <input type="text" class="form-control" name="fibu" id="fibu" placeholder="Fibu" required>
             </div>
             <div class="form-group">
+                <select class="custom-select form-control" name="packaging_calculation" id="packaging_calculation" required>
+                    <option value="" selected>--- Specifica daca se calculeaza automat ambalajele ---</option>
+                        <option value="1">Activ</option>
+                        <option value="0">Inactiv</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <input type="text" class="form-control" name="name" id="name" placeholder="Denumire furnizor" required>
             </div>
             <div class="form-group">

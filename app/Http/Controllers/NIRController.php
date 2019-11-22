@@ -18,6 +18,8 @@ use App\Moisture;
 use App\NIRDetails;
 use App\Invoice;
 use App\Number;
+use App\PackagingData;
+use App\PackagingPerSupplier;
 use App\ReceptionCommittee;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Gate;
@@ -103,7 +105,7 @@ class NIRController extends Controller
      * @param  \App\Number  $number
      * @return \Illuminate\Http\Response
      */
-    public function store(NIR $nir, NIRDetails $nirDetails, Request $request, Number $number)
+    public function store(NIR $nir, NIRDetails $nirDetails, Request $request, Number $number, PackagingPerSupplier $packagingPerSupplier, PackagingData $packagingData)
     {
         // // dd($this->validateRequestDetails()['article_id'][0]);
         // Get the company_id with which the user logged in
@@ -178,7 +180,46 @@ class NIRController extends Controller
             $request->session()->flash('invoice_error', 'Deoarece nu au fost completate toate campurile factura nu a fost adaugata pe NIR!');
             return back();
         }
+        // Get the packaging data for the supplier and calculate data
+        $supplier_id = $this->validateRequest()['supplier_id'];
+        $supplier = Suppliers::find($supplier_id);
 
+        if ($supplier->packaging_calculation == 1) {
+            $packaging = $packagingPerSupplier::where('company_id', $company)->where('supplier_id', $supplier_id)->get();
+            $nirData = $nirDetails::where('nir_id', $nir_id)->get();
+    
+            $nirVolum = 0;
+            $nirPachete = 0;
+            $nirMetriLiniari = 0;
+    
+            foreach ($nirData as $value) {
+                $nirVolum += $value->volum_receptionat;
+                $nirPachete += $value->pachete;
+                $nirMetriLiniari += $value->total_ml;
+            }
+    
+            $ambalaj = [];
+            foreach ($packaging as $data) {
+                $data->subgroup_id;
+                $greutate = 0;
+                if ($data->unitate === 'pachet') {
+                    $greutate = $data->greutate * $nirPachete;
+                } else if ($data->unitate === 'metri liniari') {
+                    $greutate = $data->greutate * $nirMetriLiniari;
+                } else if ($data->unitate === 'metri cubi') {
+                    $greutate = $data->greutate * $nirVolum;
+                }
+                $ambalaj[$data->subgroup_id] = $greutate;
+            }
+    
+            // Save the packaging data for each NIR
+            $packagingData->create([
+                'nir_id' => $nir_id,
+                'packaging_data' => json_encode($ambalaj)
+            ]);
+        }
+
+        // redirect the user to all nir page
         return redirect('/nir');
     }
 

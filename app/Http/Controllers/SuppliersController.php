@@ -20,7 +20,7 @@ class SuppliersController extends Controller
                 ->join('supplier_status', 'suppliers.supplier_status_id', '=', 'supplier_status.id')
                 ->select(['suppliers.id as id', 'suppliers.fibu as fibu', 'suppliers.name as name', 'suppliers.cui as cui', 'suppliers.j as j', 
                 'suppliers.address as address', 'countries.name as country', 'supplier_group.name as supplier_group', 
-                'supplier_status.name as supplier_status'])->get();
+                'supplier_status.name as supplier_status', 'suppliers.packaging_calculation as packaging_calculation'])->get();
 
             return DataTables::of($suppliers)
                 ->addColumn('action', function ($suppliers) {
@@ -57,6 +57,7 @@ class SuppliersController extends Controller
         $supplier = Suppliers::findOrFail($request->id);
         $output = [
             'fibu' => $supplier->fibu,
+            'packaging_calculation' => $supplier->packaging_calculation,
             'name' => $supplier->name,
             'cui' => $supplier->cui,
             'j' => $supplier->j,
@@ -73,6 +74,7 @@ class SuppliersController extends Controller
     {
         $error_messages = [
             'fibu.required' => 'Campul FIBU trebuie sa fie completat!',
+            'packaging_calculation.required' => 'Selectati calculatia ambalaj!',
             'name.required' => 'Va rog completati numele furnizorului!',
             'cui.sometimes' => 'Codul unic de inregistrare este incorect!',
             'j.sometimes' => 'Numarul de inregistrare in registrul comertului este incorect!',
@@ -83,6 +85,7 @@ class SuppliersController extends Controller
         ];
         return request()->validate([
             'fibu' => 'required',
+            'packaging_calculation' => 'required',
             'name' => 'required',
             'cui' => 'sometimes',
             'j' => 'sometimes',
