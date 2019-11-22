@@ -9,7 +9,7 @@
 @if ($errors->any())
   @foreach ($errors->all() as $error)
     <div class="alert alert-danger alert-block">
-      <button type="button" class="close" data-dismiss="alert">×</button>	
+      <button type="button" class="close" data-dismiss="alert">×</button>
         <strong>{{ $error }}</strong>
     </div>
   @endforeach
@@ -57,6 +57,11 @@
               {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
       });
+    });
+
+    $(document).on('click', '.update', function() {
+      var id = $(this).attr("id");
+      $('#update_id').val(id);
     });
 
   </script>

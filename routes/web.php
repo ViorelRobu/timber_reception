@@ -135,6 +135,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('packaging')->group(function () {
             Route::get('/', 'PackagingController@index')->name('packaging.index')->middleware('can:user');
+            Route::patch('/nir/recalculate', 'NIRController@updatePackagingSingle')->middleware('can:admin');
             Route::get('/main', 'PackagingController@indexMain')->name('packaging_main.index')->middleware('can:superadmin');
             Route::get('/main/fetch', 'PackagingController@fetchMain')->name('packaging_main.fetch')->middleware('can:superadmin');
             Route::post('/main/add', 'PackagingController@storeMain')->middleware('can:superadmin');

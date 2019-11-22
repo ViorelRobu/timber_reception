@@ -27,6 +27,7 @@ class PackagingController extends Controller
                 ->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
                 ->select([
                     'packaging_data.id as id',
+                    'packaging_data.nir_id as nir_id',
                     'nir.numar_nir as nir',
                     'nir.data_nir as data_nir',
                     'suppliers.name as supplier',
@@ -156,7 +157,7 @@ class PackagingController extends Controller
      */
     public function storeMain(PackagingMain $packagingMain)
     {
-        
+
         $packagingMain = auth()->user()->packagingMainCreator()->create($this->validateRequestMain());
 
         return back();

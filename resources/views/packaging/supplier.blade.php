@@ -1,9 +1,13 @@
 @extends('adminlte::page')
 
-@section('content_header')<h1 class="d-inline"><strong>Cantitate ambalaj / furnizor</strong></h1>
-  @can('admin')
-    <button id="addGroup" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addSupplierForm">Adauga</button></h1>
-  @endcan
+@section('content_header')
+<h1 class="d-inline">
+    <strong>Cantitate ambalaj / furnizor</strong>
+    @can('admin')
+        <button id="addGroup" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#addSupplierForm">Adauga</button></h1>
+    @endcan
+</h1>
+
 @stop
 
 @section('content')
@@ -11,7 +15,7 @@
 @if ($errors->any())
   @foreach ($errors->all() as $error)
     <div class="alert alert-danger alert-block">
-      <button type="button" class="close" data-dismiss="alert">×</button>	
+      <button type="button" class="close" data-dismiss="alert">×</button>
         <strong>{{ $error }}</strong>
     </div>
   @endforeach
@@ -32,7 +36,7 @@
       </table>
     </div>
   </div>
-  
+
 @can('admin')
   @include('packaging.add_supplier')
 @endcan
@@ -78,7 +82,7 @@
                 $('#greutate').val(data.greutate);
             }
       });
-      
+
       $(document).on('submit', function() {
         var id = $('#id').val();
         $('form').attr('action', '/packaging/supplier/' + id + '/update');

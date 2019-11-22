@@ -10,10 +10,10 @@
         </h3>
       </div>
       <div class="modal-body">
-        <form action="/packaging/recalculate" method="POST">
-            @method('POST')
+        <form action="/packaging/nir/recalculate" method="POST">
+            @method('PATCH')
             @csrf
-            <input type="hidden" name="id" id="id" value="">
+            <input type="hidden" name="update_id" id="update_id" value="">
             Sunteti sigur ca doriti recalcularea datelor despre ambalaje?
       </div>
       <div class="modal-footer">

@@ -19,7 +19,9 @@ use App\NIRDetails;
 use App\Invoice;
 use App\Number;
 use App\PackagingData;
+use App\PackagingMain;
 use App\PackagingPerSupplier;
+use App\PackagingSub;
 use App\ReceptionCommittee;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Gate;
@@ -187,20 +189,22 @@ class NIRController extends Controller
         if ($supplier->packaging_calculation == 1) {
             $packaging = $packagingPerSupplier::where('company_id', $company)->where('supplier_id', $supplier_id)->get();
             $nirData = $nirDetails::where('nir_id', $nir_id)->get();
-    
+
             $nirVolum = 0;
             $nirPachete = 0;
             $nirMetriLiniari = 0;
-    
+
             foreach ($nirData as $value) {
                 $nirVolum += $value->volum_receptionat;
                 $nirPachete += $value->pachete;
                 $nirMetriLiniari += $value->total_ml;
             }
-    
+
             $ambalaj = [];
             foreach ($packaging as $data) {
-                $data->subgroup_id;
+                $subgroup_id = $data->subgroup_id;
+                $subgroup = PackagingSub::find($subgroup_id);
+                $group = PackagingMain::find($subgroup->main_id);
                 $greutate = 0;
                 if ($data->unitate === 'pachet') {
                     $greutate = $data->greutate * $nirPachete;
@@ -209,9 +213,19 @@ class NIRController extends Controller
                 } else if ($data->unitate === 'metri cubi') {
                     $greutate = $data->greutate * $nirVolum;
                 }
-                $ambalaj[$data->subgroup_id] = $greutate;
+                array_push(
+                    $ambalaj,
+                    [
+                        'group' => $subgroup->main_id,
+                        'group_name' => $group->name,
+                        'subgroup' => $subgroup_id,
+                        'subgroup_name' => $subgroup->name,
+                        'greutate' => $greutate
+                    ]
+                );
+
             }
-    
+
             // Save the packaging data for each NIR
             $packagingData->create([
                 'nir_id' => $nir_id,
@@ -221,6 +235,63 @@ class NIRController extends Controller
 
         // redirect the user to all nir page
         return redirect('/nir');
+    }
+
+    /**
+     * Display the specified NIR.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePackagingSingle(Request $request, PackagingPerSupplier $packagingPerSupplier, NIRDetails $nirDetails)
+    {
+        $packagingData = PackagingData::find($request->update_id);
+        $nir = NIR::find($packagingData->nir_id);
+        $supplier_id = $nir->supplier_id;
+        $company = $request->session()->get('company_was_selected');
+        $packaging = $packagingPerSupplier::where('company_id', $company)->where('supplier_id', $supplier_id)->get();
+        $nirData = $nirDetails::where('nir_id', $request->update_id)->get();
+
+        $nirVolum = 0;
+        $nirPachete = 0;
+        $nirMetriLiniari = 0;
+
+        foreach ($nirData as $value) {
+            $nirVolum += $value->volum_receptionat;
+            $nirPachete += $value->pachete;
+            $nirMetriLiniari += $value->total_ml;
+        }
+
+        $ambalaj = [];
+        foreach ($packaging as $data) {
+            $subgroup_id = $data->subgroup_id;
+            $subgroup = PackagingSub::find($subgroup_id);
+            $group = PackagingMain::find($subgroup->main_id);
+            $greutate = 0;
+            if ($data->unitate === 'pachet') {
+                $greutate = $data->greutate * $nirPachete;
+            } else if ($data->unitate === 'metri liniari') {
+                $greutate = $data->greutate * $nirMetriLiniari;
+            } else if ($data->unitate === 'metri cubi') {
+                $greutate = $data->greutate * $nirVolum;
+            }
+            array_push(
+                $ambalaj,
+                [
+                    'group' => $subgroup->main_id,
+                    'group_name' => $group->name,
+                    'subgroup' => $subgroup_id,
+                    'subgroup_name' => $subgroup->name,
+                    'greutate' => $greutate
+                ]
+            );
+        }
+
+        $packagingData->update([
+            'packaging_data' => \json_encode($ambalaj)
+        ]);
+
+        return back();
     }
 
     /**
@@ -472,7 +543,7 @@ class NIRController extends Controller
                 'invoices.numar_factura',
                 'invoices.data_factura',
             ])->get()->toArray();
- 
+
         $nir_count = count($nir);
 
         for ($i=0; $i < $nir_count; $i++) {
@@ -586,7 +657,7 @@ class NIRController extends Controller
 
     /**
      * Show export
-     * 
+     *
      * @return redirect;
      */
     public function showExport()
