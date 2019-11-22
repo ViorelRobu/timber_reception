@@ -20,16 +20,20 @@
       <table id="packaging" class="table table-bordered table-hover">
         <thead>
           <tr>
+              <th>NIR</th>
+              <th>Data NIR</th>
               <th>Furnizor</th>
               <th>Ambalaj</th>
-              <th>Unitate referinta</th>
-              <th>Greutate (kg)</th>
               <th>Actiuni</th>
           </tr>
         </thead>
       </table>
     </div>
   </div>
+
+@can('user')
+  @include('packaging.recalculate')
+@endcan
 
 @stop
 
@@ -41,15 +45,15 @@
 @section('js')
   <script>
     $(document).ready(function () {
-      $('#packaging_supplier').DataTable({
+      $('#packaging').DataTable({
           processing: true,
           serverSide: true,
-          ajax: "{{ route('packaging_supplier.index') }}",
+          ajax: "{{ route('packaging.index') }}",
           columns: [
+              {data: 'nir', name: 'nir'},
+              {data: 'data_nir', name: 'subgroup_name'},
               {data: 'supplier', name: 'supplier'},
-              {data: 'subgroup_name', name: 'subgroup_name'},
-              {data: 'unitate', name: 'unitate'},
-              {data: 'greutate', name: 'greutate'},
+              {data: 'data', name: 'data'},
               {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
       });

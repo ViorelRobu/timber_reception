@@ -6,6 +6,7 @@ use App\PackagingMain;
 use App\PackagingPerSupplier;
 use App\PackagingSub;
 use App\Suppliers;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -20,19 +21,35 @@ class PackagingController extends Controller
      */
     public function index(Request $request)
     {
-        // if ($request->ajax()) {
-        //     $main = DB::table('packaging_main_group')->get();
+        if ($request->ajax()) {
+            $main = DB::table('packaging_data')
+                ->join('nir', 'packaging_data.nir_id', '=', 'nir.id')
+                ->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
+                ->select([
+                    'packaging_data.id as id',
+                    'nir.numar_nir as nir',
+                    'nir.data_nir as data_nir',
+                    'suppliers.name as supplier',
+                    'packaging_data.packaging_data as data'
+                ])
+                ->get();
 
-        //     return DataTables::of($main)
-        //         ->addColumn('action', function ($main) {
-        //             if (Gate::allows('admin')) {
-        //                 $edit = '<a href="#" class="edit" id="' . $main->id . '"data-toggle="modal" data-target="#addMainForm"><i class="fa fa-edit"></i></a>';
-        //                 return $edit;
-        //             }
-        //         })
-        //         ->rawColumns(['action'])
-        //         ->make(true);
-        // }
+            return DataTables::of($main)
+                ->editColumn('data_nir', function ($main) {
+                    return $main->data_nir ? with(new Carbon($main->data_nir))->format('d.m.Y') : '';
+                })
+                // ->editColumn('data', function ($main) {
+                //     return 'test';
+                // })
+                ->addColumn('action', function ($main) {
+                    if (Gate::allows('user')) {
+                        $edit = '<a href="#" class="update" id="' . $main->id . '" data-toggle="modal" data-target="#recalculateForm"><i class="fa fa-play"></i></a>';
+                    return $edit;
+                }
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
 
         return view('packaging.index');
     }
