@@ -3,8 +3,11 @@
 @section('content_header')
 <h1 class="d-inline">
     <strong>Ambalaje</strong>
+    @can('user')
+        <button id="export" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#exportPackaging">Exporta date ambalaj</button>
+    @endcan
     @can('admin')
-        <button id="recalculate" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#recalculateFormMultiple">Recalculeaza ambalaj pentru perioada</button></h1>
+        <button id="recalculate" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#recalculateFormMultiple">Recalculeaza ambalaj pentru perioada</button>
     @endcan
 </h1>
 
@@ -40,6 +43,9 @@
 @can('admin')
   @include('packaging.recalculate')
   @include('packaging.multiple')
+@endcan
+@can('user')
+  @include('packaging.export')
 @endcan
 
 @stop

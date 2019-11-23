@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Article;
+use App\Exports\PackagingExport;
+use App\NIR;
+use App\NIRDetails;
+use App\PackagingData;
 use App\PackagingMain;
 use App\PackagingPerSupplier;
 use App\PackagingSub;
@@ -10,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class PackagingController extends Controller
@@ -74,6 +80,73 @@ class PackagingController extends Controller
 
         return \implode(', ', $array);
     }
+
+    /**
+     * Export the packaging data in excel format for a given timeframe
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param \App\PackagingMain $packagingMain
+     * @return download Excel
+     */
+    public function exportPackagingData(Request $request, PackagingMain $packagingMain)
+    {
+        // get the start and end period for report
+        $from = $request->from;
+        $to = $request->to;
+        // get the NIR numbers for the set time period
+        $nirInit = DB::table('nir')->whereBetween('data_nir', [$from, $to])->pluck('id')->toArray();
+        // get the data for the headings
+        $packagingMain = $packagingMain::all();
+        $headings = ['Nr crt', 'Data', 'DVI', 'Furnizor', 'Articol'];
+
+        foreach ($packagingMain as $data) {
+            array_push($headings, $data->name);
+        }
+        // set the initial values for the packaging main groups
+        $initial_values= [];
+        foreach ($packagingMain as $data) {
+            $initial_values[$data->id] = 0;
+        }
+        // calculate the values for each NIR
+        $packaging = PackagingData::whereIn('nir_id', $nirInit)->get();
+        $packaging_array = [];
+        foreach ($packaging as $data) {
+            // reinitialize weight data for each nir
+            $weight = $initial_values;
+            // sum the data
+            $values = \json_decode($data->packaging_data, true);
+            foreach ($values as $packaging) {
+                $weight[$packaging['group']] += $packaging['greutate'];
+            }
+            // push the data to the packaging array
+            array_push($packaging_array, ['nir' => $data->nir_id, 'weight' => $weight]);
+        }
+
+        // prepare data for export
+        $export = [];
+        $index = 1;
+        foreach ($packaging_array as $array_data) {
+            $nir = NIR::find($array_data['nir']);
+            $supplier = Suppliers::find($nir->supplier_id);
+            $nirDetails = NIRDetails::where('nir_id', $array_data['nir'])->get();
+            $article = Article::find($nirDetails[0]->article_id);
+            $dataset = [
+                'index' => $index++,
+                'data_nir' => date("d.m.Y", strtotime($nir->data_nir)),
+                'dvi' => $nir->dvi,
+                'supplier' => $supplier->name,
+                'articol' => $article->name,
+            ];
+            foreach ($array_data['weight'] as $key => $value) {
+                $dataset[$key] = $value;
+            }
+            array_push($export, $dataset);
+        }
+
+        // export data to excel
+        return Excel::download(new PackagingExport($headings, $export), 'ambalaj.xlsx');
+    }
+
     /**
      * Display a listing packaging_main_group.
      *
