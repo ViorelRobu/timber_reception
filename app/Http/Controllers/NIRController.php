@@ -187,49 +187,10 @@ class NIRController extends Controller
         $supplier = Suppliers::find($supplier_id);
 
         if ($supplier->packaging_calculation == 1) {
-            $packaging = $packagingPerSupplier::where('company_id', $company)->where('supplier_id', $supplier_id)->get();
-            $nirData = $nirDetails::where('nir_id', $nir_id)->get();
-
-            $nirVolum = 0;
-            $nirPachete = 0;
-            $nirMetriLiniari = 0;
-
-            foreach ($nirData as $value) {
-                $nirVolum += $value->volum_receptionat;
-                $nirPachete += $value->pachete;
-                $nirMetriLiniari += $value->total_ml;
-            }
-
-            $ambalaj = [];
-            foreach ($packaging as $data) {
-                $subgroup_id = $data->subgroup_id;
-                $subgroup = PackagingSub::find($subgroup_id);
-                $group = PackagingMain::find($subgroup->main_id);
-                $greutate = 0;
-                if ($data->unitate === 'pachet') {
-                    $greutate = $data->greutate * $nirPachete;
-                } else if ($data->unitate === 'metri liniari') {
-                    $greutate = $data->greutate * $nirMetriLiniari;
-                } else if ($data->unitate === 'metri cubi') {
-                    $greutate = $data->greutate * $nirVolum;
-                }
-                array_push(
-                    $ambalaj,
-                    [
-                        'group' => $subgroup->main_id,
-                        'group_name' => $group->name,
-                        'subgroup' => $subgroup_id,
-                        'subgroup_name' => $subgroup->name,
-                        'greutate' => $greutate
-                    ]
-                );
-
-            }
-
             // Save the packaging data for each NIR
             $packagingData->create([
                 'nir_id' => $nir_id,
-                'packaging_data' => json_encode($ambalaj)
+                'packaging_data' => $this->calculatePackaging($supplier_id, $nir_id)
             ]);
         }
 
@@ -248,9 +209,30 @@ class NIRController extends Controller
         $packagingData = PackagingData::find($request->update_id);
         $nir = NIR::find($packagingData->nir_id);
         $supplier_id = $nir->supplier_id;
-        $company = $request->session()->get('company_was_selected');
+
+        $packagingData->update([
+            'packaging_data' => $this->calculatePackaging($supplier_id, $nir->id)
+        ]);
+
+        return back();
+    }
+
+    /**
+     * Calculate the packaging data
+     *
+     * @param int $supplier_id
+     * @param int $nir_id
+     * @return json
+     */
+    protected function calculatePackaging(int $supplier_id, int $nir_id)
+    {
+        $packagingPerSupplier = new PackagingPerSupplier();
+        $nirDetails = new NIRDetails();
+
+        $company = request()->session()->get('company_was_selected');
+
         $packaging = $packagingPerSupplier::where('company_id', $company)->where('supplier_id', $supplier_id)->get();
-        $nirData = $nirDetails::where('nir_id', $packagingData->nir_id)->get();
+        $nirData = $nirDetails::where('nir_id', $nir_id)->get();
 
         $nirVolum = 0;
         $nirPachete = 0;
@@ -287,13 +269,8 @@ class NIRController extends Controller
             );
         }
 
-        $packagingData->update([
-            'packaging_data' => \json_encode($ambalaj)
-        ]);
-
-        return back();
+            return json_encode($ambalaj);
     }
-
     /**
      * Display the specified NIR.
      *
