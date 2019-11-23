@@ -105,6 +105,8 @@ class NIRController extends Controller
      * @param  \App\NIRDetails  $nirDetails
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Number  $number
+     * @param  \App\PackagingPerSupplier $packagingPerSupplier
+     * @param  \App\PackagingData $packagingData
      * @return \Illuminate\Http\Response
      */
     public function store(NIR $nir, NIRDetails $nirDetails, Request $request, Number $number, PackagingPerSupplier $packagingPerSupplier, PackagingData $packagingData)
@@ -199,12 +201,12 @@ class NIRController extends Controller
     }
 
     /**
-     * Display the specified NIR.
+     * Update packaging data for the specified NIR
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function updatePackagingSingle(Request $request, PackagingPerSupplier $packagingPerSupplier, NIRDetails $nirDetails)
+    public function updatePackagingSingle(Request $request)
     {
         $packagingData = PackagingData::find($request->update_id);
         $nir = NIR::find($packagingData->nir_id);
@@ -213,6 +215,29 @@ class NIRController extends Controller
         $packagingData->update([
             'packaging_data' => $this->calculatePackaging($supplier_id, $nir->id)
         ]);
+
+        return back();
+    }
+
+    /**
+     * Update the packaging data for the NIR inside the selected time range
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePackagingMultiple(Request $request)
+    {
+        $from = $request->from;
+        $to = $request->to;
+        $nirCollection = NIR::whereBetween('data_nir', [$from, $to])->get();
+
+        foreach ($nirCollection as $nir) {
+            $packagingData = PackagingData::where('nir_id', $nir->id);
+            $supplier_id = $nir->supplier_id;
+            $packagingData->update([
+                'packaging_data' => $this->calculatePackaging($supplier_id, $nir->id)
+            ]);
+        }
 
         return back();
     }

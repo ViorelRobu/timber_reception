@@ -1,6 +1,12 @@
 @extends('adminlte::page')
 
-@section('content_header')<h1 class="d-inline"><strong>Ambalaje</strong></h1>
+@section('content_header')
+<h1 class="d-inline">
+    <strong>Ambalaje</strong>
+    @can('admin')
+        <button id="recalculate" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#recalculateFormMultiple">Recalculeaza ambalaj pentru perioada</button></h1>
+    @endcan
+</h1>
 
 @stop
 
@@ -31,8 +37,9 @@
     </div>
   </div>
 
-@can('user')
+@can('admin')
   @include('packaging.recalculate')
+  @include('packaging.multiple')
 @endcan
 
 @stop
