@@ -39,9 +39,9 @@ class PackagingController extends Controller
                 ->editColumn('data_nir', function ($main) {
                     return $main->data_nir ? with(new Carbon($main->data_nir))->format('d.m.Y') : '';
                 })
-                // ->editColumn('data', function ($main) {
-                //     return 'test';
-                // })
+                ->editColumn('data', function ($main) {
+                    return $this->decodePackagingDataJson($main->data);
+                })
                 ->addColumn('action', function ($main) {
                     if (Gate::allows('user')) {
                         $edit = '<a href="#" class="update" id="' . $main->id . '" data-toggle="modal" data-target="#recalculateForm"><i class="fa fa-play"></i></a>';
@@ -55,6 +55,25 @@ class PackagingController extends Controller
         return view('packaging.index');
     }
 
+    /**
+     * Decode the data in JSON format for the packaging
+     *
+     * @param
+     * @return mixed
+     */
+    public function decodePackagingDataJson($data)
+    {
+        $decoded = \json_decode($data, true);
+        $array = [];
+        foreach ($decoded as $data) {
+            $nume = $data['subgroup_name'];
+            $greutate = $data['greutate'];
+            $concat_data = $nume . ' = '  . $greutate . ' kg';
+            array_push($array, $concat_data);
+        }
+
+        return \implode(', ', $array);
+    }
     /**
      * Display a listing packaging_main_group.
      *
