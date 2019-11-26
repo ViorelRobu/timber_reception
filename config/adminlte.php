@@ -313,6 +313,6 @@ return [
     'plugins' => [
         'datatables' => true,
         'select2'    => true,
-        'chartjs'    => false,
+        'chartjs'    => true,
     ],
 ];

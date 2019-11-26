@@ -64,7 +64,7 @@
 
 @if(config('adminlte.plugins.chartjs'))
     <!-- ChartJS -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
+    <script src="{{ asset('vendor/adminlte/dist/js/Chart.min.js') }}"></script>
 @endif
 
 @yield('adminlte_js')
