@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 
 @section('content_header')
-    <h1 class="d-inline">Comisia de receptie<button id="addCountry" class="btn btn-primary pull-right" data-toggle="modal" data-target="#receptionCommitteeForm">Adauga membru comisie receptie</button></h1>
+    <h1 class="d-inline">Membri comisia de receptie<button id="addCountry" class="btn btn-primary pull-right" data-toggle="modal" data-target="#receptionCommitteeForm">Adauga membru comisie receptie</button></h1>
 @stop
 
 @section('content')
@@ -23,7 +23,8 @@
           <tr>
               <th>ID</th>
               <th>Fabrica</th>
-              <th>Nume membru comisie de receptie</th>
+              <th>Comisia de receptie</th>
+              <th>Nume membru</th>
               <th>Activ</th>
               <th>Actiuni</th>
 
@@ -53,6 +54,7 @@
           columns: [
               {data: 'id', name: 'id'},
               {data: 'company', name: 'company'},
+              {data: 'committee', name: 'committee'},
               {data: 'member', name: 'member'},
               {data: 'active', name: 'active'},
               {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -78,7 +80,7 @@
 
       $(document).on('submit', function() {
         var id = $('#id').val();
-        $('form').attr('action', 'reception/' + id + '/update');
+        $('form').attr('action', 'reception/' + id + '/update/member');
         $("input[name='_method']").val('PATCH');
       });
 
@@ -101,7 +103,7 @@
 
       $(document).on('submit', function() {
         var id = $('#id_upload').val();
-        $('form').attr('action', '/reception/' + id + '/upload');
+        $('form').attr('action', '/reception/' + id + '/upload/signature');
         $("input[name='_method']").val('PATCH');
       });
 
@@ -117,7 +119,7 @@
       console.log(id);
       var link = $(this).attr("data-link");
       $('#path').val(link);
-      $('form').attr('action', '/reception/' + id + '/delete');
+      $('form').attr('action', '/reception/' + id + '/delete/signature');
     });
   </script>
 @endsection

@@ -113,12 +113,16 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/add', 'NumbersController@store')->middleware('can:admin');
         });
         Route::prefix('reception')->group(function () {
-            Route::get('/', 'ReceptionCommitteeController@index')->name('reception.index')->middleware('can:admin');
-            Route::get('/fetch', 'ReceptionCommitteeController@fetchCommitteeMemberDetails')->name('reception_committee.fetch')->middleware('can:admin');
-            Route::post('/add', 'ReceptionCommitteeController@store')->middleware('can:admin');
-            Route::patch('/{reception_committee}/update', 'ReceptionCommitteeController@update')->middleware('can:admin');
-            Route::patch('/{reception_committee}/upload', 'ReceptionCommitteeController@uploadSignature')->middleware('can:admin');
-            Route::patch('/{reception_committee}/delete', 'ReceptionCommitteeController@deleteSignature')->middleware('can:admin');
+            Route::get('/', 'ReceptionCommitteeController@indexCommittee')->name('committee.index')->middleware('can:admin');
+            Route::get('/members', 'ReceptionCommitteeController@index')->name('reception.index')->middleware('can:admin');
+            Route::get('/fetch', 'ReceptionCommitteeController@fetchCommitteeDetails')->name('committee.fetch')->middleware('can:admin');
+            Route::get('/fetch/member', 'ReceptionCommitteeController@fetchCommitteeMemberDetails')->name('reception_committee.fetch')->middleware('can:admin');
+            Route::post('/add', 'ReceptionCommitteeController@storeCommittee')->middleware('can:admin');
+            Route::post('/add/member', 'ReceptionCommitteeController@store')->middleware('can:admin');
+            Route::patch('/{committee}/update', 'ReceptionCommitteeController@updateCommittee')->middleware('can:admin');
+            Route::patch('/{reception_committee}/update/member', 'ReceptionCommitteeController@update')->middleware('can:admin');
+            Route::patch('/{reception_committee}/upload/signature', 'ReceptionCommitteeController@uploadSignature')->middleware('can:admin');
+            Route::patch('/{reception_committee}/delete/signature', 'ReceptionCommitteeController@deleteSignature')->middleware('can:admin');
         });
         Route::prefix('users')->group(function () {
             Route::get('/', 'UsersController@index')->name('users.index')->middleware('can:superadmin');

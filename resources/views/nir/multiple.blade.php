@@ -213,7 +213,7 @@
             <div class="reception">
                 <p>COMISIA DE RECEPTIE</p>
                 <div class="signatures_block section group">
-                    @foreach ($reception_committee as $member)
+                    @foreach ($nir->reception_committee as $member)
                     <div class="col span_1_of_3 signature">
                         {{ $member->member }}
                         <br>

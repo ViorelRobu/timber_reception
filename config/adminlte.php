@@ -220,8 +220,21 @@ return [
                 ],
                 [
                     'text' => 'Comisii de receptie',
-                    'url'  => 'reception',
+                    'url'  => '#',
                     'can'  => 'admin',
+                    'submenu' => [
+                        [
+                            'text' => 'Comisii',
+                            'url'  => 'reception',
+                            'can'  => 'admin',
+                        ],
+                        [
+                            'text' => 'Membri comisie',
+                            'url'  => 'reception/members',
+                            'can'  => 'admin',
+                        ],
+
+                    ],
                 ],
                 [
                     'text'    => 'Ambalaje',

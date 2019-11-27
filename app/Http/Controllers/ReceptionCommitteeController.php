@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Committee;
 use App\CompanyAssignment;
 use App\ReceptionCommittee;
 use App\User;
@@ -20,10 +21,13 @@ class ReceptionCommitteeController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = DB::table('reception_committee')->join('company_info', 'reception_committee.company_id', '=', 'company_info.id')
+            $data = DB::table('reception_committee')
+                ->join('committee', 'reception_committee.committee_id', '=', 'committee.id')
+                ->join('company_info', 'committee.company_id', '=', 'company_info.id')
                 ->select([
                     'reception_committee.id as id',
                     'company_info.name as company',
+                    'committee.name as committee',
                     'reception_committee.member as member',
                     'reception_committee.active as active',
                     'reception_committee.img_url as img_url'
@@ -39,7 +43,37 @@ class ReceptionCommitteeController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('reception_committee.index');
+
+        $company = session()->get('company_was_selected');
+        $committee_list = Committee::where('company_id', $company)->get();
+
+        return view('reception_committee.index', \compact('committee_list'));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexCommittee(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = DB::table('committee')
+                ->join('company_info', 'committee.company_id', '=', 'company_info.id')
+                ->select([
+                    'committee.id as id',
+                    'company_info.name as company',
+                    'committee.name as name',
+                ])->get();
+            return DataTables::of($data)
+                ->addColumn('action', function($data) {
+                    $edit = '<a href="#" class="edit" id="' . $data->id . '"data-toggle="modal" data-target="#receptionCommitteeForm"><i class="fa fa-edit"></i></a>';
+                return $edit;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('reception_committee.committee');
     }
 
     /**
@@ -51,7 +85,19 @@ class ReceptionCommitteeController extends Controller
     public function store(ReceptionCommittee $receptionCommittee)
     {
         $receptionCommittee = auth()->user()->receptionCommitteeCreator()->create($this->validateRequest());
-        return redirect('/reception');
+        return back();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeCommittee(Committee $committee)
+    {
+        $committee = auth()->user()->committeeCreator()->create($this->validateRequestCommittee());
+        return back();
     }
 
     /**
@@ -73,6 +119,24 @@ class ReceptionCommitteeController extends Controller
     }
 
     /**
+     * Fetch the data for the requested resource for populating the edit form
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\ReceptionCommittee  $receptionCommittee
+     * @return json
+     */
+    public function fetchCommitteeDetails(Request $request)
+    {
+        $committee = Committee::findOrFail($request->id);
+        $output = [
+            'name' => $committee->name,
+            'company_id' => $committee->company_id
+        ];
+
+        return json_encode($output);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -81,8 +145,21 @@ class ReceptionCommitteeController extends Controller
      */
     public function update(ReceptionCommittee $receptionCommittee)
     {
-        // dd($this->validateRequest());
         $receptionCommittee->update($this->validateRequest());
+        return back();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Committee  $committee
+     * @return \Illuminate\Http\Response
+     */
+    public function updateCommittee(Committee $committee)
+    {
+        // dd($this->validateRequestCommittee());
+        $committee->update($this->validateRequestCommittee());
         return back();
     }
 
@@ -131,13 +208,30 @@ class ReceptionCommitteeController extends Controller
     public function validateRequest()
     {
         $error_messages = [
-            'member.required' => 'Nici un utilizator selectat!'
+            'member.required' => 'Introduceti nume membru!'
         ];
 
         return request()->validate([
             'member' => 'required',
-            'company_id' => 'required',
+            'committee_id' => 'required',
             'active' => 'required',
+        ], $error_messages);
+    }
+
+    /**
+     * Validate request and output custom error messages
+     *
+     * @return array
+     */
+    public function validateRequestCommittee()
+    {
+        $error_messages = [
+            'name.required' => 'Trebuie completat numele comisiei de receptie!'
+        ];
+
+        return request()->validate([
+            'name' => 'required',
+            'company_id' => 'required',
         ], $error_messages);
     }
 }

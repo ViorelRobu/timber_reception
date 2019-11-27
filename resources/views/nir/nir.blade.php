@@ -2,7 +2,7 @@
 
 @section('content_header')
   {{-- {{ dd($nir->id) }} --}}
-  <h1 class="d-inline"><a href="/nir"><i class="fa fa-arrow-left"></i></a>      <strong>Detalii NIR numarul {{ $nir->numar_nir }} din {{ date("d.m.Y", strtotime($nir->data_nir)) }}</strong> - {{ $company }}</h1>
+  <h1 class="d-inline"><a href="/nir"><i class="fa fa-arrow-left"></i></a>      <strong>Detalii NIR numarul {{ $nir->numar_nir }} din {{ date("d.m.Y", strtotime($nir->data_nir)) }}</strong> - {{ $company }} &nbsp; <a href="/nir/{{ $nir->id }}/print" target="_blank" ><i class="fa fa-print"></i></a></h1>
   <input type="hidden" id="nir_id" name="nir_id" value="{{ $nir->id }}">
 @stop
 
@@ -37,12 +37,13 @@
           @if ($nir->greutate_bruta || $nir->greutate_neta)
             <h4><strong>Greutate (brut / net):</strong> {{ $nir->greutate_bruta }} kg / {{ $nir->greutate_neta }} kg</h4>
           @endif
+          <h4><strong>Flux: </strong> {{ $committee }}</h4>
         </div>
         <div class="col-sm-4">
           @if ($invoice->count() !== 0)
             <h4><strong>Factura:</strong>   {{ $invoice[0]->numar_factura }} / {{ date("d.m.Y", strtotime($invoice[0]->data_factura)) }} 
               @can('user')
-              <a href="" id="{{ $invoice[0]->id }}" class="delete" data-toggle="modal" data-target="#deleteInvoiceForm"><i class="fa fa-trash pull-right"></i></a><a href="" id="{{ $invoice[0]->id }}" class="editInvoice" data-toggle="modal" data-target="#invoiceForm"><i class="fa fa-edit pull-right"></i></a><a href="/nir/{{ $nir->id }}/print" target="_blank" ><i class="fa fa-print pull-right"></i></a></h4>
+              <a href="" id="{{ $invoice[0]->id }}" class="delete" data-toggle="modal" data-target="#deleteInvoiceForm"><i class="fa fa-trash pull-right"></i></a><a href="" id="{{ $invoice[0]->id }}" class="editInvoice" data-toggle="modal" data-target="#invoiceForm"><i class="fa fa-edit pull-right"></i></a></h4>
               @endcan
               <h4><strong>Valoare:</strong> &euro; {{ $invoice[0]->valoare_factura }}</h4>
             <h4><strong>Transport:</strong> &euro; {{ $invoice[0]->valoare_transport }}</h4>

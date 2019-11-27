@@ -118,6 +118,11 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(Number::class, 'user_id');
     }
 
+    public function committeeCreator()
+    {
+        return $this->hasMany(Committee::class, 'user_id');
+    }
+
     public function receptionCommitteeCreator()
     {
         return $this->hasMany(ReceptionCommittee::class, 'user_id');

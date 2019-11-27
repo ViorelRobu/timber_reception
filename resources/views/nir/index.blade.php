@@ -140,16 +140,16 @@
                   <button type="button" class="remBtn btn btn-danger">Sterge</button>
               </div>
               <div class="form-group col-md-3">
-                  <input type="number" class="form-control" id="volum_aviz" step="0.01" name="volum_aviz[]" placeholder="Volum aviz" required>
+                  <input type="number" class="form-control" id="volum_aviz" step="0.01" min="0" name="volum_aviz[]" placeholder="Volum aviz" required>
               </div>
               <div class="form-group col-md-3">
-                  <input type="number" class="form-control" id="volum_receptionat" step="0.001" name="volum_receptionat[]" placeholder="Volum factura" required>
+                  <input type="number" class="form-control" id="volum_receptionat" step="0.001" min="0" name="volum_receptionat[]" placeholder="Volum factura" required>
               </div>
               <div class="form-group col-md-3">
-                  <input type="number" class="form-control" id="pachete" name="pachete[]" placeholder="Numar pachete" required>
+                  <input type="number" class="form-control" id="pachete" step="1" name="pachete[]" min="0" placeholder="Numar pachete" required>
               </div>
               <div class="form-group col-md-3">
-                  <input type="number" class="form-control" id="total_ml" step="0.01" name="total_ml[]" placeholder="Total lungimi pachete" required>
+                  <input type="number" class="form-control" id="total_ml" step="0.01" min="0" name="total_ml[]" placeholder="Total lungimi pachete" required>
               </div>
               <div class="col-xs-12"><hr></div>
           </div>`
@@ -216,6 +216,7 @@
         success: function(data)
             {
                 $('#id').val(id);
+                $('#committee_id').val(data.committee_id);
                 $('#numar_nir').val(data.numar_nir).prop('disabled', true);
                 $('#data_nir').val(data.data_nir);
                 $('#numar_we').val(data.numar_we);

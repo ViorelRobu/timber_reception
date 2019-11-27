@@ -3,32 +3,20 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title d-inline" id="exampleModalLongTitle">Adauga membru nou la comisia de receptie
+        <h3 class="modal-title d-inline" id="exampleModalLongTitle">Creaza comisie noua
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
         </h3>
       </div>
       <div class="modal-body">
-        <form action="/reception/add/member" method="POST">
+        <form action="/reception/add" method="POST">
             @method('POST')
             @csrf
+            <input type="hidden" name="company_id" id="company_id" value="{{ session()->get('company_was_selected') }}">
             <input type="hidden" name="id" id="id" value="">
             <div class="form-group">
-                <select class="form-control" name="committee_id" id="committee_id">
-                  @foreach ($committee_list as $committee)
-                    <option value="{{ $committee->id }}">{{ $committee->name }}</option>
-                  @endforeach
-                </select>
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" name="member" id="member" placeholder="Nume membru" required>
-            </div>
-            <div class="form-group">
-                <select class="form-control" name="active" id="active">
-                    <option value="1" selected>Activ</option>
-                    <option value="0">Inactiv</option>
-                </select>
+                <input type="text" class="form-control" name="name" id="name" placeholder="Nume comisie de receptie" required>
             </div>
       </div>
       <div class="modal-footer">

@@ -30,12 +30,26 @@
                 <div class="form-group col-md-12">
                     <input type="text" class="form-control" id="numar_we" name="numar_we" placeholder="Numar WE">
                 </div>
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-8">
                     <select class="custom-select form-control" name="supplier_id" id="supplier_id" required>
                         <option value="" selected>--- Alege furnizorul ---</option>
                         @foreach ($suppliers as $supplier)
                             <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                         @endforeach
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <select class="custom-select form-control" name="committee_id" id="committee_id" required>
+                        @if ($committee_list->count() == 1)
+                            @foreach ($committee_list as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        @else
+                            <option value="" selected>--- Alege fluxul ---</option>
+                            @foreach ($committee_list as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        @endif
                     </select>
                 </div>
                 <div class="form-group col-md-6">
@@ -50,10 +64,10 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <input type="number" class="form-control" id="greutate_bruta" step="0.01" name="greutate_bruta" placeholder="Greutate bruta">
+                    <input type="number" class="form-control" id="greutate_bruta" step="0.01" min="0" name="greutate_bruta" placeholder="Greutate bruta">
                 </div>
-                <div class="form-group col-md-6">
-                    <input type="number" class="form-control" id="greutate_neta" step="0.01" name="greutate_neta" placeholder="Greutate neta">
+                <div class="form-group col-md-6"> 
+                    <input type="number" class="form-control" id="greutate_neta" step="0.01" min="0" name="greutate_neta" placeholder="Greutate neta">
                 </div>
                 <div class="form-group col-md-4">
                     <input type="text" class="form-control" id="serie_aviz" name="serie_aviz" placeholder="Serie aviz" required>

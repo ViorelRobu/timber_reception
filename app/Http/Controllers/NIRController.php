@@ -11,6 +11,7 @@ use App\Suppliers;
 use App\Certification;
 use App\Vehicle;
 use App\Article;
+use App\Committee;
 use App\Countries;
 use App\Exports\NIRExport;
 use App\Species;
@@ -38,8 +39,8 @@ class NIRController extends Controller
      */
     public function index(Request $request)
     {
+        $company = $request->session()->get('company_was_selected');
         if ($request->ajax()) {
-            $company = $request->session()->get('company_was_selected');
             $nir = DB::table('nir')->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
                 ->join('vehicles', 'nir.vehicle_id', '=', 'vehicles.id')
                 ->join('certifications', 'nir.certification_id', '=', 'certifications.id')
@@ -94,8 +95,9 @@ class NIRController extends Controller
         $articles = Article::all()->sortBy('name');
         $species = Species::all()->sortBy('name');
         $moistures = Moisture::all()->sortBy('name');
+        $committee_list = Committee::where('company_id', $company)->get();
         return view('nir.index', ['company_name' => $company_name, 'suppliers' => $suppliers, 'certifications' => $certifications, 'vehicles' => $vehicles,
-        'articles' => $articles, 'species' => $species, 'moistures' => $moistures]);
+        'articles' => $articles, 'species' => $species, 'moistures' => $moistures, 'committee_list' => $committee_list]);
     }
 
     /**
@@ -127,6 +129,7 @@ class NIRController extends Controller
         // Create the new NIR
         $nir = new NIR();
         $nir->company_id = $company;
+        $nir->committee_id = $this->validateRequest()['committee_id'];
         $nir->numar_nir = $new_nir;
         $nir->data_nir = $this->validateRequest()['data_nir'];
         $nir->numar_we = $this->validateRequest()['numar_we'];
@@ -349,10 +352,13 @@ class NIRController extends Controller
         $supplier = Suppliers::where('id', $nir->supplier_id)->value('name');
         $vehicle = Vehicle::where('id', $nir->vehicle_id)->value('name');
         $certification = Certification::where('id', $nir->certification_id)->value('name');
+        $committee = Committee::find($nir->committee_id);
+
         return view('nir.nir',
                     [
                         'nir' => $nir,
                         'company' => $company,
+                        'committee' => $committee->name,
                         'invoice' => $invoice,
                         'supplier' => $supplier,
                         'vehicle' => $vehicle,
@@ -378,6 +384,7 @@ class NIRController extends Controller
     {
         $nir = NIR::findOrFail($request->id);
         $output = [
+            'committee_id' => $nir->committee_id,
             'numar_nir' => $nir->numar_nir,
             'data_nir' => $nir->data_nir,
             'numar_we' => $nir->numar_we,
@@ -460,8 +467,8 @@ class NIRController extends Controller
         $vehicle = Vehicle::where('id', $nir->vehicle_id)->value('name');
         $invoice = Invoice::where('nir_id', $nir->id)->get();
         $invoice_count = Invoice::where('nir_id', $nir->id)->count();
-        // get the active reception committee for the current mill
-        $reception_committee = ReceptionCommittee::where('company_id', session()->get('company_was_selected'))->where('active', 1)->get();
+        // get the active reception committee set for the nir
+        $reception_committee = ReceptionCommittee::where('committee_id', $nir->committee_id)->where('active', 1)->get();
 
         if($invoice_count === 0) {
             $invoice = null;
@@ -518,6 +525,7 @@ class NIRController extends Controller
             ->whereBetween('data_nir', [$from_date, $to_date])
             ->select([
                 'nir.id as id',
+                'nir.committee_id as committee_id',
                 'nir.numar_nir as numar_nir',
                 'company_info.name',
                 'company_info.cui',
@@ -571,10 +579,13 @@ class NIRController extends Controller
                 ])->get();
             $nir[$i]->details = $nir_details;
             $nir[$i]->totals = $totals;
+
+            // get the active reception committee for each NIR
+            $reception_committee = ReceptionCommittee::where('committee_id', $nir[$i]->committee_id)->where('active', 1)->get();
+            $nir[$i]->reception_committee = $reception_committee;
         }
 
-        // get the active reception committee for the current mill
-        $reception_committee = ReceptionCommittee::where('company_id', session()->get('company_was_selected'))->where('active', 1)->get();
+        // dd($nir);
 
         $data = [
             'nir' => $nir,
@@ -594,6 +605,7 @@ class NIRController extends Controller
     {
         $error_messages = [
             'company_id.required' => 'ID-ul companiei este necesar. Reincarcati pagina si incercati din nou!',
+            'committee_id.required' => 'Selectati fluxul de receptie a marfii!',
             'data_nir.required' => 'Completati data NIR!',
             'numar_we.sometimes' => 'Verificati numarul WE!',
             'supplier_id.required' => 'Selectati furnizorul din lista!',
@@ -612,6 +624,7 @@ class NIRController extends Controller
 
         return request()->validate([
             'company_id' => 'required',
+            'committee_id' => 'required',
             'data_nir' => 'required',
             'numar_we' => 'sometimes',
             'supplier_id' => 'required',

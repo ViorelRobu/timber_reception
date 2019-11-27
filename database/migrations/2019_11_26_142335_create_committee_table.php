@@ -16,10 +16,12 @@ class CreateCommitteeTable extends Migration
         Schema::create('committee', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('name');
+            $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
+            $table->foreign('company_id')->references('id')->on('company_info')->onDelete('restrict');
         });
     }
 
