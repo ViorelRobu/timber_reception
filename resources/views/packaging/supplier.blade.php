@@ -3,7 +3,7 @@
 @section('content_header')
 <h1 class="d-inline">
     <strong>Cantitate ambalaj / furnizor</strong>
-    @can('admin')
+    @can('user')
         <button id="addGroup" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#addSupplierForm">Adauga</button></h1>
     @endcan
 </h1>
