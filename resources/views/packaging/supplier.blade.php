@@ -37,7 +37,7 @@
     </div>
   </div>
 
-@can('admin')
+@can('user')
   @include('packaging.add_supplier')
 @endcan
 
