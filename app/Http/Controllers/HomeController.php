@@ -65,33 +65,61 @@ class HomeController extends Controller
         foreach ($dataset as $key => $value) {
             $deliveries->dataset($key, 'bar', $value);
         }
+
+        // Calculate average price current month
+        $first_current_month = $now->copy()->firstOfMonth()->format('Y-m-d');
+        $last_current_month = $now->copy()->lastOfMonth()->format('Y-m-d');
+        $data_current_month = $this->calculateAveragePrice($first_current_month, $last_current_month);
+        $current_month = ['volum' => 0, 'valoare' => 0];
+        foreach ($data_current_month as $data) {
+            $current_month['volum'] += $data->volum;
+            $current_month['valoare'] += $data->valoare_factura + $data->transport;
+        }
+
+        // Calculate average price last month
+        $last_month_first = new Carbon('first day of last month');
+        $last_month_first->startOfMonth()->format('Y-m-d');
+        $last_month_last = new Carbon('last day of last month');
+        $last_month_last->endOfMonth()->format('Y-m-d');
+        $data_last_month = $this->calculateAveragePrice($last_month_first, $last_month_last);
+        $last_month = ['volum' => 0, 'valoare' => 0];
+        foreach ($data_last_month as $data) {
+            $last_month['volum'] += $data->volum;
+            $last_month['valoare'] += $data->valoare_factura + $data->transport;
+        }
+
         // get the company name
         $company_name = CompanyInfo::where('id', session()->get('company_was_selected'))->pluck('name');
         // return the view
-        // dd($this->calculateAveragePriceLastMonth());
-        return view('home', ['company_name' => $company_name, 'deliveries' => $deliveries]);
+        // dd($data_last_month);
+        return view('home', [
+                        'company_name' => $company_name, 
+                        'deliveries' => $deliveries, 
+                        'current_month' => $current_month, 
+                        'data_current_month' => $data_current_month,
+                        'last_month' => $last_month, 
+                        'data_last_month' => $data_last_month,
+                    ]);
     }
 
     /**
-     * Calculate the average for timber for the current month for external suppliers
+     * Calculate the average for timber for the external suppliers for a given time period
      * 
-     * @param
-     * @return
+     * @param $from - beginning date
+     * @param $to - end date
+     * @return collection
      */
-    public function calculateAveragePriceCurrentMonth()
+    public function calculateAveragePrice($from, $to)
     {
         $company_id = session()->get('company_was_selected');
 
-        $now = Carbon::now();
-        $first = $now->copy()->firstOfMonth()->format('Y-m-d');
-        $last = $now->copy()->lastOfMonth()->format('Y-m-d');
         $nir_data = DB::table('nir')
             ->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
             ->join('nir_details', 'nir_details.nir_id', '=', 'nir.id')
             ->leftJoin('invoices', 'invoices.nir_id', '=', 'nir.id')
             ->where('company_id', $company_id)
             ->where('suppliers.supplier_group_id', 2)
-            ->whereBetween('data_nir', [$first, $last])
+            ->whereBetween('data_nir', [$from, $to])
             ->select([
                 'suppliers.name as supplier',
                 DB::raw('SUM(nir_details.volum_receptionat) as volum'),
@@ -104,36 +132,4 @@ class HomeController extends Controller
         return $nir_data;
     }
 
-    /**
-     * Calculate the average for timber for the current month for external suppliers
-     * 
-     * @param
-     * @return
-     */
-    public function calculateAveragePriceLastMonth()
-    {
-        $company_id = session()->get('company_was_selected');
-
-        $first = new Carbon('first day of last month');
-        $first->startOfMonth()->format('Y-m-d');
-        $last = new Carbon('last day of last month');
-        $last->endOfMonth()->format('Y-m-d');
-        $nir_data = DB::table('nir')
-            ->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
-            ->join('nir_details', 'nir_details.nir_id', '=', 'nir.id')
-            ->leftJoin('invoices', 'invoices.nir_id', '=', 'nir.id')
-            ->where('company_id', $company_id)
-            ->where('suppliers.supplier_group_id', 2)
-            ->whereBetween('data_nir', [$first, $last])
-            ->select([
-                'suppliers.name as supplier',
-                DB::raw('SUM(nir_details.volum_receptionat) as volum'),
-                DB::raw('SUM(invoices.valoare_factura) as valoare_factura'),
-                DB::raw('SUM(invoices.valoare_transport) as transport')
-            ])
-            ->groupBy('suppliers.name')
-            ->get();
-
-        return $nir_data;
-    }
 }
