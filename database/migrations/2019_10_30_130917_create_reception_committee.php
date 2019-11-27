@@ -32,8 +32,6 @@ class CreateReceptionCommittee extends Migration
      */
     public function down()
     {
-        Schema::table('reception_committee', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('reception_committee');
     }
 }

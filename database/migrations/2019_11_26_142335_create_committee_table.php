@@ -30,6 +30,6 @@ class CreateCommitteeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comittee');
+        Schema::dropIfExists('committee');
     }
 }
