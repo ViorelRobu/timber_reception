@@ -9,5 +9,13 @@
 @stop
 
 @section('content')
-    <p>You are logged in!</p>
+    {!! $deliveries->container() !!}
 @stop
+
+@section('footer')
+    @include('footer')
+@endsection
+
+@section('js')
+      {!! $deliveries->script() !!}
+@endsection
