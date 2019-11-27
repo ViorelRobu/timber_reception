@@ -62,8 +62,12 @@ class HomeController extends Controller
         // dd($dataset);
         $deliveries->labels(['ianuarie', 'februarie', 'martie', 'aprilie', 'mai', 'iunie', 'iulie', 'august', 'septembrie', 'octombrie', 'noiembrie', 'decembrie']);
         // pass the dataset to the chart
-        foreach ($dataset as $key => $value) {
-            $deliveries->dataset($key, 'bar', $value);
+        if ($dataset == []) {
+            $deliveries->dataset('Nu exista date', 'bar', [0]);  
+        } else {
+            foreach ($dataset as $key => $value) {
+                $deliveries->dataset($key, 'bar', $value);
+            }
         }
 
         // Calculate average price current month
