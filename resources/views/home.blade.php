@@ -9,7 +9,9 @@
 @stop
 
 @section('content')
-    {!! $deliveries->container() !!}
+    <div>
+        {!! $deliveries->container() !!}
+    </div>
     
     <div class="row">
         <br>
