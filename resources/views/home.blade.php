@@ -21,7 +21,7 @@
             @if ($current_month['valoare'] == 0)
                 <h4>Nu exista date</h4>
             @else
-                <h4>{{ round(($current_month['valoare'] / $current_month['volum']),2) }} EUR</h4>
+                <h4>{{ $current_month['volum'] }} mc &mdash; {{ round(($current_month['valoare'] / $current_month['volum']),2) }} EUR</h4>
             @endif
             
         </div>
@@ -31,7 +31,7 @@
                 <h4>Nu exista date</h4>
             @else
                 @foreach ($data_current_month as $data)
-                    <h4>{{ $data->supplier }} &mdash; {{ round((($data->valoare_factura + $data->transport)/$data->volum),2) }} EUR</h4>
+                    <h4>{{ $data->supplier }} &mdash; {{ $data->volum }} mc &mdash; {{ round((($data->valoare_factura + $data->transport)/$data->volum),2) }} EUR</h4>
                 @endforeach
             @endif
         </div>
@@ -40,7 +40,7 @@
             @if ($last_month['valoare'] == 0)
                 <h4>Nu exista date</h4>
             @else
-                <h4>{{ round(($last_month['valoare'] / $last_month['volum']),2) }} EUR</h4>
+                <h4>{{ $last_month['volum'] }} mc &mdash; {{ round(($last_month['valoare'] / $last_month['volum']),2) }} EUR</h4>
             @endif
         </div>
         <div class="col-lg-3 text-center">
@@ -49,7 +49,7 @@
                 <h4>Nu exista date</h4>
             @else
                 @foreach ($data_last_month as $data)
-                    <h4>{{ $data->supplier }} &mdash; {{ round((($data->valoare_factura + $data->transport)/$data->volum),2) }} EUR</h4>
+                    <h4>{{ $data->supplier }} &mdash; {{ $data->volum }} mc &mdash; {{ round((($data->valoare_factura + $data->transport)/$data->volum),2) }} EUR</h4>
                 @endforeach
             @endif
         </div>
