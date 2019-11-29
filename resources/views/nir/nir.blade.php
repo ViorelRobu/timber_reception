@@ -2,7 +2,11 @@
 
 @section('content_header')
   {{-- {{ dd($nir->id) }} --}}
-  <h1 class="d-inline"><a href="/nir"><i class="fa fa-arrow-left"></i></a>      <strong>Detalii NIR numarul {{ $nir->numar_nir }} din {{ date("d.m.Y", strtotime($nir->data_nir)) }}</strong> - {{ $company }} &nbsp; <a href="/nir/{{ $nir->id }}/print" target="_blank" ><i class="fa fa-print"></i></a></h1>
+  <h1 class="d-inline"><a href="/nir"><i class="fa fa-arrow-left"></i></a>      
+    <strong>Detalii NIR numarul {{ $nir->numar_nir }} din {{ date("d.m.Y", strtotime($nir->data_nir)) }}</strong> - {{ $company }} &nbsp; 
+    <a href="/nir/{{ $nir->id }}/print" target="_blank" ><i class="fa fa-print"></i></a>
+    <a href="#" class="pull-right" data-toggle="modal" data-target="#NIRHistory"><i class="fa fa-history"></i></a>
+  </h1>
   <input type="hidden" id="nir_id" name="nir_id" value="{{ $nir->id }}">
 @stop
 
@@ -115,6 +119,9 @@
   @include('nir.details')
   @include('nir.delete_invoice')
   @include('nir.delete_detail')
+@endcan
+@can('admin')
+  @include('nir.history')
 @endcan
 
 @stop
