@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title d-inline" id="exampleModalLongTitle">Istoric NIR   <small>NIR, detalii NIR si factura</small>
+        <h3 class="modal-title d-inline" id="exampleModalLongTitle">Istoric NIR   <sup><small>NIR, detalii NIR si factura</small></sup>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -71,36 +71,32 @@
                 <div class="col-lg-12"><hr></div>
             @endforeach
         </div>
-        {{-- <div class="row col-lg-12">
-            @if ($audit_nir_invoice != null)
-            @foreach ($audit_nir_invoice as $invoices)
-                @foreach ($invoice as $audit)
-                    <div class="col-lg-2">
-                        {{ $audit->user->name }}
-                        <br>
-                        <sup>{{ $audit->created_at->toDateTimeString() }}</sup>
-                        <br>
-                        <sup>Detalii factura</sup>
-                    </div>
-                    <div class="col-lg-5">
-                        @foreach ($audit->old_values as $key => $value)
-                                <div>
-                                    {{ $key }} - {{ $value }}
-                                </div>
-                        @endforeach
-                    </div>
-                    <div class="col-lg-5">
-                        @foreach ($audit->new_values as $key => $value)
-                                <div>
-                                    {{ $key }} - {{ $value }}
-                                </div>
-                        @endforeach
-                    </div>
-                    <div class="col-lg-12"><hr></div>
-                @endforeach
+        <div class="row col-lg-12">
+            @foreach ($invoice_audit as $details)
+                <div class="col-lg-2">
+                    {{ $details['user'] }}
+                    <br>
+                    <sup>{{ $details['created_at'] }} {{ $details['event'] }}</sup>
+                    <br>
+                    <sup>Factura</sup>
+                </div>
+                <div class="col-lg-5">
+                    @foreach ($details['old_values'] as $key => $value)
+                            <div>
+                                {{ $key }} - {{ $value }}
+                            </div>
+                    @endforeach
+                </div>
+                <div class="col-lg-5">
+                    @foreach ($details['new_values'] as $key => $value)
+                            <div>
+                                {{ $key }} - {{ $value }}
+                            </div>
+                    @endforeach
+                </div>
+                <div class="col-lg-12"><hr></div>
             @endforeach
-            @endif
-        </div> --}}
+        </div>
       </div>
       <div class="modal-footer">
       </div>

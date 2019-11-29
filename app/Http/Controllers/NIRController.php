@@ -328,50 +328,6 @@ class NIRController extends Controller
         $total_pachete = 0;
         $total_ml = 0;
 
-        // get the audits for the current nir
-        $audit_nir = $nir->audits;
-        // get the audit for the nir details
-        $audit_nir_details = Audit::where('auditable_type', 'App\NIRDetails')->get();
-        $nir_details_audits = [];
-        foreach ($audit_nir_details as $audit) {
-            $audit->event = 'created';
-            // if (!$audit->old_values) {
-            //     $nir_id = $audit->new_values['nir_id'];
-            // } else {
-            //     $nir_id = $audit->old_values['nir_id'];
-            // }
-            // if ($nir_id == $nir->id) {
-            //     array_push($nir_details_audits, [
-            //         'user' => $audit->user->name,
-            //         'event' => $audit->event,
-            //         'old_values' => $audit->old_values,
-            //         'new_values' => $audit->new_values,
-            //         'created_at' => $audit->created_at->toDateTimeString()
-            //     ]);
-            // }
-        }
-        // get the audit for the invoice
-        $invoice_audit_data = Audit::where('auditable_type', 'App\Invoice')->get();
-        $invoice_audit = [];
-        foreach ($invoice_audit_data as $audit) {
-            if (!$audit->old_values) {
-                $nir_id = $audit->new_values['nir_id'];
-            } else {
-                $nir_id = $audit->old_values['nir_id'];
-            }
-            if ($nir_id == $nir->id) {
-                array_push($invoice_audit, [
-                    'user' => $audit->user->name,
-                    'event' => $audit->event,
-                    'old_values' => $audit->old_values,
-                    'new_values' => $audit->new_values,
-                    'created_at' => $audit->created_at->toDateTimeString()
-                ]);
-            }
-        }
-        // dd($audit_nir_details);
-        $audit_nir_invoice = null;
-
         foreach ($nir_details as $details) {
             $total_aviz += $details->volum_aviz;
         }
@@ -388,6 +344,15 @@ class NIRController extends Controller
             $total_ml += $details->total_ml;
         }
 
+        // get the audits for the current nir
+        $audit_nir = $nir->audits;
+
+        // get the audit data for the nir details
+        $nir_details_audits = $this->displayHistoryNIRDetails($nir->id, $nir->created_at);
+
+        // get the audit for the invoice
+        $audit_nir_invoice = $this->displayHistoryNIRInvoice($nir->id, $nir->created_at);
+        // dd($audit_nir_invoice);
 
         $articles = Article::all()->sortBy('name');
         $species = Species::all()->sortBy('name');
@@ -418,9 +383,76 @@ class NIRController extends Controller
                         'moistures' => $moistures,
                         'audit_nir' => $audit_nir,
                         'nir_details_audits' => $nir_details_audits,
-                        'invoice_audit' => $invoice_audit
+                        'invoice_audit' => $audit_nir_invoice
 
                     ]);
+    }
+
+    /**
+     * Display the auditable data for the NIR details
+     * 
+     * @param $nir
+     * @param $date
+     * @return array
+     */
+    protected function displayHistoryNIRDetails(int $nir, $date)
+    {
+        $collection = Audit::where('auditable_type', 'App\NIRDetails')->where('created_at', '>=', $date)->where('event', 'created')->get();
+        $history = [];
+        
+        $nir_details = [];
+        foreach ($collection as $data) {
+            if ($data->new_values['nir_id'] == $nir) {
+                array_push($nir_details, $data->auditable_id);
+            }
+        }
+        
+        $collection = Audit::where('auditable_type', 'App\NIRDetails')->whereIn('auditable_id', $nir_details)->get();
+
+        foreach ($collection as $data) {
+            array_push($history, [
+                'user' => $data->user->name,
+                'event' => $data->event,
+                'old_values' => $data->old_values,
+                'new_values' => $data->new_values,
+                'created_at' => $data->created_at->toDateTimeString()
+            ]);
+        }
+
+        return $history;
+    }
+
+    /**
+     * Display the auditable data for the invoices assigned to the NIR
+     * 
+     * @param $nir
+     * @param $date
+     * @return array
+     */
+    protected function displayHistoryNIRInvoice(int $nir, $date)
+    {
+        $collection = Audit::where('auditable_type', 'App\Invoice')->where('created_at', '>=', $date)->where('event', 'created')->get();
+        $history = [];
+
+        $invoices = [];
+        foreach ($collection as $data) {
+            if ($data->new_values['nir_id'] == $nir) {
+                array_push($invoices, $data->auditable_id);
+            }
+        }
+
+        $collection = Audit::where('auditable_type', 'App\Invoice')->whereIn('auditable_id', $invoices)->get();
+
+        foreach ($collection as $data) {
+            array_push($history, [
+                'user' => $data->user->name,
+                'event' => $data->event,
+                'old_values' => $data->old_values,
+                'new_values' => $data->new_values,
+                'created_at' => $data->created_at->toDateTimeString()
+            ]);
+        }
+        return $history;
     }
 
     /**
