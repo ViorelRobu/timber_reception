@@ -22,23 +22,23 @@
             </div>
             @foreach ($audit_nir as $audit)
                 <div class="col-lg-2">
-                    {{ $audit->user->name }}
+                    {{ $audit['user'] }}
                     <br>
-                    <sup>{{ $audit->created_at->toDateTimeString() }} {{ $audit->event }}</sup>
+                    <sup>{{ $audit['created_at'] }} {{ $audit['event'] }}</sup>
                     <br>
                     <sup>NIR</sup>
                 </div>
                 <div class="col-lg-5">
-                    @foreach ($audit->old_values as $key => $value)
+                    @foreach ($audit['old_values'] as $key => $value)
                             <div>
-                                {{ $key }} - {{ $value }}
+                                {{ $key }} &mdash; {{ $value }}
                             </div>
                     @endforeach
                 </div>
                 <div class="col-lg-5">
-                    @foreach ($audit->new_values as $key => $value)
+                    @foreach ($audit['new_values'] as $key => $value)
                             <div>
-                                {{ $key }} - {{ $value }}
+                                {{ $key }} &mdash; {{ $value }}
                             </div>
                     @endforeach
                 </div>
@@ -57,14 +57,14 @@
                 <div class="col-lg-5">
                     @foreach ($details['old_values'] as $key => $value)
                             <div>
-                                {{ $key }} - {{ $value }}
+                                {{ $key }} &mdash; {{ $value }}
                             </div>
                     @endforeach
                 </div>
                 <div class="col-lg-5">
                     @foreach ($details['new_values'] as $key => $value)
                             <div>
-                                {{ $key }} - {{ $value }}
+                                {{ $key }} &mdash; {{ $value }}
                             </div>
                     @endforeach
                 </div>
@@ -83,14 +83,14 @@
                 <div class="col-lg-5">
                     @foreach ($details['old_values'] as $key => $value)
                             <div>
-                                {{ $key }} - {{ $value }}
+                                {{ $key }} &mdash; {{ $value }}
                             </div>
                     @endforeach
                 </div>
                 <div class="col-lg-5">
                     @foreach ($details['new_values'] as $key => $value)
                             <div>
-                                {{ $key }} - {{ $value }}
+                                {{ $key }} &mdash; {{ $value }}
                             </div>
                     @endforeach
                 </div>

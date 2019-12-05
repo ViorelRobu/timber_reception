@@ -56,7 +56,7 @@ class HomeController extends Controller
         foreach ($nir_data as $nir) {
             $supplier = $nir->supplier;
             $array_key_month = $nir->month - 1;
-            $dataset[$supplier][$array_key_month] += $nir->volum; 
+            $dataset[$supplier][$array_key_month] += round($nir->volum, 3); 
         }
         // set the chart labels
         // dd($dataset);

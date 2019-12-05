@@ -345,7 +345,7 @@ class NIRController extends Controller
         }
 
         // get the audits for the current nir
-        $audit_nir = $nir->audits;
+        $audit_nir = $this->displayHistoryNIR($nir->id, $nir->created_at);
 
         // get the audit data for the nir details
         $nir_details_audits = $this->displayHistoryNIRDetails($nir->id, $nir->created_at);
@@ -389,6 +389,90 @@ class NIRController extends Controller
     }
 
     /**
+     * Translate the Foreign Keys ID's from the auditable table into human readable data 
+     * 
+     * @param $item
+     * @return array
+     */
+    protected function translate(string $item)
+    {
+        $data = [
+            'user_id' => ['utilizator' =>'App\User'],
+            'company_id' => ['companie' => 'App\CompanyInfo'],
+            'committee_id' => ['flux' => 'App\Committee'],
+            'supplier_id' => ['furnizor' => 'App\Suppliers'],
+            'vehicle_id' => ['vehicol' => 'App\Vehicle'],
+            'certification_id' => ['certificare' => 'App\Certification'],
+            'article_id' => ['articol' => 'App\Article'],
+            'species_id' => ['specie' => 'App\Species'],
+            'moisture_id' => ['umiditate' => 'App\Moisture'],
+            // 'nir_id' => ['nir' => 'App\NIR']
+        ];
+
+        $value = [];
+
+        foreach ($data as $key => $val) {
+            if($item == $key) {
+                $value = $val;
+            }
+        }
+        
+        return $value;
+    }
+
+    /**
+     * Display the auditable data for the NIR
+     * 
+     * @param $nir
+     * @param $date
+     * @return array
+     */
+    protected function displayHistoryNIR(int $nir, $date) 
+    {
+        $collection = Audit::where('auditable_type', 'App\NIR')->where('auditable_id', $nir)->get();
+        $history = [];
+
+        foreach ($collection as $data) {
+            $old = [];
+            foreach ($data->old_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $old[$key] = $value;
+                } else {
+                    foreach ($translated as $k => $class) {
+                        $valoare = $class::find($value)->pluck('name');
+                        $old[$k] = $valoare[0];
+                    }
+                }
+            }
+
+            $new = [];
+            foreach ($data->new_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $new[$key] = $value;
+                } else {
+                    foreach ($translated as $k => $class) {
+                        $valoare = $class::find($value)->pluck('name');
+                        $new[$k] = $valoare[0];
+                    }
+                }
+            }
+
+            array_push($history, [
+                'user' => $data->user->name,
+                'event' => $data->event,
+                'old_values' => $old,
+                'new_values' => $new,
+                'created_at' => $data->created_at->toDateTimeString()
+            ]);
+        }
+
+        return $history;
+        
+    }
+
+    /**
      * Display the auditable data for the NIR details
      * 
      * @param $nir
@@ -410,11 +494,37 @@ class NIRController extends Controller
         $collection = Audit::where('auditable_type', 'App\NIRDetails')->whereIn('auditable_id', $nir_details)->get();
 
         foreach ($collection as $data) {
+            $old = [];
+            foreach ($data->old_values as $key => $value) {
+                $translated = $this->translate($key);
+                if($translated == null) {
+                    $old[$key] = $value;
+                } else {
+                    foreach ($translated as $k => $class) {
+                        $valoare = $class::find($value)->pluck('name');
+                        $old[$k] = $valoare[0];
+                    }
+                }
+            }
+
+            $new = [];
+            foreach ($data->new_values as $key => $value) {
+                $translated = $this->translate($key);
+                if($translated == null) {
+                    $new[$key] = $value;
+                } else {
+                    foreach ($translated as $k => $class) {
+                        $valoare = $class::find($value)->pluck('name');
+                        $new[$k] = $valoare[0];
+                    }
+                }
+            }
+            
             array_push($history, [
                 'user' => $data->user->name,
                 'event' => $data->event,
-                'old_values' => $data->old_values,
-                'new_values' => $data->new_values,
+                'old_values' => $old,
+                'new_values' => $new,
                 'created_at' => $data->created_at->toDateTimeString()
             ]);
         }
@@ -444,11 +554,37 @@ class NIRController extends Controller
         $collection = Audit::where('auditable_type', 'App\Invoice')->whereIn('auditable_id', $invoices)->get();
 
         foreach ($collection as $data) {
+            $old = [];
+            foreach ($data->old_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $old[$key] = $value;
+                } else {
+                    foreach ($translated as $k => $class) {
+                        $valoare = $class::find($value)->pluck('name');
+                        $old[$k] = $valoare[0];
+                    }
+                }
+            }
+
+            $new = [];
+            foreach ($data->new_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $new[$key] = $value;
+                } else {
+                    foreach ($translated as $k => $class) {
+                        $valoare = $class::find($value)->pluck('name');
+                        $new[$k] = $valoare[0];
+                    }
+                }
+            }
+
             array_push($history, [
                 'user' => $data->user->name,
                 'event' => $data->event,
-                'old_values' => $data->old_values,
-                'new_values' => $data->new_values,
+                'old_values' => $old,
+                'new_values' => $new,
                 'created_at' => $data->created_at->toDateTimeString()
             ]);
         }
