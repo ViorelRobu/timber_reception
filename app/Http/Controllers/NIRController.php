@@ -29,9 +29,26 @@ use Illuminate\Support\Facades\Gate;
 use domPDF;
 use Maatwebsite\Excel\Facades\Excel;
 use OwenIt\Auditing\Models\Audit;
+use App\Traits\Translatable;
 
 class NIRController extends Controller
 {
+
+    use Translatable;
+
+    protected $dictionary = [
+        'user_id' => ['utilizator', 'App\User', 'name'],
+        'company_id' => ['companie', 'App\CompanyInfo', 'name'],
+        'committee_id' => ['flux', 'App\Committee', 'name'],
+        'supplier_id' => ['furnizor', 'App\Suppliers', 'name'],
+        'vehicle_id' => ['vehicol', 'App\Vehicle', 'name'],
+        'certification_id' => ['certificare', 'App\Certification', 'name'],
+        'article_id' => ['articol', 'App\Article', 'name'],
+        'species_id' => ['specie', 'App\Species', 'name'],
+        'moisture_id' => ['umiditate', 'App\Moisture', 'name'],
+        'nir_id' => ['nir', 'App\NIR', 'numar_nir']
+    ];
+
     /**
      * Display a listing of all the NIR's
      *
@@ -389,38 +406,6 @@ class NIRController extends Controller
     }
 
     /**
-     * Translate the Foreign Keys ID's from the auditable table into human readable data 
-     * 
-     * @param $item
-     * @return array
-     */
-    protected function translate(string $item)
-    {
-        $data = [
-            'user_id' => ['utilizator' =>'App\User'],
-            'company_id' => ['companie' => 'App\CompanyInfo'],
-            'committee_id' => ['flux' => 'App\Committee'],
-            'supplier_id' => ['furnizor' => 'App\Suppliers'],
-            'vehicle_id' => ['vehicol' => 'App\Vehicle'],
-            'certification_id' => ['certificare' => 'App\Certification'],
-            'article_id' => ['articol' => 'App\Article'],
-            'species_id' => ['specie' => 'App\Species'],
-            'moisture_id' => ['umiditate' => 'App\Moisture'],
-            // 'nir_id' => ['nir' => 'App\NIR']
-        ];
-
-        $value = [];
-
-        foreach ($data as $key => $val) {
-            if($item == $key) {
-                $value = $val;
-            }
-        }
-        
-        return $value;
-    }
-
-    /**
      * Display the auditable data for the NIR
      * 
      * @param $nir
@@ -439,10 +424,8 @@ class NIRController extends Controller
                 if ($translated == null) {
                     $old[$old_key] = $old_value;
                 } else {
-                    foreach ($translated as $k => $class) {
-                        $valoare = $class::where('id', $old_value)->get()->pluck('name');
-                        $old[$k] = $valoare[0];
-                    }
+                    $valoare = $translated[1]::where('id', $old_value)->get()->pluck($translated[2]);
+                    $old[$translated[0]] = $valoare[0];
                 }
             }
 
@@ -452,10 +435,8 @@ class NIRController extends Controller
                 if ($translated == null) {
                     $new[$new_key] = $new_value;
                 } else {
-                    foreach ($translated as $k => $class) {
-                        $valoare = $class::where('id',$new_value)->get()->pluck('name');
-                        $new[$k] = $valoare[0];
-                    }
+                    $valoare = $translated[1]::where('id', $new_value)->get()->pluck($translated[2]);
+                    $new[$translated[0]] = $valoare[0];
                 }
             }
 
@@ -501,10 +482,8 @@ class NIRController extends Controller
                 if($translated == null) {
                     $old[$key] = $value;
                 } else {
-                    foreach ($translated as $k => $class) {
-                        $valoare = $class::where('id', $value)->get()->pluck('name');
-                        $old[$k] = $valoare[0];
-                    }
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $old[$translated[0]] = $valoare[0];
                 }
             }
 
@@ -514,10 +493,8 @@ class NIRController extends Controller
                 if($translated == null) {
                     $new[$key] = $value;
                 } else {
-                    foreach ($translated as $k => $class) {
-                        $valoare = $class::where('id', $value)->get()->pluck('name');
-                        $new[$k] = $valoare[0];
-                    }
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $new[$translated[0]] = $valoare[0];
                 }
             }
             
@@ -561,10 +538,8 @@ class NIRController extends Controller
                 if ($translated == null) {
                     $old[$key] = $value;
                 } else {
-                    foreach ($translated as $k => $class) {
-                        $valoare = $class::where('id', $value)->get()->pluck('name');
-                        $old[$k] = $valoare[0];
-                    }
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $old[$translated[0]] = $valoare[0];
                 }
             }
 
@@ -574,10 +549,8 @@ class NIRController extends Controller
                 if ($translated == null) {
                     $new[$key] = $value;
                 } else {
-                    foreach ($translated as $k => $class) {
-                        $valoare = $class::where('id', $value)->get()->pluck('name');
-                        $new[$k] = $valoare[0];
-                    }
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $new[$translated[0]] = $valoare[0];
                 }
             }
 
