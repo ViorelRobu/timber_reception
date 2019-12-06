@@ -49,8 +49,12 @@ class PackagingController extends Controller
                     return $this->decodePackagingDataJson($main->data);
                 })
                 ->addColumn('action', function ($main) {
-                    if (Gate::allows('user')) {
+                    if (Gate::allows('admin')) {
                         $edit = '<a href="#" class="update" id="' . $main->id . '" data-toggle="modal" data-target="#recalculateForm"><i class="fa fa-play"></i></a>';
+                        $history = '<a href="#" class="history" id="' . $main->id . '" data-toggle="modal" data-target="#packagingHistory"> <i class="fa fa-history"></i></a>';
+                        return $history . ' ' . $edit;
+                    } else if (Gate::allows('user')) {
+                    $edit = '<a href="#" class="update" id="' . $main->id . '" data-toggle="modal" data-target="#recalculateForm"><i class="fa fa-play"></i></a>';
                     return $edit;
                 }
                 })
@@ -59,6 +63,42 @@ class PackagingController extends Controller
         }
 
         return view('packaging.index');
+    }
+
+    /**
+     * Fetch the history data via ajax for the selected packaging data
+     * 
+     * @param Request $request
+     * @return json
+     */
+    public function fetchHistory(Request $request)
+    {
+        $packagingData = PackagingData::findOrFail($request->id);
+        $audits = $packagingData->audits;
+
+        $data = [];
+
+        foreach ($audits as $audit) {
+
+            if ($audit->old_values == null) {
+                $old = null;
+            } else {
+                $old = $this->decodePackagingDataJson($audit->old_values['packaging_data']);
+            }
+
+            $array = [
+                'user' => $audit->user->name,
+                'event' => $audit->event,
+                'old_values' => $old,
+                'new_values' => $this->decodePackagingDataJson($audit->new_values['packaging_data']),
+                'created_at' => $audit->created_at->toDateTimeString()
+            ];
+            
+            array_push($data, $array);
+        }
+
+        return json_encode($data);
+
     }
 
     /**

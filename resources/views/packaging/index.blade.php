@@ -4,10 +4,10 @@
 <h1 class="d-inline">
     <strong>Ambalaje</strong>
     @can('user')
-        <button id="export" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#exportPackaging">Exporta date ambalaj</button>
+      <button id="export" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#exportPackaging">Exporta date ambalaj</button>
     @endcan
     @can('admin')
-        <button id="recalculate" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#recalculateFormMultiple">Recalculeaza ambalaj pentru perioada</button>
+      <button id="recalculate" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#recalculateFormMultiple">Recalculeaza ambalaj pentru perioada</button>
     @endcan
 </h1>
 
@@ -43,6 +43,7 @@
 @can('admin')
   @include('packaging.recalculate')
   @include('packaging.multiple')
+  @include('packaging.history')
 @endcan
 @can('user')
   @include('packaging.export')
@@ -75,6 +76,27 @@
     $(document).on('click', '.update', function() {
       var id = $(this).attr("id");
       $('#update_id').val(id);
+    });
+
+    $(document).on('click', '.history', function() {
+      var id = $(this).attr("id");
+      $.ajax({
+        url: "{{ route('packaging.history') }}",
+        method: 'get',
+        data: {id:id},
+        dataType:'json',
+        success: function(data)
+            {
+              var p1 = '<div class="col-lg-2">';
+              var p2 = '<br><sup>';
+              var p3 = '</sup></div><div class="col-lg-5"><div>';
+              var p4 = '</div></div><div class="col-lg-5"><div>';
+              var p5 = '</div></div><div class="col-lg-12"><hr></div>';
+
+                data.forEach(element => {
+                  $('#history').append( p1 + element.user + p2 + element.created_at + ' ' + element.event + p3 + element.old_values + p4 + element.new_values + p5)});
+            }
+      });
     });
 
   </script>
