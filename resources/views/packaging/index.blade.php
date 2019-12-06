@@ -99,5 +99,9 @@
       });
     });
 
+    $("#packagingHistory").on("hidden.bs.modal", function(){
+      $("#history").html("");
+    });
+
   </script>
 @endsection
