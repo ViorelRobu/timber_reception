@@ -434,26 +434,26 @@ class NIRController extends Controller
 
         foreach ($collection as $data) {
             $old = [];
-            foreach ($data->old_values as $key => $value) {
-                $translated = $this->translate($key);
+            foreach ($data->old_values as $old_key => $old_value) {
+                $translated = $this->translate($old_key);
                 if ($translated == null) {
-                    $old[$key] = $value;
+                    $old[$old_key] = $old_value;
                 } else {
                     foreach ($translated as $k => $class) {
-                        $valoare = $class::find($value)->pluck('name');
+                        $valoare = $class::where('id', $old_value)->get()->pluck('name');
                         $old[$k] = $valoare[0];
                     }
                 }
             }
 
             $new = [];
-            foreach ($data->new_values as $key => $value) {
-                $translated = $this->translate($key);
+            foreach ($data->new_values as $new_key => $new_value) {
+                $translated = $this->translate($new_key);
                 if ($translated == null) {
-                    $new[$key] = $value;
+                    $new[$new_key] = $new_value;
                 } else {
                     foreach ($translated as $k => $class) {
-                        $valoare = $class::find($value)->pluck('name');
+                        $valoare = $class::where('id',$new_value)->get()->pluck('name');
                         $new[$k] = $valoare[0];
                     }
                 }
@@ -468,6 +468,7 @@ class NIRController extends Controller
             ]);
         }
 
+        // dd($history);
         return $history;
         
     }
@@ -501,7 +502,7 @@ class NIRController extends Controller
                     $old[$key] = $value;
                 } else {
                     foreach ($translated as $k => $class) {
-                        $valoare = $class::find($value)->pluck('name');
+                        $valoare = $class::where('id', $value)->get()->pluck('name');
                         $old[$k] = $valoare[0];
                     }
                 }
@@ -514,7 +515,7 @@ class NIRController extends Controller
                     $new[$key] = $value;
                 } else {
                     foreach ($translated as $k => $class) {
-                        $valoare = $class::find($value)->pluck('name');
+                        $valoare = $class::where('id', $value)->get()->pluck('name');
                         $new[$k] = $valoare[0];
                     }
                 }
@@ -561,7 +562,7 @@ class NIRController extends Controller
                     $old[$key] = $value;
                 } else {
                     foreach ($translated as $k => $class) {
-                        $valoare = $class::find($value)->pluck('name');
+                        $valoare = $class::where('id', $value)->get()->pluck('name');
                         $old[$k] = $valoare[0];
                     }
                 }
@@ -574,7 +575,7 @@ class NIRController extends Controller
                     $new[$key] = $value;
                 } else {
                     foreach ($translated as $k => $class) {
-                        $valoare = $class::find($value)->pluck('name');
+                        $valoare = $class::where('id', $value)->get()->pluck('name');
                         $new[$k] = $valoare[0];
                     }
                 }
