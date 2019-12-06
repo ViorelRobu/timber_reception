@@ -9,9 +9,20 @@ use Illuminate\Support\Facades\DB;
 use App\Countries;
 use App\SupplierGroup;
 use App\SupplierStatus;
+use Illuminate\Support\Facades\Gate;
+use App\Traits\Translatable;
 
 class SuppliersController extends Controller
 {
+    use Translatable;
+
+    protected $dictionary = [
+        'country_id' => ['tara', 'App\Countries', 'name'],
+        'supplier_group_id' => ['grup_furnizor', 'App\SupplierGroup', 'name'],
+        'supplier_status_id' => ['status', 'App\SupplierStatus', 'name'],
+        'user_id' => ['utilizator', 'App\User', 'name']
+    ];
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -24,8 +35,14 @@ class SuppliersController extends Controller
 
             return DataTables::of($suppliers)
                 ->addColumn('action', function ($suppliers) {
-                    $edit = '<a href="#" class="edit" id="' . $suppliers->id . '"data-toggle="modal" data-target="#supplierForm"><i class="fa fa-edit"></i></a>';
-                    return $edit;
+                    if (Gate::allows('admin')) {
+                        $history = '<a href="#" class="history" id="' . $suppliers->id . '" data-toggle="modal" data-target="#supplierHistory"> <i class="fa fa-history"></i></a>';
+                        $edit = '<a href="#" class="edit" id="' . $suppliers->id . '"data-toggle="modal" data-target="#supplierForm"><i class="fa fa-edit"></i></a>';
+                        return $edit . ' ' . $history;
+                    } else if (Gate::allows('user')) {
+                        $edit = '<a href="#" class="edit" id="' . $suppliers->id . '"data-toggle="modal" data-target="#supplierForm"><i class="fa fa-edit"></i></a>';
+                        return $edit;
+                    }
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -37,6 +54,56 @@ class SuppliersController extends Controller
 
         return view('suppliers.index', ['countries' => $countries, 'supplier_groups' => $supplier_groups, 'supplier_statuses' => $supplier_statuses]);
         
+    }
+
+    /**
+     * Fetch the modification history for the selected supplier
+     * 
+     * @param Request $request
+     * @return json
+     */
+    public function fetchHistory(Request $request)
+    {
+        $supplier = Suppliers::findOrFail($request->id);
+        $audits = $supplier->audits;
+
+        $data = [];
+
+        foreach ($audits as $audit) {
+
+            $old = [];
+            foreach ($audit->old_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $old[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $old[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $new = [];
+            foreach ($audit->new_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $new[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $new[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $array = [
+                'user' => $audit->user->name,
+                'event' => $audit->event,
+                'old_values' => $old,
+                'new_values' => $new,
+                'created_at' => $audit->created_at->toDateTimeString()
+            ];
+            array_push($data, $array);
+        }
+
+        return json_encode($data);
     }
 
     public function store(Suppliers $suppliers)

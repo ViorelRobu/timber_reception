@@ -54,9 +54,9 @@ class PackagingController extends Controller
                         $history = '<a href="#" class="history" id="' . $main->id . '" data-toggle="modal" data-target="#packagingHistory"> <i class="fa fa-history"></i></a>';
                         return $history . ' ' . $edit;
                     } else if (Gate::allows('user')) {
-                    $edit = '<a href="#" class="update" id="' . $main->id . '" data-toggle="modal" data-target="#recalculateForm"><i class="fa fa-play"></i></a>';
-                    return $edit;
-                }
+                        $edit = '<a href="#" class="update" id="' . $main->id . '" data-toggle="modal" data-target="#recalculateForm"><i class="fa fa-play"></i></a>';
+                        return $edit;
+                    }
                 })
                 ->rawColumns(['action'])
                 ->make(true);

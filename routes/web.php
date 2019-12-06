@@ -19,6 +19,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('dashboard', 'HomeController@index')->name('home')->middleware('can:viewer');
         Route::prefix('suppliers')->group(function() {
             Route::get('/', 'SuppliersController@index')->name('suppliers.index')->middleware('can:user');
+            Route::get('/history', 'SuppliersController@fetchHistory')->name('suppliers.history')->middleware('can:admin');
             Route::get('/fetch', 'SuppliersController@fetchSuppliers')->name('suppliers.fetch')->middleware('can:user');
             Route::post('/add', 'SuppliersController@store')->middleware('can:user');
             Route::patch('/{suppliers}/update', 'SuppliersController@update')->middleware('can:user');

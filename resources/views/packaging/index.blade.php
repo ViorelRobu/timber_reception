@@ -94,7 +94,8 @@
               var p5 = '</div></div><div class="col-lg-12"><hr></div>';
 
                 data.forEach(element => {
-                  $('#history').append( p1 + element.user + p2 + element.created_at + ' ' + element.event + p3 + element.old_values + p4 + element.new_values + p5)});
+                  $('#history').append( p1 + element.user + p2 + element.created_at + ' ' + element.event + p3 + element.old_values + p4 + element.new_values + p5)
+                });
             }
       });
     });
