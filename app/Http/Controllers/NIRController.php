@@ -918,12 +918,17 @@ class NIRController extends Controller
         $data = [];
 
         foreach ($nir as $nir) {
+            if ($nir->data_dvi == null) {
+                $data_dvi = '';
+            } else {
+                $data_dvi = date("d.m.Y", strtotime($nir->data_dvi));
+            }
             $array = [
                 'numar_nir' => $nir->numar_nir,
                 'data_nir' => date("d.m.Y", strtotime($nir->data_nir)),
                 'furnizor' => $nir->supplier,
                 'dvi' => $nir->dvi,
-                'data_dvi' => date("d.m.Y", strtotime($nir->data_dvi)),
+                'data_dvi' => $data_dvi,
                 'serie_aviz' => $nir->serie_aviz,
                 'numar_aviz' => $nir->numar_aviz,
                 'data_aviz' => date("d.m.Y", strtotime($nir->data_aviz)),
