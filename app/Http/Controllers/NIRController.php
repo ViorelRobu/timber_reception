@@ -80,8 +80,9 @@ class NIRController extends Controller
                     'nir.specificatie as specificatie',
                     'vehicles.name as vehicle',
                     'nir.numar_inmatriculare as numar_inmatriculare',
-                    'certifications.name as certificare'
-                ])->get();
+                    'certifications.name as certificare',
+                    'nir.created_at as created_at'
+                ])->orderBy('created_at', 'DESC')->get();
 
             return DataTables::of($nir)
                 ->editColumn('data_nir', function ($nir) {

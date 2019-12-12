@@ -75,7 +75,7 @@
           serverSide: true,
           ajax: "{{ route('nir.index') }}",
           columns: [
-              {data: 'numar_nir', name: 'numar_nir'},
+              {data: 'numar_nir', name: 'numar_nir', orderable: false},
               {data: 'data_nir', name: 'data_nir'},
               {data: 'numar_we', name: 'numar_we'},
               {data: 'supplier', name: 'supplier'},
