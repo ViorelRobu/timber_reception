@@ -251,7 +251,8 @@ class NIRController extends Controller
     {
         $from = $request->from;
         $to = $request->to;
-        $nirCollection = NIR::whereBetween('data_nir', [$from, $to])->get();
+        $company = request()->session()->get('company_was_selected');
+        $nirCollection = NIR::where('company_id', $company)->whereBetween('data_nir', [$from, $to])->get();
 
         foreach ($nirCollection as $nir) {
             $packagingData = PackagingData::where('nir_id', $nir->id);

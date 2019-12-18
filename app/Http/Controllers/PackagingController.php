@@ -28,7 +28,9 @@ class PackagingController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            $company = request()->session()->get('company_was_selected');
             $main = DB::table('packaging_data')
+                ->where('company_id', $company)
                 ->join('nir', 'packaging_data.nir_id', '=', 'nir.id')
                 ->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
                 ->select([
