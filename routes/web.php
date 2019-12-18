@@ -48,7 +48,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/add', 'CompanyInfoController@store')->middleware('can:superadmin');
             Route::patch('/{company_info}/update', 'CompanyInfoController@update')->middleware('can:superadmin');
             Route::prefix('assign')->group(function() {
-                Route::get('/', 'CompanyAssignmentsController@index')->name('user_assignment.index')->middleware('can:admin');
+                Route::get('/', 'CompanyAssignmentsController@index')->name('user_assignment.index')->middleware('can:superadmin');
                 Route::post('/add', 'CompanyAssignmentsController@store')->middleware('can:admin');
                 Route::delete('/delete', 'CompanyAssignmentsController@destroy')->middleware('can:admin');
                 Route::get('/loadCompanies', 'CompanyInfoController@loadUnassignedCompanies')->name('loadUnassignedCompanies')->middleware('can:admin');

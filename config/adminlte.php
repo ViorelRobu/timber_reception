@@ -171,7 +171,7 @@ return [
                 [
                     'text' => 'Date firma',
                     'url'  => 'companies',
-                    'can'  => 'admin',
+                    'can'  => 'superadmin',
                 ],
                 [
                     'text' => 'Numere NIR',
@@ -262,7 +262,7 @@ return [
         [
             'text'    => 'Management utilizatori',
             'icon'    => 'users',
-            'can' => 'admin',
+            'can' => 'superadmin',
             'submenu' => [
                 [
                     'text' => 'Lista utilizatori',
@@ -274,6 +274,7 @@ return [
                     'text' => 'Drepturi acces companie',
                     'url'  => '/companies/assign/',
                     'icon' => 'check',
+                    'can'  => 'superadmin',
                 ]
             ]
         ]
