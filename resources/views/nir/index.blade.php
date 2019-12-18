@@ -172,7 +172,7 @@
                 <h4 class="text-center">Factura</h4>
                 <hr>
               </div>
-              <div class="form-group col-md-3">
+              <div class="form-group col-md-2">
                 <input type="hidden" name="invoice_to_add" value="true">
                 <input type="text" class="form-control pull-right" id="numar_factura" name="numar_factura" placeholder="Numar factura" autocomplete="off" required>
               </div>
@@ -187,8 +187,8 @@
               <div class="form-group col-md-2">
                 <input type="number" class="form-control pull-right" id="valoare_factura" name="valoare_factura" step="0.01" placeholder="Valoare factura" autocomplete="off" required>
               </div>
-              <div class="form-group col-md-2">
-                <input type="number" class="form-control pull-right" id="valoare_transport" name="valoare_transport" step="0.01" placeholder="Valoare transport" autocomplete="off" required>
+              <div class="form-group col-md-3">
+                <input type="number" class="form-control pull-right" id="valoare_transport" name="valoare_transport" step="0.01" placeholder="Comision/transport" autocomplete="off" required>
               </div>
               <div class="form-group col-md-2">
                 <button type="button" class="remInvBtn btn btn-danger">Sterge factura</button>

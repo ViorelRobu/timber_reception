@@ -52,7 +52,7 @@
               <a href="" id="{{ $invoice[0]->id }}" class="delete" data-toggle="modal" data-target="#deleteInvoiceForm"><i class="fa fa-trash pull-right"></i></a><a href="" id="{{ $invoice[0]->id }}" class="editInvoice" data-toggle="modal" data-target="#invoiceForm"><i class="fa fa-edit pull-right"></i></a></h4>
               @endcan
               <h4><strong>Valoare:</strong> &euro; {{ $invoice[0]->valoare_factura }}</h4>
-            <h4><strong>Transport:</strong> &euro; {{ $invoice[0]->valoare_transport }}</h4>
+            <h4><strong>Transport / Comision:</strong> &euro; {{ $invoice[0]->valoare_transport }}</h4>
           @endif
         </div>
         <div class="col-sm-11 d-inline mx-2">
