@@ -252,13 +252,14 @@ class NIRController extends Controller
         $from = $request->from;
         $to = $request->to;
         $company = request()->session()->get('company_was_selected');
-        $nirCollection = NIR::where('company_id', $company)->whereBetween('data_nir', [$from, $to])->get();
+        $nirCollection = NIR::where('company_id', $company)->whereBetween('data_nir', [$from, $to])->get()->pluck('id');
+        $pack = PackagingData::whereIn('nir_id', $nirCollection)->get()->pluck('id');
 
-        foreach ($nirCollection as $nir) {
-            $packagingData = PackagingData::where('nir_id', $nir->id);
-            $supplier_id = $nir->supplier_id;
+        foreach ($pack as $data) {
+            $packagingData = PackagingData::find($data);
+            $supplier_id = NIR::find($packagingData->nir_id)->supplier_id;
             $packagingData->update([
-                'packaging_data' => $this->calculatePackaging($supplier_id, $nir->id)
+                'packaging_data' => $this->calculatePackaging($supplier_id, $packagingData->nir_id)
             ]);
         }
 
