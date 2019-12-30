@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('countries')->group(function() {
             Route::get('/', 'CountriesController@index')->name('countries.index')->middleware('can:user');
             Route::get('/fetch', 'CountriesController@fetchCountry')->name('countries.fetch')->middleware('can:user');
+            Route::get('/history', 'CountriesController@fetchHistory')->name('countries.history')->middleware('can:superadmin');
             Route::post('/add', 'CountriesController@store')->middleware('can:user');
             Route::patch('/{countries}/update', 'CountriesController@update')->middleware('can:user');
         });
@@ -45,6 +46,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('companies')->group(function() {
             Route::get('/', 'CompanyInfoController@index')->name('companies.index')->middleware('can:superadmin');
             Route::get('/fetch', 'CompanyInfoController@fetchCompanyInfo')->name('companies.fetch')->middleware('can:superadmin');
+            Route::get('/history', 'CompanyInfoController@fetchHistory')->name('companies.history')->middleware('can:superadmin');
             Route::post('/add', 'CompanyInfoController@store')->middleware('can:superadmin');
             Route::patch('/{company_info}/update', 'CompanyInfoController@update')->middleware('can:superadmin');
             Route::prefix('assign')->group(function() {
