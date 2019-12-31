@@ -34,12 +34,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('supplier_group')->group(function() {
             Route::get('/', 'SupplierGroupController@index')->name('supplier_group.index')->middleware('can:admin');
             Route::get('/fetch', 'SupplierGroupController@fetchSupplierGroup')->name('supplier_group.fetch')->middleware('can:admin');
+            Route::get('/history', 'SupplierGroupController@fetchHistory')->name('supplier_group.history')->middleware('can:admin');
             Route::post('/add', 'SupplierGroupController@store')->middleware('can:admin');
             Route::patch('/{supplier_group}/update', 'SupplierGroupController@update')->middleware('can:admin');
         });
         Route::prefix('supplier_status')->group(function() {
             Route::get('/', 'SupplierStatusController@index')->name('supplier_status.index')->middleware('can:admin');
             Route::get('/fetch', 'SupplierStatusController@fetchSupplierStatus')->name('supplier_status.fetch')->middleware('can:admin');
+            Route::get('/history', 'SupplierStatusController@fetchHistory')->name('supplier_status.history')->middleware('can:admin');
             Route::post('/add', 'SupplierStatusController@store')->middleware('can:admin');
             Route::patch('/{supplier_status}/update', 'SupplierStatusController@update')->middleware('can:admin');
         });
@@ -59,12 +61,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('vehicles')->group(function() {
             Route::get('/', 'VehiclesController@index')->name('vehicles.index')->middleware('can:admin');
             Route::get('/fetch', 'VehiclesController@fetchVehicle')->name('vehicles.fetch')->middleware('can:admin');
+            Route::get('/history', 'VehiclesController@fetchHistory')->name('vehicles.history')->middleware('can:admin');
             Route::post('/add', 'VehiclesController@store')->middleware('can:admin');
             Route::patch('/{vehicle}/update', 'VehiclesController@update')->middleware('can:admin');
         });
         Route::prefix('certifications')->group(function () {
             Route::get('/', 'CertificationsController@index')->name('certifications.index')->middleware('can:admin');
             Route::get('/fetch', 'CertificationsController@fetchCertifications')->name('certifications.fetch')->middleware('can:admin');
+            Route::get('/history', 'CertificationsController@fetchHistory')->name('certifications.history')->middleware('can:admin');
             Route::post('/add', 'CertificationsController@store')->middleware('can:admin');
             Route::patch('/{certification}/update', 'CertificationsController@update')->middleware('can:admin');
         });

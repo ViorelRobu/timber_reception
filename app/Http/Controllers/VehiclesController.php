@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\Vehicle;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use App\Traits\Translatable;
+use Illuminate\Support\Facades\Gate;
 
 class VehiclesController extends Controller
 {
+    use Translatable;
+
+    protected $dictionary = [
+        'user_id' => ['utilizator', 'App\User', 'name']
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -20,9 +28,14 @@ class VehiclesController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
-
-                    $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#vehiclesForm"><i class="fa fa-edit"></i></a>';
-                    return $edit;
+                    if (Gate::allows('admin')) {
+                        $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#vehiclesForm"><i class="fa fa-edit"></i></a>';
+                        $history = '<a href="#" class="history" id="' . $data->id . '" data-toggle="modal" data-target="#vehiclesHistory"> <i class="fa fa-history"></i></a>';
+                        return $history . ' ' . $edit;
+                    } else if (Gate::allows('user')) {
+                        $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#vehiclesForm"><i class="fa fa-edit"></i></a>';
+                        return $edit;
+                    }
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -65,6 +78,56 @@ class VehiclesController extends Controller
         ];
 
         return json_encode($output);
+    }
+
+    /**
+     * Fetch the modification history
+     *
+     * @param Request $request
+     * @return json
+     */
+    public function fetchHistory(Request $request)
+    {
+        $company = Vehicle::findOrFail($request->id);
+        $audits = $company->audits;
+
+        $data = [];
+
+        foreach ($audits as $audit) {
+
+            $old = [];
+            foreach ($audit->old_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $old[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $old[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $new = [];
+            foreach ($audit->new_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $new[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $new[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $array = [
+                'user' => $audit->user->name,
+                'event' => $audit->event,
+                'old_values' => $old,
+                'new_values' => $new,
+                'created_at' => $audit->created_at->toDateTimeString()
+            ];
+            array_push($data, $array);
+        }
+
+        return json_encode($data);
     }
 
     public function validateRequest()
