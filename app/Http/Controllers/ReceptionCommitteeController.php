@@ -5,14 +5,24 @@ namespace App\Http\Controllers;
 use App\Committee;
 use App\CompanyAssignment;
 use App\ReceptionCommittee;
+use App\Traits\Translatable;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
 class ReceptionCommitteeController extends Controller
 {
+    use Translatable;
+
+    protected $dictionary = [
+        'user_id' => ['utilizator', 'App\User', 'name'],
+        'company_id' => ['firma', 'App\CompanyInfo', 'name'],
+        'committee_id' => ['comisie', 'App\Committee', 'name'],
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -38,7 +48,8 @@ class ReceptionCommitteeController extends Controller
                     $upload = '<a href="#" class="upload" id="' . $data->id . '"data-toggle="modal" data-target="#uploadSignatureForm"><i class="fa fa-plus"></i></a>';
                     $image = '<a href="#" class="show_signature" data-link="/storage/signatures/' . $data->img_url . '"data-toggle="modal" data-target="#showSignature"><i class="fa fa-eye"></i></a>';
                     $delete = '<a href="#" class="delete_signature" data-delete="' . $data->id . '" data-link="signatures/' . $data->img_url . '"data-toggle="modal" data-target="#deleteSignature"><i class="fa fa-trash"></i></a>';
-                return $edit . " " . $upload . " " . $image . " " . $delete;
+                    $history = '<a href="#" class="history" id="' . $data->id . '" data-toggle="modal" data-target="#receptionCommitteeHistory"> <i class="fa fa-history"></i></a>';
+                return $edit . " " . $upload . " " . $image . " " . $delete . " " . $history;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -67,6 +78,14 @@ class ReceptionCommitteeController extends Controller
                 ])->get();
             return DataTables::of($data)
                 ->addColumn('action', function($data) {
+                    if (Gate::allows('admin')) {
+                        $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#receptionCommitteeForm"><i class="fa fa-edit"></i></a>';
+                        $history = '<a href="#" class="history" id="' . $data->id . '" data-toggle="modal" data-target="#receptionCommitteeHistory"> <i class="fa fa-history"></i></a>';
+                        return $history . ' ' . $edit;
+                    } else if (Gate::allows('user')) {
+                        $edit = '<a href="#" class="edit" id="' . $data->id . '" data-toggle="modal" data-target="#receptionCommitteeForm"><i class="fa fa-edit"></i></a>';
+                        return $edit;
+                    }
                     $edit = '<a href="#" class="edit" id="' . $data->id . '"data-toggle="modal" data-target="#receptionCommitteeForm"><i class="fa fa-edit"></i></a>';
                 return $edit;
                 })
@@ -198,6 +217,106 @@ class ReceptionCommitteeController extends Controller
         $receptionCommittee->update();
         return back();
         
+    }
+
+    /**
+     * Fetch the modification history
+     *
+     * @param Request $request
+     * @return json
+     */
+    public function fetchHistory(Request $request)
+    {
+        $company = Committee::findOrFail($request->id);
+        $audits = $company->audits;
+
+        $data = [];
+
+        foreach ($audits as $audit) {
+
+            $old = [];
+            foreach ($audit->old_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $old[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $old[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $new = [];
+            foreach ($audit->new_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $new[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $new[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $array = [
+                'user' => $audit->user->name,
+                'event' => $audit->event,
+                'old_values' => $old,
+                'new_values' => $new,
+                'created_at' => $audit->created_at->toDateTimeString()
+            ];
+            array_push($data, $array);
+        }
+
+        return json_encode($data);
+    }
+
+    /**
+     * Fetch the modification history
+     *
+     * @param Request $request
+     * @return json
+     */
+    public function fetchReceptionCommitteeHistory(Request $request)
+    {
+        $company = ReceptionCommittee::findOrFail($request->id);
+        $audits = $company->audits;
+
+        $data = [];
+
+        foreach ($audits as $audit) {
+
+            $old = [];
+            foreach ($audit->old_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $old[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $old[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $new = [];
+            foreach ($audit->new_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $new[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $new[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $array = [
+                'user' => $audit->user->name,
+                'event' => $audit->event,
+                'old_values' => $old,
+                'new_values' => $new,
+                'created_at' => $audit->created_at->toDateTimeString()
+            ];
+            array_push($data, $array);
+        }
+
+        return json_encode($data);
     }
 
     /**

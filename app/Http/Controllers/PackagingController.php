@@ -11,6 +11,7 @@ use App\PackagingMain;
 use App\PackagingPerSupplier;
 use App\PackagingSub;
 use App\Suppliers;
+use App\Traits\Translatable;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,16 @@ use Yajra\DataTables\DataTables;
 
 class PackagingController extends Controller
 {
+    use Translatable;
+
+    protected $dictionary = [
+        'user_id' => ['utilizator', 'App\User', 'name'],
+        'main_id' => ['grupa parinte', 'App\PackagingMain', 'name'],
+        'company_id' => ['firma', 'App\CompanyInfo', 'name'],
+        'supplier_id' => ['furnizor', 'App\Suppliers', 'name'],
+        'subgroup_id' => ['subgrupa ambalaj', 'App\PackagingSub', 'name'],
+    ];
+
     /**
      * Display a listing packaging_main_group.
      *
@@ -203,7 +214,8 @@ class PackagingController extends Controller
                 ->addColumn('action', function ($main) {
                     if (Gate::allows('admin')) {
                         $edit = '<a href="#" class="edit" id="' . $main->id . '"data-toggle="modal" data-target="#addMainForm"><i class="fa fa-edit"></i></a>';
-                        return $edit;
+                        $history = '<a href="#" class="history" id="' . $main->id . '" data-toggle="modal" data-target="#packagingHistory"> <i class="fa fa-history"></i></a>';
+                        return $history . " " . $edit;
                     }
                 })
                 ->rawColumns(['action'])
@@ -211,6 +223,56 @@ class PackagingController extends Controller
         }
 
         return view('packaging.main');
+    }
+
+    /**
+     * Fetch the modification history
+     *
+     * @param Request $request
+     * @return json
+     */
+    public function fetchHistoryMain(Request $request)
+    {
+        $company = PackagingMain::findOrFail($request->id);
+        $audits = $company->audits;
+
+        $data = [];
+
+        foreach ($audits as $audit) {
+
+            $old = [];
+            foreach ($audit->old_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $old[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $old[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $new = [];
+            foreach ($audit->new_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $new[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $new[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $array = [
+                'user' => $audit->user->name,
+                'event' => $audit->event,
+                'old_values' => $old,
+                'new_values' => $new,
+                'created_at' => $audit->created_at->toDateTimeString()
+            ];
+            array_push($data, $array);
+        }
+
+        return json_encode($data);
     }
 
     /**
@@ -234,7 +296,8 @@ class PackagingController extends Controller
                 ->addColumn('action', function ($main) {
                     if (Gate::allows('admin')) {
                         $edit = '<a href="#" class="edit" id="' . $main->id . '"data-toggle="modal" data-target="#addSubForm"><i class="fa fa-edit"></i></a>';
-                        return $edit;
+                        $history = '<a href="#" class="history" id="' . $main->id . '" data-toggle="modal" data-target="#packagingHistory"> <i class="fa fa-history"></i></a>';
+                        return $history . " " . $edit;
                     }
                 })
                 ->rawColumns(['action'])
@@ -244,6 +307,57 @@ class PackagingController extends Controller
         $main_group = PackagingMain::all();
         return view('packaging.sub', compact('main_group'));
     }
+
+    /**
+     * Fetch the modification history
+     *
+     * @param Request $request
+     * @return json
+     */
+    public function fetchHistorySub(Request $request)
+    {
+        $company = PackagingSub::findOrFail($request->id);
+        $audits = $company->audits;
+
+        $data = [];
+
+        foreach ($audits as $audit) {
+
+            $old = [];
+            foreach ($audit->old_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $old[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $old[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $new = [];
+            foreach ($audit->new_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $new[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $new[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $array = [
+                'user' => $audit->user->name,
+                'event' => $audit->event,
+                'old_values' => $old,
+                'new_values' => $new,
+                'created_at' => $audit->created_at->toDateTimeString()
+            ];
+            array_push($data, $array);
+        }
+
+        return json_encode($data);
+    }
+
 
     /**
      * Display a listing packaging_per_supplier.
@@ -271,8 +385,11 @@ class PackagingController extends Controller
                 ->addColumn('action', function ($main) {
                     if (Gate::allows('admin')) {
                         $edit = '<a href="#" class="edit" id="' . $main->id . '"data-toggle="modal" data-target="#addSupplierForm"><i class="fa fa-edit"></i></a>';
-                        return $edit;
+                        $history = '<a href="#" class="history" id="' . $main->id . '" data-toggle="modal" data-target="#packagingHistory"> <i class="fa fa-history"></i></a>';
+                        return $history . " " . $edit;
                     }
+                    $edit = '<a href="#" class="edit" id="' . $main->id . '"data-toggle="modal" data-target="#addSupplierForm"><i class="fa fa-edit"></i></a>';
+                    return  $edit;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -281,6 +398,56 @@ class PackagingController extends Controller
         $suppliers = Suppliers::orderBy('name')->get();
         $subgroups = PackagingSub::orderBy('name')->get();
         return view('packaging.supplier', compact('suppliers', 'subgroups'));
+    }
+
+    /**
+     * Fetch the modification history
+     *
+     * @param Request $request
+     * @return json
+     */
+    public function fetchHistoryPackagingPerSupplier(Request $request)
+    {
+        $company = PackagingPerSupplier::findOrFail($request->id);
+        $audits = $company->audits;
+
+        $data = [];
+
+        foreach ($audits as $audit) {
+
+            $old = [];
+            foreach ($audit->old_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $old[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $old[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $new = [];
+            foreach ($audit->new_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $new[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $new[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $array = [
+                'user' => $audit->user->name,
+                'event' => $audit->event,
+                'old_values' => $old,
+                'new_values' => $new,
+                'created_at' => $audit->created_at->toDateTimeString()
+            ];
+            array_push($data, $array);
+        }
+
+        return json_encode($data);
     }
 
     /**
