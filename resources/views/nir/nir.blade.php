@@ -5,6 +5,7 @@
   <h1 class="d-inline"><a href="/nir"><i class="fa fa-arrow-left"></i></a>      
     <strong>Detalii NIR numarul {{ $nir->numar_nir }} din {{ date("d.m.Y", strtotime($nir->data_nir)) }}</strong> - {{ $company }} &nbsp; 
     <a href="/nir/{{ $nir->id }}/print" target="_blank" ><i class="fa fa-print"></i></a>
+    <a href="/nir/{{ $nir->id }}/print?summary=1" target="_blank" ><i class="fa fa-sticky-note"></i></a>
 @can('admin')
   <a href="#" class="pull-right" data-toggle="modal" data-target="#NIRHistory"><i class="fa fa-history"></i></a>
 @endcan

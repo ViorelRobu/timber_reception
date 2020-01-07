@@ -186,13 +186,21 @@
                     <tr>
                         <td>{{ $detail->article . ' ' .$detail->species }}, {{ $detail->moisture }}</td>
                         <td>{{ $detail->volum_aviz }}</td>
-                        <td>{{ $detail->volum_receptionat }}</td>
+                        @if (request()->has('summary'))
+                            <td>{{ $detail->volum_aviz }}</td>
+                        @else
+                            <td>{{ $detail->volum_receptionat }}</td>
+                        @endif
                     </tr>
                 @endforeach
                 <tr>
                     <td><strong>TOTAL</strong></td>
                     <td><strong>{{ $total_aviz }}</strong></td>
-                    <td><strong>{{ $total_receptionat }}</strong></td>
+                    @if (request()->has('summary'))
+                        <td><strong>{{ $total_aviz }}</strong></td>
+                    @else
+                        <td><strong>{{ $total_receptionat }}</strong></td>
+                    @endif
                 </tr>
             </table>
             <br>
