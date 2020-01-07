@@ -189,20 +189,28 @@
                 <table id="nir_details">
                     <tr>
                         <th><strong>Sortiment</strong></th>
-                        <th><strong>Volum aviz (m&sup3;)</strong></th>
+                        <th><strong>Volum avizat (m&sup3;)</strong></th>
                         <th><strong>Volum receptionat (m&sup3;)</strong></th>
                     </tr>
                     @for ($i = 0; $i < count($nir->details); $i++)
                         <tr>
                             <td>{{ $nir->details[$i]->article . ' ' . $nir->details[$i]->species }}, {{ $nir->details[$i]->moisture }}</td>
-                            <td>{{ $nir->details[$i]->volum_aviz }}</td>
-                            <td>{{ $nir->details[$i]->volum_receptionat }}</td>
+                            <td>{{ $nir->details[$i]->volum_aviz }}</td> 
+                            @if (request()->summary == 0)
+                                <td>{{ $nir->details[$i]->volum_receptionat }}</td>
+                            @else
+                                <td>{{ $nir->details[$i]->volum_aviz }}</td>
+                            @endif
                         </tr>
                     @endfor
                     <tr>
                         <td><strong>TOTAL</strong></td>
                         <td><strong>{{ $nir->totals[0]->volum_aviz }}</strong></td>
-                        <td><strong>{{ $nir->totals[0]->volum_receptionat }}</strong></td>
+                        @if (request()->summary == 0)
+                            <td><strong>{{ $nir->totals[0]->volum_receptionat }}</strong></td>
+                        @else
+                            <td><strong>{{ $nir->totals[0]->volum_aviz }}</strong></td>
+                        @endif
                     </tr>
                 </table>
                 <br>

@@ -179,7 +179,7 @@
             <table id="nir_details">
                 <tr>
                     <th><strong>Sortiment</strong></th>
-                    <th><strong>Volum aviz (m&sup3;)</strong></th>
+                    <th><strong>Volum avizat (m&sup3;)</strong></th>
                     <th><strong>Volum receptionat (m&sup3;)</strong></th>
                 </tr>
                 @foreach ($nir_details as $detail)
