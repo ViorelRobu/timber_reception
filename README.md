@@ -41,7 +41,8 @@ Pentru a putea rula aplicatia, cerintele minime sunt urmatoarele:
 9. Pentru a da posibilitatea utilizatorului sa incarce o poza de profil trebuie sa rulati comanda `php artisan storage:link` si sa setati
 CHOWN si CHMOD corect pentru `calea_catre_folder_unde_a_fost_clonat_repo_github/timber_reception/storage/app/public`
 
-*** NOTA ***
+***NOTA***
+
 Pentru a putea accesa aplicatia va trebui sa configurati Nginx sa ia datele din folderul `calea_catre_folder_unde_a_fost_clonat_repo_github/timber_reception/public/`.
 Tutoriale in diverse formate se pot gasi pe google cu un simplu search cu `install nginx on ubuntu 18.04`.
 
@@ -50,9 +51,9 @@ Accesarea aplicatiei se face urmand adresa setata in momentul in care ati config
 Pentru a va autentifica trebuie sa folositi user-ul si parola setata in fisierul .env.
 Configurati aplicatia si introduceti toate datele necesare in nomenclator.
 
-*** Spor la completat date! ***
+***Spor la completat date!***
 
-*** Aplicatia este oferita sub licenta MIT ***
+***Aplicatia este oferita sub licenta MIT***
 
-*** Detalii si contact in comentariile de la acest repo pe GitHub ***
+***Detalii si contact in comentariile de la acest repo pe GitHub***
 
