@@ -51,9 +51,11 @@ Accesarea aplicatiei se face urmand adresa setata in momentul in care ati config
 Pentru a va autentifica trebuie sa folositi user-ul si parola setata in fisierul .env.
 Configurati aplicatia si introduceti toate datele necesare in nomenclator.
 
+<<<<<<< HEAD
 ***Spor la completat date!***
 
 ***Aplicatia este oferita sub licenta MIT***
 
 ***Detalii si contact in comentariile de la acest repo pe GitHub***
+
 
