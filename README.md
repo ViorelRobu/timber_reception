@@ -11,6 +11,7 @@ In dashboard-ul fiecarei societati exista un grafic cu livrarile de la furnizori
 
 ## Cerinte server/software
 Pentru a putea rula aplicatia, cerintele minime sunt urmatoarele:
+
     - server VPS cu minim 1GB RAM si 1 procesor
     - sistemul de operare preferat este Ubuntu 18.04.3 LTS
     - Nginx
