@@ -13,8 +13,8 @@ class SupplierGroupSeeder extends Seeder
     public function run()
     {
         SupplierGroup::create([
-            'name' => 'HSR',
-            'name_en' => 'HSR',
+            'name' => 'punct de lucru / filiala',
+            'name_en' => 'company branch',
             'user_id' => 1
         ]);
 
