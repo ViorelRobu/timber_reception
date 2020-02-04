@@ -80,7 +80,7 @@ class PackagingController extends Controller
 
     /**
      * Fetch the history data via ajax for the selected packaging data
-     * 
+     *
      * @param Request $request
      * @return json
      */
@@ -106,7 +106,7 @@ class PackagingController extends Controller
                 'new_values' => $this->decodePackagingDataJson($audit->new_values['packaging_data']),
                 'created_at' => $audit->created_at->toDateTimeString()
             ];
-            
+
             array_push($data, $array);
         }
 
@@ -143,11 +143,14 @@ class PackagingController extends Controller
      */
     public function exportPackagingData(Request $request, PackagingMain $packagingMain)
     {
+        // select the logged in users company
+        $company = session()->get('company_was_selected');
+
         // get the start and end period for report
         $from = $request->from;
         $to = $request->to;
         // get the NIR numbers for the set time period
-        $nirInit = DB::table('nir')->whereBetween('data_nir', [$from, $to])->pluck('id')->toArray();
+        $nirInit = DB::table('nir')->whereBetween('data_nir', [$from, $to])->where('company_id', $company)->pluck('id')->toArray();
         // get the data for the headings
         $packagingMain = $packagingMain::all();
         $headings = ['Nr crt', 'Data', 'DVI', 'Furnizor', 'Articol'];
