@@ -50,8 +50,9 @@ class PackagingController extends Controller
                     'nir.numar_nir as nir',
                     'nir.data_nir as data_nir',
                     'suppliers.name as supplier',
-                    'packaging_data.packaging_data as data'
-                ])
+                    'packaging_data.packaging_data as data',
+                    'nir.created_at as created_at'
+                ])->orderBy('created_at', 'DESC')
                 ->get();
 
             return DataTables::of($main)

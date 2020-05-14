@@ -50,7 +50,7 @@
           serverSide: true,
           ajax: "{{ route('invoices.index') }}",
           columns: [
-              {data: 'nir', name: 'nir'},
+              {data: 'nir', name: 'nir', orderable: false, searchable: false},
               {data: 'data_nir', name: 'data_nir'},
               {data: 'supplier', name: 'supplier'},
               {data: 'numar_factura', name: 'numar_factura'},

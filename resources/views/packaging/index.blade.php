@@ -64,7 +64,7 @@
           serverSide: true,
           ajax: "{{ route('packaging.index') }}",
           columns: [
-              {data: 'nir', name: 'nir'},
+              {data: 'nir', name: 'nir', orderable: false, searchable: false},
               {data: 'data_nir', name: 'subgroup_name'},
               {data: 'supplier', name: 'supplier'},
               {data: 'data', name: 'data'},

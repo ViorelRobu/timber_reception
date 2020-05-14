@@ -27,8 +27,10 @@ class InvoicesController extends Controller
                     'invoices.numar_factura as numar_factura',
                     'invoices.data_factura as data_factura',
                     'invoices.valoare_factura as valoare_factura',
-                    'invoices.valoare_transport as valoare_transport'
-                ])->get();
+                    'invoices.valoare_transport as valoare_transport',
+                    'nir.created_at as created_at'
+                ])->orderBy('created_at', 'DESC')
+                ->get();
 
             return DataTables::of($nir)
                 ->editColumn('data_nir', function ($nir) {
