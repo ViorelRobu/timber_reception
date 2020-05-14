@@ -10,7 +10,7 @@ class CompanySelectorController extends Controller
 {
     /*
     *   Return the main page view
-    *   
+    *
     */
     public function index()
     {
@@ -27,6 +27,10 @@ class CompanySelectorController extends Controller
     public function setCompany(Request $request)
     {
         session()->put('company_was_selected', $request->company_id);
-        return redirect('/dashboard');
+        if (auth()->user()->custom_pass === 0) {
+            return redirect('/change/password');
+        } else {
+            return redirect('/dashboard');
+        }
     }
 }

@@ -171,6 +171,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/supplier/add', 'PackagingController@storeSupplier')->middleware('can:user');
             Route::patch('/supplier/{id}/update', 'PackagingController@updateSupplier')->middleware('can:user');
         });
+
+        Route::get('/change/password', 'UsersController@setCustomPassword');
+        Route::post('/change/password/submit', 'UsersController@changePassword');
     });
 });
 

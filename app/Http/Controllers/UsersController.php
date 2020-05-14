@@ -68,7 +68,7 @@ class UsersController extends Controller
         $userGroup->class_id = 4;
         $userGroup->user_id = $user->id;
         $userGroup->save();
-        
+
         return back();
     }
 
@@ -124,7 +124,7 @@ class UsersController extends Controller
             $user->name = $data['name'];
             $user->email = $data['email'];
             $user->active = $data['active'];
-            $user->update();            
+            $user->update();
         } else {
             $user->name = $data['name'];
             $user->email = $data['email'];
@@ -168,5 +168,33 @@ class UsersController extends Controller
             'email' => 'required',
             'password1' => 'required',
         ], $error_messages);
+    }
+
+    /**
+     * Return the view to set the users first custom password
+     *
+     * @return view
+     */
+    public function setCustomPassword()
+    {
+        return view('users.password');
+    }
+
+    public function changePassword()
+    {
+        $user = User::find(auth()->user()->id);
+        $data = request()->validate([
+            'password' => 'required',
+            'password_confirmation' => 'required'
+        ]);
+        if ($data['password'] !== $data['password_confirmation']) {
+            return back()->with('danger', 'Parolele nu sunt identice!');
+        } else {
+            $user->password = bcrypt($data['password']);
+            $user->custom_pass = 1;
+            $user->save();
+
+            return redirect('/dashboard');
+        }
     }
 }
