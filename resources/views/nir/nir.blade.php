@@ -2,10 +2,12 @@
 
 @section('content_header')
   {{-- {{ dd($nir->id) }} --}}
-  <h1 class="d-inline"><a href="/nir"><i class="fa fa-arrow-left"></i></a>      
-    <strong>Detalii NIR numarul {{ $nir->numar_nir }} din {{ date("d.m.Y", strtotime($nir->data_nir)) }}</strong> - {{ $company }} &nbsp; 
-    <a href="/nir/{{ $nir->id }}/print" target="_blank" ><i class="fa fa-print"></i></a>
-    <a href="/nir/{{ $nir->id }}/print?summary=1" target="_blank" ><i class="fa fa-sticky-note"></i></a>
+  <h1 class="d-inline"><a href="/nir"><i class="fa fa-arrow-left"></i></a>
+    <strong>Detalii NIR numarul {{ $nir->numar_nir }} din {{ date("d.m.Y", strtotime($nir->data_nir)) }}</strong> - {{ $company }} &nbsp;
+    @can('user')
+        <a href="/nir/{{ $nir->id }}/print" target="_blank" ><i class="fa fa-print"></i></a>
+        <a href="/nir/{{ $nir->id }}/print?summary=1" target="_blank" ><i class="fa fa-sticky-note"></i></a>
+    @endcan
 @can('admin')
   <a href="#" class="pull-right" data-toggle="modal" data-target="#NIRHistory"><i class="fa fa-history"></i></a>
 @endcan
@@ -48,7 +50,7 @@
         </div>
         <div class="col-sm-4">
           @if ($invoice->count() !== 0)
-            <h4><strong>Factura:</strong>   {{ $invoice[0]->numar_factura }} / {{ date("d.m.Y", strtotime($invoice[0]->data_factura)) }} 
+            <h4><strong>Factura:</strong>   {{ $invoice[0]->numar_factura }} / {{ date("d.m.Y", strtotime($invoice[0]->data_factura)) }}
               @can('user')
               <a href="" id="{{ $invoice[0]->id }}" class="delete" data-toggle="modal" data-target="#deleteInvoiceForm"><i class="fa fa-trash pull-right"></i></a><a href="" id="{{ $invoice[0]->id }}" class="editInvoice" data-toggle="modal" data-target="#invoiceForm"><i class="fa fa-edit pull-right"></i></a></h4>
               @endcan
@@ -63,7 +65,9 @@
         </div>
         @if (count($invoice) === 0)
           <div class="col-sm-1 d-inline mx-2">
-            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#invoiceForm">Adauga factura</button>
+            @can('user')
+                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#invoiceForm">Adauga factura</button>
+            @endcan
           </div>
         @endif
       </div>
