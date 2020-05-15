@@ -43,13 +43,13 @@ class PackagingController extends Controller
             $main = DB::table('packaging_data')
                 ->where('company_id', $company)
                 ->join('nir', 'packaging_data.nir_id', '=', 'nir.id')
-                ->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
+                ->join('sub_suppliers', 'nir.supplier_id', '=', 'sub_suppliers.id')
                 ->select([
                     'packaging_data.id as id',
                     'packaging_data.nir_id as nir_id',
                     'nir.numar_nir as nir',
                     'nir.data_nir as data_nir',
-                    'suppliers.name as supplier',
+                    'sub_suppliers.name as supplier',
                     'packaging_data.packaging_data as data',
                     'nir.created_at as created_at'
                 ])->orderBy('created_at', 'DESC')
@@ -374,11 +374,11 @@ class PackagingController extends Controller
             $company = session()->get('company_was_selected');
             $main = DB::table('packaging_per_supplier')
                 ->join('packaging_subgroup', 'packaging_per_supplier.subgroup_id', '=', 'packaging_subgroup.id')
-                ->join('suppliers', 'packaging_per_supplier.supplier_id', '=', 'suppliers.id')
+                ->join('sub_suppliers', 'packaging_per_supplier.subsupplier_id', '=', 'sub_suppliers.id')
                 ->where('company_id', $company)
                 ->select([
                     'packaging_per_supplier.id as id',
-                    'suppliers.name as supplier',
+                    'sub_suppliers.name as supplier',
                     'packaging_subgroup.name as subgroup_name',
                     'packaging_per_supplier.unitate as unitate',
                     'packaging_per_supplier.greutate as greutate',
