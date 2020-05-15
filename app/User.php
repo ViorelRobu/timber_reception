@@ -9,6 +9,7 @@ use App\Countries;
 use App\SupplierGroup;
 use App\SupplierStatus;
 use App\Suppliers;
+use App\SubSupplier;
 use App\CompanyInfo;
 use App\Vehicle;
 use App\Certification;
@@ -23,7 +24,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class User extends Authenticatable implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-    
+
     use Notifiable;
 
     /**
@@ -71,6 +72,11 @@ class User extends Authenticatable implements Auditable
     public function supplierCreator()
     {
         return $this->hasMany(Suppliers::class, 'user_id');
+    }
+
+    public function subSupplierCreator()
+    {
+        return $this->hasMany(SubSupplier::class, 'user_id');
     }
 
     public function companyCreator()

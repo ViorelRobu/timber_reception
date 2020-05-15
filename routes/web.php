@@ -98,6 +98,15 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::patch('/{nir}/update', 'NIRController@update')->middleware('can:user');
             });
         });
+
+        Route::prefix('sub_suppliers')->group(function() {
+            Route::get('/', 'SubSuppliersController@index')->name('sub.index')->middleware('can:user');
+            Route::get('/history', 'SubSuppliersController@fetchHistory')->name('sub.history')->middleware('can:admin');
+            Route::get('/fetch', 'SubSuppliersController@fetchSubSupplier')->name('sub.fetch')->middleware('can:user');
+            Route::post('/add', 'SubSuppliersController@store')->middleware('can:user');
+            Route::patch('/{sub_supplier}/update', 'SubSuppliersController@update')->middleware('can:user');
+        });
+
         Route::prefix('articles')->group(function () {
             Route::get('/', 'ArticlesController@index')->name('articles.index')->middleware('can:admin');
             Route::get('/fetch', 'ArticlesController@fetchArticle')->name('articles.fetch')->middleware('can:admin');

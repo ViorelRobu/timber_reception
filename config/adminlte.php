@@ -159,6 +159,12 @@ return [
         [
             'text'        => 'Furnizori',
             'url'         => 'suppliers',
+            'icon'        => 'link',
+            'can'         => 'user',
+        ],
+        [
+            'text'        => 'Subfurnizori',
+            'url'         => 'sub_suppliers',
             'icon'        => 'tree',
             'can'         => 'user',
         ],

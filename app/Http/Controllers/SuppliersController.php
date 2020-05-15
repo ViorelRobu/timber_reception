@@ -7,6 +7,7 @@ use App\Suppliers;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Countries;
+use App\SubSupplier;
 use App\SupplierGroup;
 use App\SupplierStatus;
 use Illuminate\Support\Facades\Gate;
@@ -29,8 +30,8 @@ class SuppliersController extends Controller
             $suppliers = DB::table('suppliers')->join('countries', 'suppliers.country_id', '=', 'countries.id')
                 ->join('supplier_group', 'suppliers.supplier_group_id', '=', 'supplier_group.id')
                 ->join('supplier_status', 'suppliers.supplier_status_id', '=', 'supplier_status.id')
-                ->select(['suppliers.id as id', 'suppliers.fibu as fibu', 'suppliers.name as name', 'suppliers.cui as cui', 'suppliers.j as j', 
-                'suppliers.address as address', 'countries.name as country', 'supplier_group.name as supplier_group', 
+                ->select(['suppliers.id as id', 'suppliers.fibu as fibu', 'suppliers.name as name', 'suppliers.cui as cui', 'suppliers.j as j',
+                'suppliers.address as address', 'countries.name as country', 'supplier_group.name as supplier_group',
                 'supplier_status.name as supplier_status', 'suppliers.packaging_calculation as packaging_calculation'])->get();
 
             return DataTables::of($suppliers)
@@ -53,12 +54,12 @@ class SuppliersController extends Controller
         $supplier_statuses = SupplierStatus::orderBy('name')->get();
 
         return view('suppliers.index', ['countries' => $countries, 'supplier_groups' => $supplier_groups, 'supplier_statuses' => $supplier_statuses]);
-        
+
     }
 
     /**
      * Fetch the modification history for the selected supplier
-     * 
+     *
      * @param Request $request
      * @return json
      */
@@ -109,6 +110,12 @@ class SuppliersController extends Controller
     public function store(Suppliers $suppliers)
     {
         $suppliers = auth()->user()->supplierCreator()->create($this->validateRequest());
+        $sub = new SubSupplier();
+        $sub->supplier_id = $suppliers->id;
+        $sub->name = $this->validateRequest()['name'];
+        $sub->country_id = $this->validateRequest()['country_id'];
+        $sub->user_id = auth()->user()->id;
+        $sub->save();
         return redirect('suppliers');
     }
 
