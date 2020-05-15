@@ -74,6 +74,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('nir')->group(function () {
             Route::get('/', 'NIRController@index')->name('nir.index')->middleware('can:viewer');
+            Route::get('/all', 'NIRController@indexAll')->name('nir.all')->middleware('can:viewer');
             Route::get('/invoices', 'InvoicesController@index')->name('invoices.index')->middleware('can:user');
             Route::get('/fetch', 'NIRController@fetchNIR')->name('nir.fetch')->middleware('can:user');
             Route::get('/invoice/fetch', 'InvoicesController@fetchInvoice')->name('invoice.fetch')->middleware('can:user');

@@ -57,12 +57,21 @@ class NIRController extends Controller
      */
     public function index(Request $request)
     {
+        $now = Carbon::now();
+        $startOfYear = $now->copy()->startOfYear();
+        if($startOfYear->isSameMonth($now)) {
+            $refference = $startOfYear->copy()->subYear()->toDateTimeString();
+        } else {
+            $refference = $startOfYear->copy()->toDateTimeString();
+        }
+
         $company = $request->session()->get('company_was_selected');
         if ($request->ajax()) {
             $nir = DB::table('nir')->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
                 ->join('vehicles', 'nir.vehicle_id', '=', 'vehicles.id')
                 ->join('certifications', 'nir.certification_id', '=', 'certifications.id')
                 ->where('company_id', $company)
+                ->where('nir.data_nir', '>=', $refference)
                 ->select([
                     'nir.id as id',
                     'nir.company_id as company_id',
@@ -117,6 +126,78 @@ class NIRController extends Controller
         $committee_list = Committee::where('company_id', $company)->get();
         return view('nir.index', ['company_name' => $company_name, 'suppliers' => $suppliers, 'certifications' => $certifications, 'vehicles' => $vehicles,
         'articles' => $articles, 'species' => $species, 'moistures' => $moistures, 'committee_list' => $committee_list]);
+    }
+
+    /**
+     * Display the older NIR so that the current year nir page loads faster
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function indexAll(Request $request)
+    {
+        $company = $request->session()->get('company_was_selected');
+        if ($request->ajax()) {
+            $nir = DB::table('nir')->join('suppliers', 'nir.supplier_id', '=', 'suppliers.id')
+                ->join('vehicles', 'nir.vehicle_id', '=', 'vehicles.id')
+                ->join('certifications', 'nir.certification_id', '=', 'certifications.id')
+                ->where('company_id', $company)
+                ->select([
+                    'nir.id as id',
+                    'nir.company_id as company_id',
+                    'nir.numar_nir as numar_nir',
+                    'nir.data_nir as data_nir',
+                    'nir.numar_we as numar_we',
+                    'suppliers.name as supplier',
+                    'nir.dvi as dvi',
+                    'nir.data_dvi as data_dvi',
+                    'nir.greutate_bruta as greutate_bruta',
+                    'nir.greutate_neta as greutate_neta',
+                    'nir.serie_aviz as serie_aviz',
+                    'nir.numar_aviz as numar_aviz',
+                    'nir.data_aviz as data_aviz',
+                    'nir.specificatie as specificatie',
+                    'vehicles.name as vehicle',
+                    'nir.numar_inmatriculare as numar_inmatriculare',
+                    'certifications.name as certificare',
+                    'nir.created_at as created_at'
+                ])->orderBy('created_at', 'DESC')->get();
+
+            return DataTables::of($nir)
+                ->editColumn('data_nir', function ($nir) {
+                    return $nir->data_nir ? with(new Carbon($nir->data_nir))->format('d.m.Y') : '';
+                })
+                ->editColumn('data_dvi', function ($nir) {
+                    return $nir->data_dvi ? with(new Carbon($nir->data_dvi))->format('d.m.Y') : '';
+                })
+                ->editColumn('data_aviz', function ($nir) {
+                    return $nir->data_aviz ? with(new Carbon($nir->data_aviz))->format('d.m.Y') : '';
+                })
+                ->addColumn('action', function ($nir) {
+                    if (Gate::allows('admin')) {
+                        $view = '<a href="/nir/' . $nir->id . '/show"><i class="fa fa-eye"></i></a>';
+                        $edit = '<a href="#" class="edit" id="' . $nir->id . '"data-toggle="modal" data-target="#nirForm"><i class="fa fa-edit"></i></a>';
+                        return $view . ' ' . $edit;
+                    } else {
+                        return '<a href="/nir/' . $nir->id . '/show"><i class="fa fa-eye"></i></a>';
+                    }
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        $company_name = CompanyInfo::where('id', session()->get('company_was_selected'))->pluck('name');
+        $suppliers = Suppliers::all()->sortBy('name');
+        $certifications = Certification::all()->sortBy('name');
+        $vehicles = Vehicle::all()->sortBy('name');
+        $articles = Article::all()->sortBy('name');
+        $species = Species::all()->sortBy('name');
+        $moistures = Moisture::all()->sortBy('name');
+        $committee_list = Committee::where('company_id', $company)->get();
+        return view('nir.index_all', [
+            'company_name' => $company_name, 'suppliers' => $suppliers, 'certifications' => $certifications, 'vehicles' => $vehicles,
+            'articles' => $articles, 'species' => $species, 'moistures' => $moistures, 'committee_list' => $committee_list
+        ]);
     }
 
     /**
@@ -410,12 +491,12 @@ class NIRController extends Controller
 
     /**
      * Display the auditable data for the NIR
-     * 
+     *
      * @param $nir
      * @param $date
      * @return array
      */
-    protected function displayHistoryNIR(int $nir, $date) 
+    protected function displayHistoryNIR(int $nir, $date)
     {
         $collection = Audit::where('auditable_type', 'App\NIR')->where('auditable_id', $nir)->get();
         $history = [];
@@ -454,12 +535,12 @@ class NIRController extends Controller
 
         // dd($history);
         return $history;
-        
+
     }
 
     /**
      * Display the auditable data for the NIR details
-     * 
+     *
      * @param $nir
      * @param $date
      * @return array
@@ -468,14 +549,14 @@ class NIRController extends Controller
     {
         $collection = Audit::where('auditable_type', 'App\NIRDetails')->where('created_at', '>=', $date)->where('event', 'created')->get();
         $history = [];
-        
+
         $nir_details = [];
         foreach ($collection as $data) {
             if ($data->new_values['nir_id'] == $nir) {
                 array_push($nir_details, $data->auditable_id);
             }
         }
-        
+
         $collection = Audit::where('auditable_type', 'App\NIRDetails')->whereIn('auditable_id', $nir_details)->get();
 
         foreach ($collection as $data) {
@@ -500,7 +581,7 @@ class NIRController extends Controller
                     $new[$translated[0]] = $valoare[0];
                 }
             }
-            
+
             array_push($history, [
                 'user' => $data->user->name,
                 'event' => $data->event,
@@ -515,7 +596,7 @@ class NIRController extends Controller
 
     /**
      * Display the auditable data for the invoices assigned to the NIR
-     * 
+     *
      * @param $nir
      * @param $date
      * @return array

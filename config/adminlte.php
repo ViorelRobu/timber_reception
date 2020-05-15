@@ -121,10 +121,16 @@ return [
             'can'         => 'viewer',
         ],
         [
-            'text'        => 'NIR',
+            'text'        => 'NIR an curent',
             'url'         => 'nir',
             'icon'        => 'list',
             'can'         => 'viewer',
+        ],
+        [
+            'text' => 'Toate NIR',
+            'url'  => 'nir/all',
+            'icon' => 'list',
+            'can'  => 'admin',
         ],
         [
             'text'        => 'Printeaza NIR',
