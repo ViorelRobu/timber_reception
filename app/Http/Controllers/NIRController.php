@@ -190,6 +190,7 @@ class NIRController extends Controller
 
         $company_name = CompanyInfo::where('id', session()->get('company_was_selected'))->pluck('name');
         $suppliers = Suppliers::all()->sortBy('name');
+        $subsuppliers = SubSupplier::all()->sortBy('name');
         $certifications = Certification::all()->sortBy('name');
         $vehicles = Vehicle::all()->sortBy('name');
         $articles = Article::all()->sortBy('name');
@@ -198,7 +199,7 @@ class NIRController extends Controller
         $committee_list = Committee::where('company_id', $company)->get();
         return view('nir.index_all', [
             'company_name' => $company_name, 'suppliers' => $suppliers, 'certifications' => $certifications, 'vehicles' => $vehicles,
-            'articles' => $articles, 'species' => $species, 'moistures' => $moistures, 'committee_list' => $committee_list
+            'articles' => $articles, 'species' => $species, 'moistures' => $moistures, 'committee_list' => $committee_list, 'subsuppliers' => $subsuppliers
         ]);
     }
 
