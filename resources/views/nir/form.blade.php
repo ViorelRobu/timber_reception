@@ -31,7 +31,7 @@
                     <input type="text" class="form-control" id="numar_we" name="numar_we" placeholder="Numar WE">
                 </div>
                 <div class="form-group col-md-8">
-                    <select class="custom-select form-control" name="supplier_id" id="supplier_id" required>
+                    <select class="custom-select form-control" name="supplier_id" id="supplier_id" onchange="loadSubSupplier(this.value, '#edit_subsupplier_id')" required>
                         <option value="" selected>--- Alege furnizorul ---</option>
                         @foreach ($suppliers as $supplier)
                             <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
@@ -52,6 +52,14 @@
                         @endif
                     </select>
                 </div>
+                <div class="form-group col-md-12">
+                    <select class="custom-select form-control" name="subsupplier_id" id="edit_subsupplier_id" required>
+                        <option value="" selected>--- Alege subfurnizorul ---</option>
+                        @foreach ($subsuppliers as $subsupplier)
+                            <option value="{{ $subsupplier->id }}">{{ $subsupplier->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="form-group col-md-6">
                     <input type="text" class="form-control" id="dvi" name="dvi" placeholder="DVI">
                 </div>
@@ -66,7 +74,7 @@
                 <div class="form-group col-md-6">
                     <input type="number" class="form-control" id="greutate_bruta" step="0.01" min="0" name="greutate_bruta" placeholder="Greutate bruta">
                 </div>
-                <div class="form-group col-md-6"> 
+                <div class="form-group col-md-6">
                     <input type="number" class="form-control" id="greutate_neta" step="0.01" min="0" name="greutate_neta" placeholder="Greutate neta">
                 </div>
                 <div class="form-group col-md-4">

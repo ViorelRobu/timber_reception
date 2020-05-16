@@ -77,6 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/all', 'NIRController@indexAll')->name('nir.all')->middleware('can:viewer');
             Route::get('/invoices', 'InvoicesController@index')->name('invoices.index')->middleware('can:user');
             Route::get('/fetch', 'NIRController@fetchNIR')->name('nir.fetch')->middleware('can:user');
+            Route::get('/fetchSub', 'NIRController@fetchSupplierID')->name('supp.fetch')->middleware('can:user');
             Route::get('/invoice/fetch', 'InvoicesController@fetchInvoice')->name('invoice.fetch')->middleware('can:user');
             Route::get('/details/fetch', 'NIRDetailsController@fetchDetails')->name('details.fetch')->middleware('can:user');
             Route::get('/print_multiple', 'NIRController@showPrintNIRPage')->middleware('can:user');
@@ -103,6 +104,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/', 'SubSuppliersController@index')->name('sub.index')->middleware('can:user');
             Route::get('/history', 'SubSuppliersController@fetchHistory')->name('sub.history')->middleware('can:admin');
             Route::get('/fetch', 'SubSuppliersController@fetchSubSupplier')->name('sub.fetch')->middleware('can:user');
+            Route::get('/fetchByID', 'SubSuppliersController@fetchSubSuppliersBySupplierID')->name('sub.id')->middleware('can:user');
             Route::post('/add', 'SubSuppliersController@store')->middleware('can:user');
             Route::patch('/{sub_supplier}/update', 'SubSuppliersController@update')->middleware('can:user');
         });

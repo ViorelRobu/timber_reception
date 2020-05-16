@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 
 @section('content_header')
-  <h1 class="d-inline"><strong>Lista NIR</strong> - {{ $company_name[0] }} 
+  <h1 class="d-inline"><strong>Lista NIR</strong> - {{ $company_name[0] }}
   @can('user')
     <button id="addCountry" class="btn btn-primary pull-right" data-toggle="modal" data-target="#nirFormAdd">Adauga NIR</button></h1>
   @endcan
@@ -10,14 +10,14 @@
 @section('content')
 @if (session()->get('details_error'))
   <div class="alert alert-danger alert-block">
-    <button type="button" class="close" data-dismiss="alert">×</button>	
+    <button type="button" class="close" data-dismiss="alert">×</button>
       <strong>{{ session()->get('details_error') }}</strong>
   </div>
 @endif
 
 @if (session()->get('invoice_error'))
   <div class="alert alert-danger alert-block">
-    <button type="button" class="close" data-dismiss="alert">×</button>	
+    <button type="button" class="close" data-dismiss="alert">×</button>
       <strong>{{ session()->get('invoice_error') }}</strong>
   </div>
 @endif
@@ -25,7 +25,7 @@
 @if ($errors->any())
   @foreach ($errors->all() as $error)
     <div class="alert alert-danger alert-block">
-      <button type="button" class="close" data-dismiss="alert">×</button>	
+      <button type="button" class="close" data-dismiss="alert">×</button>
         <strong>{{ $error }}</strong>
     </div>
   @endforeach
@@ -54,7 +54,7 @@
       </table>
     </div>
   </div>
-  
+
 @can('user')
   @include('nir.form')
   @include('nir.add')
@@ -98,7 +98,7 @@
     });
 
     $(document).ready(function(e) {
-      
+
     });
 
     // add / remove nir details to add nir form
@@ -155,7 +155,7 @@
           </div>`
         );
           x++;
-        } 
+        }
       });
       $('.details').on('click', '.remBtn', function(e) {
         e.preventDefault();
@@ -206,6 +206,26 @@
       });
     });
 
+    function loadSubSupplier(value, el) {
+        $.ajax({
+        url: "{{ route('sub.id') }}",
+        method: 'get',
+        data: {id:value},
+        dataType:'json',
+        success: function(data)
+            {
+            const sub = document.querySelector(el);
+            sub.innerHTML = '';
+            for (let item of data) {
+                const opt = document.createElement('option');
+                opt.value = item.id;
+                opt.innerText = item.name;
+                sub.appendChild(opt);
+                }
+            }
+        });
+    }
+
     $(document).on('click', '.edit', function() {
       var id = $(this).attr("id");
       $.ajax({
@@ -215,12 +235,35 @@
         dataType:'json',
         success: function(data)
             {
+                var supp = data.subsupplier_id;
+                $.ajax({
+                url: "{{ route('sub.id') }}",
+                method: 'get',
+                data: {id:data.supplier_id},
+                dataType:'json',
+                success: function(res)
+                    {
+                        const sub = document.querySelector('#edit_subsupplier_id');
+                        sub.innerHTML = '';
+                        for (let item of res) {
+                            const opt = document.createElement('option');
+                            opt.value = item.id;
+                            opt.innerText = item.name;
+                            if (item.id === supp) {
+                                opt.setAttribute('selected', 'selected');
+                            }
+                            sub.appendChild(opt);
+                            }
+                        $('#subsupplier_id').val(supp);
+                    }
+                });
                 $('#id').val(id);
                 $('#committee_id').val(data.committee_id);
                 $('#numar_nir').val(data.numar_nir).prop('disabled', true);
                 $('#data_nir').val(data.data_nir);
                 $('#numar_we').val(data.numar_we);
                 $('#supplier_id').val(data.supplier_id);
+
                 $('#dvi').val(data.dvi);
                 $('#data_dvi').val(data.data_dvi);
                 $('#greutate_bruta').val(data.greutate_bruta);
@@ -234,7 +277,7 @@
                 $('#certification_id').val(data.certification_id);
             }
       });
-      
+
       $(document).on('submit', function() {
         var id = $('#id').val();
         $('form').attr('action', 'nir/' + id + '/update');

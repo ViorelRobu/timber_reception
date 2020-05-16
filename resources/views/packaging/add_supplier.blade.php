@@ -16,7 +16,7 @@
             <input type="hidden" name="id" id="id" value="">
             <input type="hidden" name="company_id" id="company_id" value="{{ session()->get('company_was_selected') }}">
             <div class="form-group">
-                <select class="form-control" name="supplier_id" id="supplier_id" required>
+                <select class="form-control" name="subsupplier_id" id="supplier_id" required>
                         <option value="" selected>-- Selecteaza furnizorul --</option>
                     @foreach ($suppliers as $supplier)
                         <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>

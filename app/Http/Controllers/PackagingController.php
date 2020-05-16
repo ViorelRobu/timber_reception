@@ -10,6 +10,7 @@ use App\PackagingData;
 use App\PackagingMain;
 use App\PackagingPerSupplier;
 use App\PackagingSub;
+use App\SubSupplier;
 use App\Suppliers;
 use App\Traits\Translatable;
 use Carbon\Carbon;
@@ -399,7 +400,7 @@ class PackagingController extends Controller
                 ->make(true);
         }
 
-        $suppliers = Suppliers::orderBy('name')->get();
+        $suppliers = SubSupplier::orderBy('name')->get();
         $subgroups = PackagingSub::orderBy('name')->get();
         return view('packaging.supplier', compact('suppliers', 'subgroups'));
     }
@@ -537,7 +538,7 @@ class PackagingController extends Controller
     {
         $packaging = PackagingPerSupplier::findOrFail($request->id);
         $output = [
-            'supplier_id' => $packaging->supplier_id,
+            'supplier_id' => $packaging->subsupplier_id,
             'subgroup_id' => $packaging->subgroup_id,
             'unitate' => $packaging->unitate,
             'greutate' => $packaging->greutate,
@@ -634,7 +635,7 @@ class PackagingController extends Controller
     {
         $error_messages = [
             'company_id.required' => 'Nu exista compania!',
-            'supplier_id.required' => 'Nu ati selectat nici un furnizor!',
+            'subsupplier_id.required' => 'Nu ati selectat nici un furnizor!',
             'subgroup_id.required' => 'Nu ati selectat nici o subgrupa',
             'unitate.required' => 'Nu ati selectat nici o unitate de referinta!',
             'greutate.required' => 'Nu ati introdus greutatea ambalajului!',
@@ -642,7 +643,7 @@ class PackagingController extends Controller
 
         return request()->validate([
             'company_id' => 'required',
-            'supplier_id' => 'required',
+            'subsupplier_id' => 'required',
             'subgroup_id' => 'required',
             'unitate' => 'required',
             'greutate' => 'required',

@@ -135,6 +135,20 @@ class SubSuppliersController extends Controller
         return json_encode($output);
     }
 
+    public function fetchSubSuppliersBySupplierID(Request $request)
+    {
+        $subsuppliers = SubSupplier::where('supplier_id', $request->id)->get(['id', 'name']);
+        $output = [];
+        foreach ($subsuppliers as $sub) {
+            $output[] = [
+                'id' => $sub->id,
+                'name' => $sub->name
+            ];
+        }
+
+        return json_encode($output);
+    }
+
     public function validateRequest()
     {
         $error_messages = [

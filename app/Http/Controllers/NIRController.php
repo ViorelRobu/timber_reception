@@ -30,6 +30,7 @@ use domPDF;
 use Maatwebsite\Excel\Facades\Excel;
 use OwenIt\Auditing\Models\Audit;
 use App\Traits\Translatable;
+use App\SubSupplier;
 
 class NIRController extends Controller
 {
@@ -118,6 +119,7 @@ class NIRController extends Controller
 
         $company_name = CompanyInfo::where('id', session()->get('company_was_selected'))->pluck('name');
         $suppliers = Suppliers::all()->sortBy('name');
+        $subsuppliers = SubSupplier::all()->sortBy('name');
         $certifications = Certification::all()->sortBy('name');
         $vehicles = Vehicle::all()->sortBy('name');
         $articles = Article::all()->sortBy('name');
@@ -125,7 +127,7 @@ class NIRController extends Controller
         $moistures = Moisture::all()->sortBy('name');
         $committee_list = Committee::where('company_id', $company)->get();
         return view('nir.index', ['company_name' => $company_name, 'suppliers' => $suppliers, 'certifications' => $certifications, 'vehicles' => $vehicles,
-        'articles' => $articles, 'species' => $species, 'moistures' => $moistures, 'committee_list' => $committee_list]);
+        'articles' => $articles, 'species' => $species, 'moistures' => $moistures, 'committee_list' => $committee_list, 'subsuppliers' => $subsuppliers]);
     }
 
     /**
@@ -234,6 +236,7 @@ class NIRController extends Controller
         $nir->data_nir = $this->validateRequest()['data_nir'];
         $nir->numar_we = $this->validateRequest()['numar_we'];
         $nir->supplier_id = $this->validateRequest()['supplier_id'];
+        $nir->subsupplier_id = $this->validateRequest()['subsupplier_id'];
         $nir->dvi = $this->validateRequest()['dvi'];
         $nir->data_dvi = $this->validateRequest()['data_dvi'];
         $nir->greutate_bruta = $this->validateRequest()['greutate_bruta'];
@@ -288,14 +291,14 @@ class NIRController extends Controller
             return back();
         }
         // Get the packaging data for the supplier and calculate data
-        $supplier_id = $this->validateRequest()['supplier_id'];
-        $supplier = Suppliers::find($supplier_id);
+        $subsupplier_id = $this->validateRequest()['subsupplier_id'];
+        $supplier = Suppliers::find($this->validateRequest()['supplier_id']);
 
         if ($supplier->packaging_calculation == 1) {
             // Save the packaging data for each NIR
             $packagingData->create([
                 'nir_id' => $nir_id,
-                'packaging_data' => $this->calculatePackaging($supplier_id, $nir_id)
+                'packaging_data' => $this->calculatePackaging($subsupplier_id, $nir_id)
             ]);
         }
 
@@ -313,10 +316,10 @@ class NIRController extends Controller
     {
         $packagingData = PackagingData::find($request->update_id);
         $nir = NIR::find($packagingData->nir_id);
-        $supplier_id = $nir->supplier_id;
+        $subsupplier_id = $nir->subsupplier_id;
 
         $packagingData->update([
-            'packaging_data' => $this->calculatePackaging($supplier_id, $nir->id)
+            'packaging_data' => $this->calculatePackaging($subsupplier_id, $nir->id)
         ]);
 
         return back();
@@ -338,9 +341,9 @@ class NIRController extends Controller
 
         foreach ($pack as $data) {
             $packagingData = PackagingData::find($data);
-            $supplier_id = NIR::find($packagingData->nir_id)->supplier_id;
+            $subsupplier_id = NIR::find($packagingData->nir_id)->subsupplier_id;
             $packagingData->update([
-                'packaging_data' => $this->calculatePackaging($supplier_id, $packagingData->nir_id)
+                'packaging_data' => $this->calculatePackaging($subsupplier_id, $packagingData->nir_id)
             ]);
         }
 
@@ -354,14 +357,14 @@ class NIRController extends Controller
      * @param int $nir_id
      * @return json
      */
-    protected function calculatePackaging(int $supplier_id, int $nir_id)
+    protected function calculatePackaging(int $subsupplier_id, int $nir_id)
     {
         $packagingPerSupplier = new PackagingPerSupplier();
         $nirDetails = new NIRDetails();
 
         $company = request()->session()->get('company_was_selected');
 
-        $packaging = $packagingPerSupplier::where('company_id', $company)->where('supplier_id', $supplier_id)->get();
+        $packaging = $packagingPerSupplier::where('company_id', $company)->where('subsupplier_id', $subsupplier_id)->get();
         $nirData = $nirDetails::where('nir_id', $nir_id)->get();
 
         $nirVolum = 0;
@@ -461,6 +464,7 @@ class NIRController extends Controller
         $company = CompanyInfo::where('id', $nir->company_id)->value('name');
         $invoice = Invoice::where('nir_id', $nir->id)->get();
         $supplier = Suppliers::where('id', $nir->supplier_id)->value('name');
+        $subsupplier = SubSupplier::find($nir->subsupplier_id);
         $vehicle = Vehicle::where('id', $nir->vehicle_id)->value('name');
         $certification = Certification::where('id', $nir->certification_id)->value('name');
         $committee = Committee::find($nir->committee_id);
@@ -472,6 +476,7 @@ class NIRController extends Controller
                         'committee' => $committee->name,
                         'invoice' => $invoice,
                         'supplier' => $supplier,
+                        'subsupplier' => $subsupplier,
                         'vehicle' => $vehicle,
                         'certification' => $certification,
                         'nir_details' =>$nir_details,
@@ -664,6 +669,7 @@ class NIRController extends Controller
             'data_nir' => $nir->data_nir,
             'numar_we' => $nir->numar_we,
             'supplier_id' => $nir->supplier_id,
+            'subsupplier_id' => $nir->subsupplier_id,
             'dvi' => $nir->dvi,
             'data_dvi' => $nir->data_dvi,
             'greutate_bruta' => $nir->greutate_bruta,
@@ -675,6 +681,22 @@ class NIRController extends Controller
             'vehicle_id' => $nir->vehicle_id,
             'numar_inmatriculare' => $nir->numar_inmatriculare,
             'certification_id' => $nir->certification_id,
+        ];
+
+        return json_encode($output);
+    }
+
+    /**
+     * Fetch the SupplierID.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function fetchSupplierID(Request $request)
+    {
+        $nir = NIR::findOrFail($request->id);
+        $output = [
+            'supplier_id' => $nir->supplier_id,
         ];
 
         return json_encode($output);
@@ -884,6 +906,7 @@ class NIRController extends Controller
             'data_nir.required' => 'Completati data NIR!',
             'numar_we.sometimes' => 'Verificati numarul WE!',
             'supplier_id.required' => 'Selectati furnizorul din lista!',
+            'subsupplier_id.required' => 'Selectati subfurnizorul din lista!',
             'dvi.sometimes' => 'Verificati numarul DVI!',
             'data_dvi.sometimes' => 'Verificati data DVI!',
             'greutate_bruta.sometimes' => 'Verificati greutatea bruta!',
@@ -903,6 +926,7 @@ class NIRController extends Controller
             'data_nir' => 'required',
             'numar_we' => 'sometimes',
             'supplier_id' => 'required',
+            'subsupplier_id' => 'required',
             'dvi' => 'sometimes',
             'data_dvi' => 'sometimes',
             'greutate_bruta' => 'sometimes',

@@ -31,6 +31,7 @@
       <div class="row">
         <div class="col-sm-8">
           <h4><strong>Furnizor:</strong> {{ $supplier }}</h4>
+          <h4><strong>Subfurnizor:</strong> {{ $subsupplier->name }}</h4>
           @if ($nir->numar_we)
             <h4><strong>Numar WE:</strong> {{ $nir->numar_we }}</h4>
           @endif

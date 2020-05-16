@@ -30,12 +30,17 @@
                 <div class="form-group col-md-4">
                     <input type="text" class="form-control" id="numar_we" name="numar_we" placeholder="Numar WE">
                 </div>
-                <div class="form-group col-md-8">
-                    <select class="custom-select form-control" name="supplier_id" id="supplier_id" required>
+                <div class="form-group col-md-4">
+                    <select class="custom-select form-control" name="supplier_id" id="supplier_id" onchange="loadSubSupplier(this.value,'#subsupplier_id')" required>
                         <option value="" selected>--- Alege furnizorul ---</option>
                         @foreach ($suppliers as $supplier)
                             <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                         @endforeach
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <select class="custom-select form-control" name="subsupplier_id" id="subsupplier_id" required>
+                        <option value="" selected>--- Alege subfurnizorul ---</option>
                     </select>
                 </div>
                 <div class="form-group col-md-4">
