@@ -142,7 +142,7 @@ return [
             'text'        => 'Exporta NIR',
             'url'         => '/nir/export',
             'icon'        => 'table',
-            'can'         => 'user',
+            'can'         => 'viewer',
         ],
         [
             'text'        => 'Facturi',

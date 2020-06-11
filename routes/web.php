@@ -81,8 +81,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/invoice/fetch', 'InvoicesController@fetchInvoice')->name('invoice.fetch')->middleware('can:user');
             Route::get('/details/fetch', 'NIRDetailsController@fetchDetails')->name('details.fetch')->middleware('can:user');
             Route::get('/print_multiple', 'NIRController@showPrintNIRPage')->middleware('can:user');
-            Route::get('/export', 'NIRController@showExport')->middleware('can:user');
-            Route::post('/export/download', 'NIRController@export')->middleware('can:user');
+            Route::get('/export', 'NIRController@showExport')->middleware('can:viewer');
+            Route::post('/export/download', 'NIRController@export')->middleware('can:viewer');
             Route::post('/print', 'NIRController@printMultipleNIR')->middleware('can:user');
             Route::post('/add', 'NIRController@store')->middleware('can:user');
             Route::post('/details/add', 'NIRDetailsController@store')->middleware('can:user');
