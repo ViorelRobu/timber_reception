@@ -184,6 +184,19 @@ Route::group(['middleware' => 'auth'], function () {
             Route::patch('/supplier/{id}/update', 'PackagingController@updateSupplier')->middleware('can:user');
         });
 
+        Route::prefix('claim_status')->group(function() {
+            Route::get('/', 'ClaimStatusController@index')->name('claim_status.index')->middleware('can:superadmin');
+            Route::post('/add', 'ClaimStatusController@store')->middleware('can:superadmin');
+            Route::get('/fetch', 'ClaimStatusController@fetch')->name('claim_status.fetch')->middleware('can:superadmin');
+            Route::patch('/{claimStatus}/update', 'ClaimStatusController@update')->middleware('can:superadmin');
+        });
+
+        Route::prefix('claims')->group(function() {
+            Route::get('/', 'ClaimsController@index')->name('claims.index')->middleware('can:user');
+            Route::get('/fetch/nir', 'ClaimsController@fetchNIR')->name('claims.fetch.nir')->middleware('can:user');
+            Route::post('/add', 'ClaimsController@store')->middleware('can:user');
+        });
+
         Route::get('/change/password', 'UsersController@setCustomPassword');
         Route::post('/change/password/submit', 'UsersController@changePassword');
     });

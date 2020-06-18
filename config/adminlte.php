@@ -151,6 +151,12 @@ return [
             'can'         => 'user',
         ],
         [
+            'text'        => 'Reclamatii',
+            'url'         => 'claims',
+            'icon'        => 'file',
+            'can'         => 'user',
+        ],
+        [
             'text'        => 'Ambalaje',
             'url'         => 'packaging',
             'icon'        => 'recycle',
@@ -268,6 +274,11 @@ return [
                             'can'     => 'user',
                         ],
                     ],
+                ],
+                [
+                    'text' => 'Status reclamatii',
+                    'url'  => 'claim_status',
+                    'can'  => 'superadmin',
                 ],
             ],
         ],
