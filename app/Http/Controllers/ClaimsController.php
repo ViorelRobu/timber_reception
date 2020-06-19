@@ -42,8 +42,19 @@ class ClaimsController extends Controller
             return DataTables::of($table)
                 ->addIndexColumn()
                 ->addColumn('action', function ($table) {
-                    $edit = '<a href="#" class="edit" id="' . $table->id . '"data-toggle="modal" data-target="#claimStatusForm"><i class="fa fa-edit"></i></a>';
-                    return $edit;
+                    return view('claims.partials.actions', ['data' => $table])->render();
+                })
+                ->editColumn('nir', function ($table) {
+                    $nir_id_array = explode(',', $table->nir);
+                    $nir_array = [];
+                    foreach ($nir_id_array as $data) {
+                        $nir = NIR::findOrFail(intval($data));
+                        $nir_array[] = $nir->numar_nir;
+                    }
+                    return implode(', ',$nir_array);
+                })
+                ->editColumn('date', function ($table) {
+                    return (new Carbon($table->date))->format('d.m.Y');
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -80,6 +91,44 @@ class ClaimsController extends Controller
     }
 
     /**
+     * Fetch the data about a specific claim
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function fetch(Request $request)
+    {
+        $claim = Claim::findOrFail($request->id);
+        $nir = explode(',', $claim->nir);
+        $nir_data = [];
+        $nir_id = [];
+        foreach ($nir as $data) {
+            $sn = NIR::find(intval($data));
+            $invoice = Invoice::where('nir_id', intval($data))->get();
+            $data_nir = (new Carbon($sn->data_nir))->format('d.m.Y');
+            if (count($invoice) > 0) {
+                $nir_data[] = 'NIR ' . $sn->numar_nir . ' din ' . $data_nir . ', factura ' . $invoice[0]->numar_factura . '/' . (new Carbon($invoice[0]->data_factura))->format('d.m.Y');
+            } else {
+                $nir_data[] = 'NIR ' . $sn->numar_nir . ' din ' . $data_nir;
+            }
+            $nir_id[] = intval($data);
+        }
+        $output = [
+            'supplier_id' => $claim->supplier_id,
+            'claim_date' => $claim->claim_date,
+            'nir' => $nir_data,
+            'nir_id' => $nir_id,
+            'defects' => $claim->defects,
+            'claim_amount' => $claim->claim_amount,
+            'claim_value' => $claim->claim_value,
+            'claim_currency' => $claim->claim_currency,
+            'observations' => $claim->observations,
+        ];
+        return json_encode($output);
+
+    }
+
+    /**
      * Persist the data inside the database
      *
      * @return redirect
@@ -88,7 +137,7 @@ class ClaimsController extends Controller
     {
         $claim->supplier_id = $this->validateRequest()['supplier_id'];
         $claim->claim_date = $this->validateRequest()['claim_date'];
-        $claim->nir = implode(', ', $this->validateRequest()['nir']);
+        $claim->nir = implode(',', $this->validateRequest()['nir']);
         $claim->defects = $this->validateRequest()['defects'];
         $claim->claim_amount = $this->validateRequest()['claim_amount'];
         $claim->claim_value = $this->validateRequest()['claim_value'];
@@ -98,6 +147,39 @@ class ClaimsController extends Controller
         $claim->user_id = auth()->user()->id;
         $claim->save();
 
+        return back();
+    }
+
+    /**
+     * Update the data inside the database
+     *
+     * @return redirect
+     */
+    public function update(Claim $claim)
+    {
+        $claim->supplier_id = $this->validateRequest()['supplier_id'];
+        $claim->claim_date = $this->validateRequest()['claim_date'];
+        $claim->nir = implode(',', $this->validateRequest()['nir']);
+        $claim->defects = $this->validateRequest()['defects'];
+        $claim->claim_amount = $this->validateRequest()['claim_amount'];
+        $claim->claim_value = $this->validateRequest()['claim_value'];
+        $claim->claim_currency = $this->validateRequest()['claim_currency'];
+        $claim->observations = $this->validateRequest()['observations'];
+        $claim->claim_status_id = 1;
+        $claim->user_id = auth()->user()->id;
+        $claim->save();
+
+        return back();
+    }
+
+    /**
+     * Deletes the entry from the database
+     *
+     * @return redirect
+     */
+    public function destroy(Claim $claim)
+    {
+        $claim->delete();
         return back();
     }
 

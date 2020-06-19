@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title d-inline" id="exampleModalLongTitle">Istoric modificari certificare
+        <h3 class="modal-title d-inline" id="exampleModalLongTitle">Istoric modificari reclamatie
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>

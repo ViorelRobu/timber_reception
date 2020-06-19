@@ -36,7 +36,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right" id="start" name="start" placeholder="Livrari de la" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off" required>
+                        <input type="text" class="form-control pull-right" id="start" name="start" placeholder="Livrari de la" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off">
                     </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -44,7 +44,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right" id="end" name="end" placeholder="Livrari pana la" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off" required>
+                        <input type="text" class="form-control pull-right" id="end" name="end" placeholder="Livrari pana la" data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off">
                     </div>
                 </div>
                 <div class="form-group col-md-12">
@@ -65,6 +65,7 @@
                     <select name="claim_currency" id="claim_currency" class="form-control" required>
                         <option value="EUR">EUR</option>
                         <option value="USD">USD</option>
+                        <option value="USD">RON</option>
                     </select>
                 </div>
                 <div class="form-group col-md-12">

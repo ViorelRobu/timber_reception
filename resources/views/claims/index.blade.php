@@ -39,6 +39,7 @@
     </div>
   </div>
 @include('claims.form')
+@include('claims.delete')
 @can('admin')
   @include('claims.history')
 @endcan
@@ -91,6 +92,7 @@
                     for (const key in data) {
                         if (data.hasOwnProperty(key)) {
                             const element = data[key];
+                            $('#nir').html('');
                             $('#nir').append('<option value="' + key + '">' + element + '</option>')
                         }
                     }
@@ -109,31 +111,45 @@
     $(document).on('click', '.edit', function() {
       var id = $(this).attr("id");
       $.ajax({
-        url: "{{ route('certifications.fetch') }}",
+        url: "{{ route('claims.fetch') }}",
         method: 'get',
         data: {id:id},
         dataType:'json',
         success: function(data)
             {
-                $('.modal-title').text('Editeaza certificarea');
+                $('.modal-title').text('Editeaza reclamatia');
                 $('#id').val(id);
-                $('#name').val(data.name);
-                $('#name_en').val(data.name_en);
+                $('#supplier_id').val(data.supplier_id);
+                $('#claim_date').val(data.claim_date);
+                $('#defects').val(data.defects);
+                $('#claim_amount').val(data.claim_amount);
+                $('#claim_value').val(data.claim_value);
+                $('#claim_currency').val(data.claim_currency);
+                $('#observations').val(data.observations);
+                data.nir.forEach((element, index) => {
+                    $('#nir').append('<option value="' + data.nir_id[index] + '" selected>' + element + '</option>');
+                });
             }
       });
 
       $(document).on('submit', function() {
         var id = $('#id').val();
-        $('form').attr('action', 'certifications/' + id + '/update');
+        $('form').attr('action', 'claims/' + id + '/update');
         $("input[name='_method']").val('PATCH');
       });
+
+    });
+
+    $(document).on('click', '.delete', function() {
+        var id = $(this).attr("id");
+        $('form').attr('action', 'claims/' + id + '/delete');
 
     });
 
     $(document).on('click', '.history', function() {
       var id = $(this).attr("id");
       $.ajax({
-        url: "{{ route('certifications.history') }}",
+        url: "{{ route('claims.history') }}",
         method: 'get',
         data: {id:id},
         dataType:'json',
