@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="certificationHistory" tabindex="-1" role="dialog" aria-labelledby="certificationHistory" aria-hidden="true">
+<div class="modal fade" id="historyForm" tabindex="-1" role="dialog" aria-labelledby="historyForm" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">

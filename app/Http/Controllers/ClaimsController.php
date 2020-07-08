@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Claim;
 use App\ClaimStatus;
+use App\Traits\Translatable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,6 +17,16 @@ use Carbon\Carbon;
 
 class ClaimsController extends Controller
 {
+
+    use Translatable;
+
+    protected $dictionary = [
+        'user_id' => ['utilizator', 'App\User', 'name'],
+        'supplier_id' => ['furnizor', 'App\Suppliers', 'name'],
+        'company_id' => ['fabrica', 'App\CompanyInfo', 'name'],
+        'claim_status_id' => ['status', 'App\ClaimStatus', 'status'],
+    ];
+
     /**
      * Display a listing of all claims
      *
@@ -70,6 +81,56 @@ class ClaimsController extends Controller
         $status = ClaimStatus::all();
 
         return view('claims.index', ['suppliers' => $suppliers, 'status' => $status]);
+    }
+
+    /**
+    * Fetch the modification history
+    *
+    * @param Request $request
+    * @return json
+    */
+    public function fetchHistory(Request $request)
+    {
+        $claim = Claim::findOrFail($request->id);
+        $audits = $claim->audits;
+
+        $data = [];
+
+        foreach ($audits as $audit) {
+
+            $old = [];
+            foreach ($audit->old_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $old[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $old[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $new = [];
+            foreach ($audit->new_values as $key => $value) {
+                $translated = $this->translate($key);
+                if ($translated == null) {
+                    $new[$key] = $value;
+                } else {
+                    $valoare = $translated[1]::where('id', $value)->get()->pluck($translated[2]);
+                    $new[$translated[0]] = $valoare[0];
+                }
+            }
+
+            $array = [
+                'user' => $audit->user->name,
+                'event' => $audit->event,
+                'old_values' => $old,
+                'new_values' => $new,
+                'created_at' => $audit->created_at->toDateTimeString()
+            ];
+            array_push($data, $array);
+        }
+
+        return json_encode($data);
     }
 
     /**
