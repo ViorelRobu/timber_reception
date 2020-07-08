@@ -16,6 +16,7 @@ class CreateClaimsTable extends Migration
         Schema::create('claims', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('supplier_id');
+            $table->unsignedBigInteger('company_id');
             $table->date('claim_date');
             $table->text('nir');
             $table->string('defects');
@@ -31,6 +32,7 @@ class CreateClaimsTable extends Migration
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('restrict');
             $table->foreign('claim_status_id')->references('id')->on('claim_status')->onDelete('restrict');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
+            $table->foreign('company_id')->references('id')->on('company_info')->onDelete('restrict');
         });
     }
 

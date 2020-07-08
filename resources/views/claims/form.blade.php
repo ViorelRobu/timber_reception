@@ -10,7 +10,7 @@
         </h3>
       </div>
       <div class="modal-body">
-        <form action="/claims/add" method="POST">
+        <form id="claimForm" action="/claims/add" method="POST">
             @method('POST')
             @csrf
             <div class="form-row">

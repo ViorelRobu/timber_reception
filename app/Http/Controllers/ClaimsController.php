@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Claim;
+use App\ClaimStatus;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use App\Suppliers;
@@ -16,15 +19,18 @@ class ClaimsController extends Controller
     /**
      * Display a listing of all claims
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
+     * @throws \Throwable
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            $mill = $request->session()->get('company_was_selected');
             $table = DB::table('claims')
                 ->join('suppliers', 'claims.supplier_id', '=', 'suppliers.id')
                 ->join('claim_status', 'claims.claim_status_id', '=', 'claim_status.id')
+                ->where('company_id', $mill)
                 ->select([
                     'claims.id as id',
                     'suppliers.name as name',
@@ -61,14 +67,15 @@ class ClaimsController extends Controller
         }
 
         $suppliers = Suppliers::all();
+        $status = ClaimStatus::all();
 
-        return view('claims.index', ['suppliers' => $suppliers]);
+        return view('claims.index', ['suppliers' => $suppliers, 'status' => $status]);
     }
 
     /**
      * Fetch the data about the NIR for the claim
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return json
      */
     public function fetchNIR(Request $request)
@@ -93,7 +100,7 @@ class ClaimsController extends Controller
     /**
      * Fetch the data about a specific claim
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return json
      */
     public function fetch(Request $request)
@@ -133,9 +140,10 @@ class ClaimsController extends Controller
      *
      * @return redirect
      */
-    public function store(Claim $claim)
+    public function store(Claim $claim, Request $request)
     {
         $claim->supplier_id = $this->validateRequest()['supplier_id'];
+        $claim->company_id = $request->session()->get('company_was_selected');;
         $claim->claim_date = $this->validateRequest()['claim_date'];
         $claim->nir = implode(',', $this->validateRequest()['nir']);
         $claim->defects = $this->validateRequest()['defects'];
@@ -145,6 +153,21 @@ class ClaimsController extends Controller
         $claim->observations = $this->validateRequest()['observations'];
         $claim->claim_status_id = 1;
         $claim->user_id = auth()->user()->id;
+        $claim->save();
+
+        return back();
+    }
+
+    /**
+     * Update the claim status
+     *
+     * @param Claim $claim
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function updateStatus(Claim $claim, Request $request)
+    {
+        $claim->claim_status_id = $request->claim_status_id;
         $claim->save();
 
         return back();

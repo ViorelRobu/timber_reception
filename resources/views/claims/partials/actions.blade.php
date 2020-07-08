@@ -7,3 +7,5 @@
 @can('admin')
     <a href="#" class="delete" id="{{ $data->id }}"data-toggle="modal" data-target="#deleteClaimForm"><i class="fa fa-trash"></i></a>
 @endcan
+
+<a href="#" class="status" id="{{ $data->id }}"data-toggle="modal" data-target="#changeStatusForm"><i class="fa fa-fast-forward"></i></a>

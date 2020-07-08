@@ -39,6 +39,7 @@
     </div>
   </div>
 @include('claims.form')
+@include('claims.status')
 @include('claims.delete')
 @can('admin')
   @include('claims.history')
@@ -108,6 +109,12 @@
       $(document).off('submit');
     });
 
+    $(document).on('click', '.status', function() {
+        let id = $(this).attr("id");
+        $('#changeStatForm').attr('action', 'claims/' + id + '/updateStatus');
+        $("input[name='_method']").val('PATCH');
+    });
+
     $(document).on('click', '.edit', function() {
       var id = $(this).attr("id");
       $.ajax({
@@ -134,7 +141,7 @@
 
       $(document).on('submit', function() {
         var id = $('#id').val();
-        $('form').attr('action', 'claims/' + id + '/update');
+        $('#claimForm').attr('action', 'claims/' + id + '/update');
         $("input[name='_method']").val('PATCH');
       });
 

@@ -198,6 +198,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/fetch', 'ClaimsController@fetch')->name('claims.fetch')->middleware('can:user');
             Route::get('/fetch/history', 'ClaimsController@fetchHistory')->name('claims.history')->middleware('can:admin');
             Route::patch('/{claim}/update', 'ClaimsController@update')->middleware('can:user');
+            Route::patch('/{claim}/updateStatus', 'ClaimsController@updateStatus')->middleware('can:user');
             Route::delete('/{claim}/delete', 'ClaimsController@destroy')->middleware('can:admin');
         });
 
