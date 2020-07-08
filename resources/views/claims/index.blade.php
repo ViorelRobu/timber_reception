@@ -110,7 +110,17 @@
     });
 
     $(document).on('click', '.status', function() {
-        let id = $(this).attr("id");
+        var id = $(this).attr("id");
+        $.ajax({
+            url: "{{ route('claims.fetch') }}",
+            method: 'get',
+            data: {id:id},
+            dataType:'json',
+            success: function(data)
+            {
+                $('#claim_status_id').val(data.claim_status_id);
+            }
+        });
         $('#changeStatForm').attr('action', 'claims/' + id + '/updateStatus');
         $("input[name='_method']").val('PATCH');
     });

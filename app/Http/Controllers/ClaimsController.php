@@ -130,6 +130,7 @@ class ClaimsController extends Controller
             'claim_value' => $claim->claim_value,
             'claim_currency' => $claim->claim_currency,
             'observations' => $claim->observations,
+            'claim_status_id' => $claim->claim_status_id,
         ];
         return json_encode($output);
 
