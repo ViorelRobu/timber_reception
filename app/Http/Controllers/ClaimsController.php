@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Claim;
 use App\ClaimStatus;
+use App\CompanyInfo;
+use App\Countries;
 use App\Traits\Translatable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +16,7 @@ use App\Suppliers;
 use App\NIR;
 use App\Invoice;
 use Carbon\Carbon;
+use domPDF;
 
 class ClaimsController extends Controller
 {
@@ -313,5 +316,51 @@ class ClaimsController extends Controller
         $claim->save();
 
         return back();
+    }
+
+    /**
+     * Print the nir
+     *
+     * @param Claim $claim
+     * @param string $language
+     * @return PDF
+     */
+    public function print(Claim $claim, $language)
+    {
+        $company = CompanyInfo::find($claim->company_id);
+        $supplier = Suppliers::find($claim->supplier_id);
+        $country = Countries::find($supplier->country_id);
+
+        $nir_arr = explode(',',$claim->nir);
+        $invoices = [];
+        foreach($nir_arr as $nir) {
+            $invoice = Invoice::where('nir_id', $nir)->get();
+            if (count($invoice) > 0) {
+                $invoices[] = $invoice[0]->numar_factura . '/' . (new Carbon($invoice[0]->data_factura))->format('d.m.Y');
+            }
+        }
+
+        $start = NIR::whereIn('id', $nir_arr)->first();
+        $end = NIR::whereIn('id', $nir_arr)->get()->last();
+
+        $data = [
+            'company' => $company,
+            'supplier' => $supplier,
+            'country' => $country,
+            'claim' => $claim,
+            'invoices' => implode(', ', $invoices),
+            'start' => Carbon::parse($start->data_nir)->format('d.m.Y'),
+            'end' => Carbon::parse($end->data_nir)->format('d.m.Y'),
+            // 'invoice' => $invoice,
+            // 'nir_details' => $nir_details,
+            // 'total_aviz' => $total_aviz,
+            // 'total_receptionat' => $total_receptionat,
+            // 'total_pachete' => $total_pachete,
+            // 'total_ml' => $total_ml,
+            // 'reception_committee' => $reception_committee
+        ];
+
+        $pdf = domPDF::loadView('claims.print_' . $language, $data);
+        return $pdf->stream();
     }
 }

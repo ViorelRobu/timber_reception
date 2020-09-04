@@ -95,10 +95,10 @@
             dataType:'json',
             success: function(data)
                 {
+                    $('#nir').html('');
                     for (const key in data) {
                         if (data.hasOwnProperty(key)) {
                             const element = data[key];
-                            $('#nir').html('');
                             $('#nir').append('<option value="' + key + '">' + element + '</option>')
                         }
                     }
@@ -165,7 +165,7 @@
 
       $(document).on('submit', function() {
         var id = $('#id').val();
-        $('#claimForm').attr('action', 'claims/' + id + '/update');
+        $('#claimForm').attr('action', '/claims/' + id + '/update');
         $("input[name='_method']").val('PATCH');
       });
 

@@ -12,8 +12,12 @@
     <a href="#" class="edit" id="{{ $data->id }}"data-toggle="modal" data-target="#claimsForm"><i class="fa fa-edit"></i></a>
 @endif
 
-@can('admin')
-    <a href="#" class="delete" id="{{ $data->id }}"data-toggle="modal" data-target="#deleteClaimForm"><i class="fa fa-trash"></i></a>
-@endcan
+<a href="/claims/{{ $data->id }}/print/ro" style="color: green" target="_blank"><i class="fa fa-print"></i></a>
+<a href="/claims/{{ $data->id }}/print/en" style="color: red" target="_blank"><i class="fa fa-print"></i></a>
 
 <a href="#" class="status" id="{{ $data->id }}"data-toggle="modal" data-target="#changeStatusForm"><i class="fa fa-fast-forward"></i></a>
+
+@can('admin')
+    <a href="#" class="delete" id="{{ $data->id }}"data-toggle="modal" data-target="#deleteClaimForm" style="color: red"><i class="fa fa-trash"></i></a>
+@endcan
+
