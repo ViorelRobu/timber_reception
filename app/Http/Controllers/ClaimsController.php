@@ -52,6 +52,7 @@ class ClaimsController extends Controller
                     'claims.claim_value as value',
                     'claims.claim_currency as currency',
                     'claim_status.status as status',
+                    'claim_status.id as status_id',
                     'claims.observations as observations',
                     'claims.resolution as resolution',
 
@@ -230,6 +231,7 @@ class ClaimsController extends Controller
     public function updateStatus(Claim $claim, Request $request)
     {
         $claim->claim_status_id = $request->claim_status_id;
+        $claim->resolution = $request->resolution;
         $claim->save();
 
         return back();
@@ -296,5 +298,20 @@ class ClaimsController extends Controller
             'claim_currency' => 'required',
             'observations' => 'sometimes',
         ], $error_messages);
+    }
+
+    /**
+     * Reactivate a claim
+     *
+     * @param Request $request
+     * @return redirect
+     */
+    public function reactivate(Request $request)
+    {
+        $claim = Claim::find($request->reactivate_claim_id);
+        $claim->claim_status_id = 1;
+        $claim->save();
+
+        return back();
     }
 }

@@ -19,9 +19,14 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="resolution">Rezolvare</label>
+                        <input type="text"
+                            class="form-control" name="resolution" id="resolution" placeholder="Rezolvare">
+                    </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuleaza</button>
+                        <button type="submit" class="btn btn-primary">Salveaza</button>
                     </div>
                 </form>
             </div>

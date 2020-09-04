@@ -41,6 +41,11 @@
 @include('claims.form')
 @include('claims.status')
 @include('claims.delete')
+
+@can('superadmin')
+    @include('claims.reactivate')
+@endcan
+
 @can('admin')
   @include('claims.history')
 @endcan
@@ -109,6 +114,10 @@
       $(document).off('submit');
     });
 
+    $('#historyForm').on('hidden.bs.modal', function() {
+      $('#history').empty();
+    });
+
     $(document).on('click', '.status', function() {
         var id = $(this).attr("id");
         $.ajax({
@@ -123,6 +132,11 @@
         });
         $('#changeStatForm').attr('action', 'claims/' + id + '/updateStatus');
         $("input[name='_method']").val('PATCH');
+    });
+
+    $(document).on('click', '.reactivate', function() {
+        var id = $(this).attr('id');
+        $('#reactivate_claim_id').val(id);
     });
 
     $(document).on('click', '.edit', function() {

@@ -21,6 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PackagingMainSeeder::class);
         $this->call(UserClassesSeeder::class);
         $this->call(UserGroupsSeeder::class);
-        $this->call(ClaimStatusSeedert::class);
+        $this->call(ClaimStatusSeeder::class);
     }
 }
