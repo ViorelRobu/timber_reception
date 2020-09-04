@@ -107,8 +107,11 @@
             .total {
                 font-weight: bold;
                 text-align: right;
-                /* margin-left: auto;
-                margin-right: auto; */
+            }
+            .user {
+                position: fixed;
+                bottom: 8px;
+                right: -600%;
             }
         </style>
         <title>Reclamatie</title>
@@ -179,6 +182,7 @@
                     Valoare: {{ $claim->claim_value }} {{ $claim->claim_currency }}
                 </p>
             <hr>
+            <p class="user">Creata de {{ $user }}</p>
         </div>
     </body>
 </html>

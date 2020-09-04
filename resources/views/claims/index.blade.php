@@ -1,7 +1,10 @@
 @extends('adminlte::page')
 
 @section('content_header')
-    <h1 class="d-inline">Lista reclamatii <button id="addClaim" class="btn btn-primary pull-right" data-toggle="modal" data-target="#claimsForm">Adauga reclamatie</button></h1>
+    <h1 class="d-inline">Lista reclamatii
+        <button id="addClaim" class="btn btn-primary pull-right" data-toggle="modal" data-target="#claimsForm">Adauga reclamatie</button>
+        <a class="btn btn-primary pull-right" href="/claims/export">Descarca reclamatii</a>
+    </h1>
 @stop
 
 @section('content')

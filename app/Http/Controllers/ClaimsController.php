@@ -6,6 +6,7 @@ use App\Claim;
 use App\ClaimStatus;
 use App\CompanyInfo;
 use App\Countries;
+use App\Exports\ClaimsExport;
 use App\Traits\Translatable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,8 +16,10 @@ use Yajra\DataTables\DataTables;
 use App\Suppliers;
 use App\NIR;
 use App\Invoice;
+use App\User;
 use Carbon\Carbon;
 use domPDF;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClaimsController extends Controller
 {
@@ -330,6 +333,7 @@ class ClaimsController extends Controller
         $company = CompanyInfo::find($claim->company_id);
         $supplier = Suppliers::find($claim->supplier_id);
         $country = Countries::find($supplier->country_id);
+        $user = User::find($claim->user_id);
 
         $nir_arr = explode(',',$claim->nir);
         $invoices = [];
@@ -351,16 +355,47 @@ class ClaimsController extends Controller
             'invoices' => implode(', ', $invoices),
             'start' => Carbon::parse($start->data_nir)->format('d.m.Y'),
             'end' => Carbon::parse($end->data_nir)->format('d.m.Y'),
-            // 'invoice' => $invoice,
-            // 'nir_details' => $nir_details,
-            // 'total_aviz' => $total_aviz,
-            // 'total_receptionat' => $total_receptionat,
-            // 'total_pachete' => $total_pachete,
-            // 'total_ml' => $total_ml,
-            // 'reception_committee' => $reception_committee
+            'user' => $user->name
         ];
 
         $pdf = domPDF::loadView('claims.print_' . $language, $data);
         return $pdf->stream();
+    }
+
+    public function export(Request $request)
+    {
+        $mill = $request->session()->get('company_was_selected');
+        $claims = DB::table('claims')
+            ->join('suppliers', 'claims.supplier_id', '=', 'suppliers.id')
+            ->join('claim_status', 'claims.claim_status_id', '=', 'claim_status.id')
+            ->where('company_id', $mill)
+            ->select([
+                'claims.id as id',
+                'suppliers.name as name',
+                'claims.claim_date as date',
+                'claims.nir as nir',
+                'claims.defects as defects',
+                'claims.claim_amount as amount',
+                'claims.claim_value as value',
+                'claims.claim_currency as currency',
+                'claim_status.status as status',
+                'claims.observations as observations',
+                'claims.resolution as resolution',
+
+            ])->get()->toArray();
+
+        foreach($claims as $claim) {
+            $nir_arr = explode(',', $claim->nir);
+            $invoices = [];
+            foreach ($nir_arr as $nir) {
+                $invoice = Invoice::where('nir_id', $nir)->get();
+                if (count($invoice) > 0) {
+                    $invoices[] = $invoice[0]->numar_factura . '/' . (new Carbon($invoice[0]->data_factura))->format('d.m.Y');
+                }
+            }
+            $claim->invoices = implode(', ', $invoices);
+        };
+
+        return Excel::download(new ClaimsExport($claims), 'reclamatii.xlsx');
     }
 }

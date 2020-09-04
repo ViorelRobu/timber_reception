@@ -197,6 +197,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/add', 'ClaimsController@store')->middleware('can:user');
             Route::post('/reactivate', 'ClaimsController@reactivate')->middleware('can:superadmin');
             Route::get('/fetch', 'ClaimsController@fetch')->name('claims.fetch')->middleware('can:user');
+            Route::get('/export', 'ClaimsController@export')->middleware('can:user');
             Route::get('/fetch/history', 'ClaimsController@fetchHistory')->name('claims.history')->middleware('can:admin');
             Route::get('/{claim}/print/{language}', 'ClaimsController@print')->middleware('can:user');
             Route::patch('/{claim}/update', 'ClaimsController@update')->middleware('can:user');
