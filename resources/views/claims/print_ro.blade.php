@@ -117,7 +117,7 @@
                 height: 150px;
             }
         </style>
-        <title>Reclamatie</title>
+        <title>Reclamatie calitate</title>
     </head>
     <body>
         <img src="img/logo.jpg" alt="logo">
@@ -149,7 +149,7 @@
         <p></p>
         <hr>
         <div class="content">
-            <p><strong>Reclamatia {{ $claim->id }} din {{ date("d.m.Y", strtotime($claim->claim_date)) }}</strong></p>
+            <p><strong>Reclamatie calitate nr {{ $claim->id }} din {{ date("d.m.Y", strtotime($claim->claim_date)) }}</strong></p>
             <hr>
             <table class="basic_details">
                 <tr>
