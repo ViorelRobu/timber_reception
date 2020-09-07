@@ -115,6 +115,7 @@
             }
             img {
                 height: 150px;
+                padding-bottom: 30px;
             }
         </style>
         <title>Quality Claim</title>
