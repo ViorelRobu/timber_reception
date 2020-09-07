@@ -113,19 +113,14 @@
                 bottom: 8px;
                 right: -600%;
             }
+            img {
+                height: 150px;
+            }
         </style>
         <title>Claim</title>
     </head>
     <body>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+        <img src="img/logo.jpg" alt="logo">
         <div class="headings">
             <div id="cumparator">
                 <p><strong>Buyer</strong></p>
