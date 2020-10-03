@@ -7,7 +7,7 @@ Aplicatia permite utilizarea pentru mai multe societati/puncte de lucru, fiecare
 In dashboard-ul fiecarei societati exista un grafic cu livrarile de la furnizorii externi (furnizorii care nu sunt punct de lucru sau filiala a companiei) pe anul curent si pretul mediu calculat (in momentul de fata se afiseaza ca moneda euro) pentru luna anterioara si cea curenta.
 
 ### TO BE DONE:
-- modul gestionare reclamatii
+- modul gestionare gestionare comenzi
 
 ## Cerinte server/software
 Pentru a putea rula aplicatia, cerintele minime sunt urmatoarele:
