@@ -205,6 +205,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::delete('/{claim}/delete', 'ClaimsController@destroy')->middleware('can:admin');
         });
 
+        Route::prefix('orders')->group(function() {
+            Route::get('/', 'OrdersController@index')->name('orders.index')->middleware('can:user');
+        });
+
         Route::get('/change/password', 'UsersController@setCustomPassword');
         Route::post('/change/password/submit', 'UsersController@changePassword');
     });

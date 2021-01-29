@@ -145,6 +145,12 @@ return [
             'can'         => 'viewer',
         ],
         [
+            'text'        => 'Comenzi',
+            'url'         => 'orders',
+            'icon'        => 'file',
+            'can'         => 'user',
+        ],
+        [
             'text'        => 'Facturi',
             'url'         => '/nir/invoices',
             'icon'        => 'file',
