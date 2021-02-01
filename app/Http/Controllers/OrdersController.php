@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\CompanyInfo;
+use App\Order;
+use App\OrderDetail;
 use App\Suppliers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -56,5 +59,31 @@ class OrdersController extends Controller
         }
 
         return view('orders.index', ['suppliers' => $suppliers]);
+    }
+
+    public function show($id)
+    {
+        $order = Order::find($id);
+        $company = CompanyInfo::find($order->company_info_id);
+        $supplier = Suppliers::find($order->supplier_id);
+        $order_details = OrderDetail::where('order_id', $order->id)->get();
+        $order_details->map(function($item, $index) {
+            $item->value = $item->ordered_volume * $item->price;
+        });
+        $total_ordered = DB::table('order_details')->where('order_id', $order->id)->sum('ordered_volume');
+        $total_confirmed = DB::table('order_details')->where('order_id', $order->id)->sum('confirmed_volume');
+        $total_delivered = DB::table('order_details')->where('order_id', $order->id)->sum('delivered_volume');
+        $total_value = $order_details->sum('value');
+
+        return view('orders.show', [
+            'order' => $order,
+            'company' => $company,
+            'supplier' => $supplier,
+            'order_details' => $order_details,
+            'total_ordered' => $total_ordered,
+            'total_confirmed' => $total_confirmed,
+            'total_delivered' => $total_delivered,
+            'total_value' => $total_value,
+            ]);
     }
 }
