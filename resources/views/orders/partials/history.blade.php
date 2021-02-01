@@ -1,9 +1,9 @@
 <!-- Modal -->
-<div class="modal fade" id="NIRHistory" tabindex="-1" role="dialog" aria-labelledby="NIRHistory" aria-hidden="true">
+<div class="modal fade" id="orderHistory" tabindex="-1" role="dialog" aria-labelledby="orderHistory" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title d-inline" id="exampleModalLongTitle">Istoric NIR   <sup><small>NIR, detalii NIR si factura</small></sup>
+        <h3 class="modal-title d-inline" id="exampleModalLongTitle">Istoric comanda
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -20,7 +20,7 @@
             <div class="col-lg-5">
                 <h4>Date noi</h4>
             </div>
-            @foreach ($audit_nir as $audit)
+            @foreach ($audit_order as $audit)
                 <div class="col-lg-2">
                     {{ $audit['user'] }}
                     <br>
@@ -46,39 +46,13 @@
             @endforeach
         </div>
         <div class="row col-lg-12">
-            @foreach ($nir_details_audits as $details)
+            @foreach ($audit_order_details as $details)
                 <div class="col-lg-2">
                     {{ $details['user'] }}
                     <br>
                     <sup>{{ $details['created_at'] }} {{ $details['event'] }}</sup>
                     <br>
                     <sup>Detalii nir</sup>
-                </div>
-                <div class="col-lg-5">
-                    @foreach ($details['old_values'] as $key => $value)
-                            <div>
-                                {{ $key }} &mdash; {{ $value }}
-                            </div>
-                    @endforeach
-                </div>
-                <div class="col-lg-5">
-                    @foreach ($details['new_values'] as $key => $value)
-                            <div>
-                                {{ $key }} &mdash; {{ $value }}
-                            </div>
-                    @endforeach
-                </div>
-                <div class="col-lg-12"><hr></div>
-            @endforeach
-        </div>
-        <div class="row col-lg-12">
-            @foreach ($invoice_audit as $details)
-                <div class="col-lg-2">
-                    {{ $details['user'] }}
-                    <br>
-                    <sup>{{ $details['created_at'] }} {{ $details['event'] }}</sup>
-                    <br>
-                    <sup>Factura</sup>
                 </div>
                 <div class="col-lg-5">
                     @foreach ($details['old_values'] as $key => $value)

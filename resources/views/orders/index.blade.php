@@ -89,12 +89,17 @@
                 <div style="margin-top: 40px" class="form-group col-md-2">
                     <button type="button" class="deleteBtn btn btn-danger">Sterge</button>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
+                  <label for="ordered_volume">Volum comandat</label>
+                  <input type="number"
+                    class="form-control" name="ordered_volume[]" id="ordered_volume" placeholder="Volum comandat" step="0.010" min="0">
+                </div>
+                <div class="form-group col-md-4">
                     <label for="price">Pret</label>
                     <input type="number"
                     class="form-control" name="price[]" placeholder="Pret" min="0" step="0.01" required>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                   <label for="currency">Valuta</label>
                   <select class="form-control" name="currency[]">
                     <option>EUR</option>

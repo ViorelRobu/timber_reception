@@ -86,11 +86,11 @@
   </div>
 
 @can('user')
-  {{-- @include('orders.partials.details')
-  @include('orders.partials.delete_detail') --}}
+  @include('orders.partials.details')
+  {{-- @include('orders.partials.delete_detail') --}}
 @endcan
 @can('admin')
-  {{-- @include('orders.partials.history') --}}
+  @include('orders.partials.history')
 @endcan
 
 @stop

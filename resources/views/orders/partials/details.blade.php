@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="nirDetailsForm" tabindex="-1" role="dialog" aria-labelledby="nirDetailsForm" aria-hidden="true">
+<div class="modal fade" id="orderDetailsForm" tabindex="-1" role="dialog" aria-labelledby="orderDetailsForm" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -10,53 +10,47 @@
         </h3>
       </div>
     <div class="modal-body">
-        <form action="/nir/details/add" method="POST">
+        <form action="/orders/details/add" method="POST">
             @method('POST')
             @csrf
             <input type="hidden" name="id" id="id">
-            <input type="hidden" name="nir_id" id="nir_id" value="{{ $nir->id }}">
-            <div class="details d-flex flex-row">
-                <div class="group-nir">
-                    <div class="form-group col-md-4">
-                        <select class="custom-select form-control" name="article_id" id="article_id" required>
-                            <option value="" selected>--- Articol ---</option>
-                            @foreach ($articles as $article)
-                                <option value="{{ $article->id }}">{{ $article->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <select class="custom-select form-control" name="species_id" id="species_id" required>
-                            <option value="" selected>--- Specie ---</option>
-                            @foreach ($species as $species)
-                                <option value="{{ $species->id }}">{{ $species->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <select class="custom-select form-control" name="moisture_id" id="moisture_id" required>
-                            <option value="" selected>--- Grup ---</option>
-                            @foreach ($moistures as $moisture)
-                                <option value="{{ $moisture->id }}">{{ $moisture->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <input type="number" class="form-control" id="volum_aviz"  step="0.01"name="volum_aviz" placeholder="Volum aviz" required>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <input type="number" class="form-control" id="volum_receptionat" step="0.001" name="volum_receptionat" placeholder="Volum factura" required>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <input type="number" class="form-control" id="pachete" name="pachete" placeholder="Numar pachete" required>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <input type="number" class="form-control" id="total_ml" step="0.01"name="total_ml" placeholder="Total lungimi pachete" required>
-                    </div>
+            <input type="hidden" name="order_id" id="order_id" value="{{ $order->id }}">
+            <div class="details d-flex flex-row row">
+                <div class="form-group col-md-12">
+                  <label for="position">Pozitie</label>
+                  <textarea class="form-control" name="position" rows="3" required></textarea>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="ordered_volume">Volum comandat</label>
+                  <input type="number"
+                    class="form-control" name="ordered_volume" id="ordered_volume" placeholder="Volum comandat" step="0.010" min="0">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="confirmed_volume">Volum confirmat</label>
+                  <input type="number"
+                    class="form-control" name="confirmed_volume" id="confirmed_volume" placeholder="Volum comandat" step="0.010" min="0">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="delivered_volume">Volum livrat</label>
+                  <input type="number"
+                    class="form-control" name="delivered_volume" id="delivered_volume" placeholder="Volum comandat" step="0.010" min="0">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="price">Pret</label>
+                    <input type="number"
+                    class="form-control" name="price" placeholder="Pret" min="0" step="0.01" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="currency">Valuta</label>
+                  <select class="form-control" name="currency">
+                    <option>EUR</option>
+                    <option>USD</option>
+                    <option>RON</option>
+                  </select>
                 </div>
             </div>
-        </div>
-      <div class="modal-footer">
+    </div>
+    <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuleaza</button>
             <button type="submit" class="btn btn-primary">Salveaza</button>
         </form>

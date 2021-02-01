@@ -207,6 +207,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::prefix('orders')->group(function() {
             Route::get('/', 'OrdersController@index')->name('orders.index')->middleware('can:user');
+            Route::post('/add', 'OrdersController@store')->middleware('can:user');
             Route::prefix('/{id}')->group(function() {
                 Route::get('/show', 'OrdersController@show');
             });

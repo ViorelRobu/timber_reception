@@ -10,7 +10,7 @@
         </h3>
     </div>
     <div class="modal-body">
-        <form action="/nir/details/delete" method="POST">
+        <form action="/orders/details/delete" method="POST">
             @method('DELETE')
             @csrf
             <input type="hidden" name="delete_detail_id" id="delete_detail_id">

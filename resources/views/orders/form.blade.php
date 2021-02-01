@@ -15,21 +15,13 @@
             @csrf
             <div class="form-row">
                 <input type="hidden" name="id" id="id">
-                <div class="form-group col-md-8">
+                <div class="form-group col-md-12">
                     <select name="supplier_id" id="supplier_id" class="form-control" required>
                         <option value="">-- Selecteaza un furnizor --</option>
                         @foreach ($suppliers as $supplier)
                             <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                         @endforeach
                     </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <input type="text" class="form-control pull-right" id="order_date" name="order_date" placeholder="Data " data-provide="datepicker" data-date-format="yyyy-mm-dd" autocomplete="off" required>
-                    </div>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="destination">Destination</label>
@@ -55,12 +47,17 @@
                 <div style="margin-top: 40px" class="form-group col-md-2">
                     <button type="button" class="addBtn btn btn-secondary">Adauga pozitie</button>
                 </div>
-                <div class="form-group col-md-6">
+                 <div class="form-group col-md-4">
+                  <label for="ordered_volume">Volum comandat</label>
+                  <input type="number"
+                    class="form-control" name="ordered_volume[]" id="ordered_volume" placeholder="Volum comandat" step="0.010" min="0">
+                </div>
+                <div class="form-group col-md-4">
                     <label for="price">Pret</label>
                     <input type="number"
                     class="form-control" name="price[]" placeholder="Pret" min="0" step="0.01" required>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                   <label for="currency">Valuta</label>
                   <select class="form-control" name="currency[]">
                     <option>EUR</option>
