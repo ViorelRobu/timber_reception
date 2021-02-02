@@ -8,4 +8,6 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Order extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+
+    protected $guarded = [];
 }

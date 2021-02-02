@@ -19,6 +19,7 @@ class OrdersController extends Controller
     use Translatable;
 
     protected $dictionary = [
+        'company_info_id' => ['Firma', 'App\CompanyInfo', 'name'],
         'supplier_id' => ['Furnizor', 'App\Suppliers', 'name'],
         'order_id' => ['Comanda', 'App\Order', 'order'],
     ];
@@ -45,6 +46,7 @@ class OrdersController extends Controller
                     'orders.order_date as order_date',
                     'orders.destination as destination',
                     'orders.delivery_term as delivery_term',
+                    'orders.incoterms as incoterms',
                 ])->orderBy('orders.created_at', 'DESC')
                 ->get();
 
@@ -59,7 +61,7 @@ class OrdersController extends Controller
                     return $main->order_date ? with(new Carbon($main->order_date))->format('d.m.Y') : '';
                 })
                 ->addColumn('action', function ($main) {
-                        $edit = '<a href="#" class="update" id="' . $main->id . '" data-toggle="modal" data-target="#editOrder"><i class="fa fa-edit"></i></a>';
+                        $edit = '<a href="#" class="edit" id="' . $main->id . '" data-toggle="modal" data-target="#editOrdersForm"><i class="fa fa-edit"></i></a>';
                         $view = '<a href="/orders/' . $main->id . '/show" class="view" target="_blank"> <i class="fa fa-eye"></i></a>';
                         return $edit . ' ' . $view;
                 })
@@ -68,6 +70,28 @@ class OrdersController extends Controller
         }
 
         return view('orders.index', ['suppliers' => $suppliers]);
+    }
+
+    /**
+     * Fetch a order entry
+     *
+     * @param Request $request
+     * @return App\Order
+     */
+    public function fetch(Request $request)
+    {
+        return Order::find($request->id);
+    }
+
+    /**
+     * Fetch a order position
+     *
+     * @param Request $request
+     * @return App\OrderDetail
+     */
+    public function fetchDetail(Request $request)
+    {
+        return OrderDetail::find($request->id);
     }
 
     /**
@@ -129,6 +153,7 @@ class OrdersController extends Controller
         $order->supplier_id = $request->supplier_id;
         $order->destination = $request->destination;
         $order->delivery_term = $request->delivery_term;
+        $order->incoterms = $request->incoterms;
         $order->save();
 
         if ($request->position[0] != null && $request->price != null && $request->currency != null) {
@@ -136,6 +161,7 @@ class OrdersController extends Controller
                 $detail = new OrderDetail();
                 $detail->order_id = $order->id;
                 $detail->position = $request->position[$i];
+                $detail->dimensions = $request->dimensions[$i];
                 $detail->ordered_volume = $request->ordered_volume[$i];
                 $detail->price = $request->price[$i];
                 $detail->currency = $request->currency[$i];
@@ -168,9 +194,24 @@ class OrdersController extends Controller
 
     }
 
-    public function update()
+    /**
+     * Update the resource
+     *
+     * @param int $id
+     * @param Request $request
+     * @return back()
+     */
+    public function update($id, Request $request)
     {
+        $order = Order::find($id);
+        $order->update([
+            'supplier_id' => $request->supplier_id,
+            'destination' => $request->destination,
+            'delivery_term' => $request->delivery_term,
+            'incoterms' => $request->incoterms,
+        ]);
 
+        return back();
     }
 
     public function updateDetails()

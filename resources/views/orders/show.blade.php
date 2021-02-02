@@ -31,6 +31,7 @@
           <h4><strong>Furnizor:</strong> {{ $supplier->name }}</h4>
           <h4><strong>Destinatie:</strong> {{ $order->destination }}</h4>
           <h4><strong>Termen de livrare:</strong> {{ $order->delivery_term }}</h4>
+          <h4><strong>Contitie de livrare:</strong> {{ $order->incoterms }}</h4>
         <div class="col-sm-11 d-inline mx-2">
           @can('user')
             <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#orderDetailsForm">Adauga detalii</button>
@@ -46,6 +47,7 @@
         <thead>
           <tr>
               <th>Descriere</th>
+              <th>Dimensiuni</th>
               <th>Volum comandat</th>
               <th>Volum confirmat</th>
               <th>Volum livrat</th>
@@ -60,6 +62,7 @@
           @foreach ($order_details as $detail)
             <tr>
               <td class="text-center">{{ $detail->position }}</td>
+              <td class="text-center">{{ $detail->dimensions }}</td>
               <td class="text-center">{{ $detail->ordered_volume }}</td>
               <td class="text-center">{{ $detail->confirmed_volume }}</td>
               <td class="text-center">{{ $detail->delivered_volume }}</td>
@@ -71,7 +74,7 @@
             </tr>
           @endforeach
           <tr style="background: lightgrey">
-            <td class="text-center"><strong>TOTAL</strong></td>
+            <td class="text-center" colspan="2"><strong>TOTAL</strong></td>
             <td class="text-center"><strong>{{ $total_ordered }}</strong></td>
             <td class="text-center"><strong>{{ $total_confirmed }}</strong></td>
             <td class="text-center"><strong>{{ $total_delivered }}</strong></td>

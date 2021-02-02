@@ -207,9 +207,12 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::prefix('orders')->group(function() {
             Route::get('/', 'OrdersController@index')->name('orders.index')->middleware('can:user');
+            Route::get('/fetch', 'OrdersController@fetch')->name('orders.fetch')->middleware('can:user');
+            Route::get('/fetch/detail', 'OrdersController@fetchDetail')->name('orders.fetchDetail')->middleware('can:user');
             Route::post('/add', 'OrdersController@store')->middleware('can:user');
             Route::prefix('/{id}')->group(function() {
-                Route::get('/show', 'OrdersController@show');
+                Route::get('/show', 'OrdersController@show')->middleware('can:user');
+                Route::patch('/update', 'OrdersController@update')->middleware('can:user');
             });
         });
 

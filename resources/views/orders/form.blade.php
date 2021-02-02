@@ -10,7 +10,7 @@
         </h3>
       </div>
       <div class="modal-body">
-        <form id="claimForm" action="/orders/add" method="POST">
+        <form id="ordersForm" action="/orders/add" method="POST">
             @method('POST')
             @csrf
             <div class="form-row">
@@ -23,15 +23,20 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                   <label for="destination">Destination</label>
                   <input type="text"
                     class="form-control" name="destination" id="destination" placeholder="Destinatie" required>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                   <label for="delivery_term">Termen de livrare</label>
                   <input type="text"
                     class="form-control" name="delivery_term" id="delivery_term" placeholder="Termen de livrare" required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="incoterms">Conditie de livrare</label>
+                  <input type="text"
+                    class="form-control" name="incoterms" id="incoterms" placeholder="Conditie de livrare" required>
                 </div>
             </div>
             <div id="order_details" class="form-row d-flex flex-row">
@@ -40,14 +45,18 @@
                     Detalii comanda
                 </h4>
                 <div class="col-md-12"><hr></div>
-                <div class="form-group col-md-10">
-                  <label for="position">Pozitie</label>
+                <div class="form-group col-md-5">
+                  <label for="position">Descriere</label>
                   <textarea class="form-control" name="position[]" rows="3" required></textarea>
+                </div>
+                <div class="form-group col-md-5">
+                  <label for="dimensions">Dimensiuni</label>
+                  <textarea class="form-control" name="dimensions[]" rows="3" required></textarea>
                 </div>
                 <div style="margin-top: 40px" class="form-group col-md-2">
                     <button type="button" class="addBtn btn btn-secondary">Adauga pozitie</button>
                 </div>
-                 <div class="form-group col-md-4">
+                <div class="form-group col-md-4">
                   <label for="ordered_volume">Volum comandat</label>
                   <input type="number"
                     class="form-control" name="ordered_volume[]" id="ordered_volume" placeholder="Volum comandat" step="0.010" min="0">

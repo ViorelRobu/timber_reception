@@ -33,6 +33,7 @@
               <th>Volum livrat</th>
               <th>Destinatie</th>
               <th>Termen livrare</th>
+              <th>Conditie livrare</th>
               <th>Actiuni</th>
           </tr>
         </thead>
@@ -40,6 +41,7 @@
     </div>
   </div>
 @include('orders.form')
+@include('orders.edit')
 @include('orders.delete')
 
 @stop
@@ -65,6 +67,7 @@
               {data: 'delivered_volume', name: 'delivered_volume'},
               {data: 'destination', name: 'destination'},
               {data: 'delivery_term', name: 'delivery_term'},
+              {data: 'incoterms', name: 'incoterms'},
               {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
       });
@@ -82,9 +85,13 @@
           $('#order_details').append(`
             <div class="group-order">
             <div class="col-md-12"><hr></div>
-                <div class="form-group col-md-10">
+                <div class="form-group col-md-5">
                   <label for="position">Pozitie</label>
                   <textarea class="form-control" name="position[]" rows="3" required></textarea>
+                </div>
+                <div class="form-group col-md-5">
+                  <label for="dimensions">Dimensiuni</label>
+                  <textarea class="form-control" name="dimensions[]" rows="3" required></textarea>
                 </div>
                 <div style="margin-top: 40px" class="form-group col-md-2">
                     <button type="button" class="deleteBtn btn btn-danger">Sterge</button>
@@ -129,38 +136,20 @@
     $(document).on('click', '.edit', function() {
       var id = $(this).attr("id");
       $.ajax({
-        url: "{{ route('claims.fetch') }}",
+        url: "{{ route('orders.fetch') }}",
         method: 'get',
         data: {id:id},
         dataType:'json',
         success: function(data)
             {
-                $('.modal-title').text('Editeaza reclamatia');
-                $('#id').val(id);
-                $('#supplier_id').val(data.supplier_id);
-                $('#claim_date').val(data.claim_date);
-                $('#defects').val(data.defects);
-                $('#claim_amount').val(data.claim_amount);
-                $('#claim_value').val(data.claim_value);
-                $('#claim_currency').val(data.claim_currency);
-                $('#observations').val(data.observations);
-                data.nir.forEach((element, index) => {
-                    $('#nir').append('<option value="' + data.nir_id[index] + '" selected>' + element + '</option>');
-                });
+                $('#editOrder').attr('action', '/orders/' + id + '/update');
+                $('#edit_id').val(id);
+                $('#edit_supplier_id').val(data.supplier_id);
+                $('#edit_destination').val(data.destination);
+                $('#edit_delivery_term').val(data.delivery_term);
+                $('#edit_incoterms').val(data.incoterms);
             }
       });
-
-      $(document).on('submit', function() {
-        var id = $('#id').val();
-        $('#claimForm').attr('action', '/claims/' + id + '/update');
-        $("input[name='_method']").val('PATCH');
-      });
-
-    });
-
-    $(document).on('click', '.delete', function() {
-        var id = $(this).attr("id");
-        $('form').attr('action', 'claims/' + id + '/delete');
 
     });
   </script>

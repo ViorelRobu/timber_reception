@@ -26,7 +26,7 @@
                     <br>
                     <sup>{{ $audit['created_at'] }} {{ $audit['event'] }}</sup>
                     <br>
-                    <sup>NIR</sup>
+                    <sup>Comanda</sup>
                 </div>
                 <div class="col-lg-5">
                     @foreach ($audit['old_values'] as $key => $value)
@@ -52,7 +52,7 @@
                     <br>
                     <sup>{{ $details['created_at'] }} {{ $details['event'] }}</sup>
                     <br>
-                    <sup>Detalii nir</sup>
+                    <sup>Detalii comanda</sup>
                 </div>
                 <div class="col-lg-5">
                     @foreach ($details['old_values'] as $key => $value)
