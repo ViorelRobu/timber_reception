@@ -130,6 +130,7 @@ class CompanyInfoController extends Controller
         $company = CompanyInfo::findOrFail($request->id);
         $output = [
             'name' => $company->name,
+            'label' => $company->label,
             'cui' => $company->cui,
             'j' => $company->j,
             'address' => $company->address,
@@ -150,6 +151,7 @@ class CompanyInfoController extends Controller
     {
         $error_messages = [
             'name.required' => 'Va rog completati denumirea firmei!',
+            'label.required' => 'Va rog completati denumirea scurta!',
             'cui.required' => 'Va rog completati Codul Unic de Inregistrare!',
             'j.required' => 'Va rog completati Numarul din Registrul Comertului!',
             'address.required' => 'Va rog completati adresa!',
@@ -159,6 +161,7 @@ class CompanyInfoController extends Controller
 
         return request()->validate([
             'name' => 'required',
+            'label' => 'required',
             'cui' => 'required',
             'j' => 'required',
             'address' => 'required',

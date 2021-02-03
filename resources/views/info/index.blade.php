@@ -24,6 +24,7 @@
           <thead>
             <tr>
               <th>Nume</th>
+              <th>Nume scurt</th>
               <th>Cod Unic Inregistrare</th>
               <th>Nr. Registru Comert</th>
               <th>Adresa</th>
@@ -53,6 +54,7 @@
           ajax: "{{ route('companies.index') }}",
           columns: [
               {data: 'name', name: 'name'},
+              {data: 'label', name: 'label'},
               {data: 'cui', name: 'cui'},
               {data: 'j', name: 'j'},
               {data: 'address', name: 'address'},
@@ -83,6 +85,7 @@
                 $('.modal-title').text('Editeaza datele firmei');
                 $('#id').val(id);
                 $('#name').val(data.name);
+                $('#label').val(data.label);
                 $('#cui').val(data.cui);
                 $('#j').val(data.j);
                 $('#address').val(data.address);

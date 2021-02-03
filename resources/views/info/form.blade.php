@@ -18,6 +18,9 @@
                 <input type="text" class="form-control" id="name" name="name" placeholder="Denumire firma" required>
             </div>
             <div class="form-group">
+                <input type="text" class="form-control" id="label" name="label" placeholder="Denumire scurta" required>
+            </div>
+            <div class="form-group">
                 <input type="text" class="form-control" id="cui" name="cui" placeholder="Cod Unic de Inregistrare" required>
             </div>
             <div class="form-group">
