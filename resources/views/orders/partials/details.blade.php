@@ -10,35 +10,34 @@
         </h3>
       </div>
     <div class="modal-body">
-        <form action="/orders/details/add" method="POST">
+        <form id="orderDetailsForm" action="/orders/{{ $order->id }}/add/detail" method="POST">
             @method('POST')
             @csrf
             <input type="hidden" name="id" id="id">
             <input type="hidden" name="order_id" id="order_id" value="{{ $order->id }}">
             <div class="details d-flex flex-row row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                   <label for="position">Pozitie</label>
-                  <textarea class="form-control" name="position" rows="3" required></textarea>
+                  <textarea class="form-control" name="position" id="position" rows="3" required></textarea>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
+                  <label for="dimensions">Dimensiuni</label>
+                  <textarea class="form-control" name="dimensions" id="dimensions" rows="3" required></textarea>
+                </div>
+                <div class="form-group col-md-6">
                   <label for="ordered_volume">Volum comandat</label>
                   <input type="number"
                     class="form-control" name="ordered_volume" id="ordered_volume" placeholder="Volum comandat" step="0.010" min="0">
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                   <label for="confirmed_volume">Volum confirmat</label>
                   <input type="number"
-                    class="form-control" name="confirmed_volume" id="confirmed_volume" placeholder="Volum comandat" step="0.010" min="0">
-                </div>
-                <div class="form-group col-md-4">
-                  <label for="delivered_volume">Volum livrat</label>
-                  <input type="number"
-                    class="form-control" name="delivered_volume" id="delivered_volume" placeholder="Volum comandat" step="0.010" min="0">
+                    class="form-control" name="confirmed_volume" id="confirmed_volume" placeholder="Volum confirmat" step="0.010" min="0">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="price">Pret</label>
                     <input type="number"
-                    class="form-control" name="price" placeholder="Pret" min="0" step="0.01" required>
+                    class="form-control" name="price" id="price" placeholder="Pret" min="0" step="0.01" required>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="currency">Valuta</label>

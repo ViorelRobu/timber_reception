@@ -3,7 +3,6 @@
 @section('content_header')
     <h1 class="d-inline">Lista comenzi
         <button id="addClaim" class="btn btn-primary pull-right" data-toggle="modal" data-target="#ordersForm">Adauga comanda</button>
-        <a class="btn btn-primary pull-right" href="/claims/export">Descarca lista comenzi</a>
     </h1>
 @stop
 

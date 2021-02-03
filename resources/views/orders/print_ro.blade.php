@@ -118,7 +118,7 @@
                 padding-bottom: 30px;
             }
         </style>
-        <title>Reclamatie calitate</title>
+        <title>Comanda</title>
     </head>
     <body>
         <img src="img/logo.jpg" alt="logo">
@@ -150,35 +150,37 @@
         <p></p>
         <hr>
         <div class="content">
-            <p><strong>Reclamatie calitate nr {{ $claim->id }} din {{ date("d.m.Y", strtotime($claim->claim_date)) }}</strong></p>
+            <p><strong>Comanda nr {{ $order->order }} din {{ date("d.m.Y", strtotime($order->order_date)) }}</strong></p>
             <hr>
             <table class="basic_details">
-                <tr>
-                    <td class="basic_details basic_title">Perioada livrare </td>
-                    <td class="basic_details basic_data bottom_border">{{ $start }} - {{ $end }}</td>
-                </tr>
-                <tr>
-                    <td class="basic_details basic_title">Facturi </td>
-                    <td class="basic_details basic_data bottom_border">{{ $invoices }}</td>
-                </tr>
-                <tr>
-                    <td class="basic_details basic_title">Defecte </td>
-                    <td class="basic_details basic_data bottom_border">{{ $claim->defects }}</td>
-                </tr>
-                <tr>
-                    <td class="basic_details basic_title">Observatii </td>
-                    <td class="basic_details basic_data">{{ $claim->observations }}</td>
-                </tr>
+                    <tr>
+                        <td class="basic_details basic_data" colspan="3"><strong>Descriere</strong></td>
+                        <td class="basic_details basic_data"></td>
+                        <td class="basic_details basic_data"><strong>Cantitate</strong></td>
+                        <td class="basic_details basic_data"><strong>Pret/mc</strong></td>
+                    </tr>
+                @foreach ($details as $item)
+                    <tr>
+                        <td class="basic_details basic_data" colspan="3">{{ $item->position }}</td>
+                        <td class="basic_details basic_data"></td>
+                        <td class="basic_details basic_data"></td>
+                        <td class="basic_details basic_data"></td>
+                    </tr>
+                    <tr>
+                        <td class="basic_details basic_data" colspan="4"><small><i>{{ $item->dimensions }}</i></small></td>
+                        <td class="basic_details basic_data">{{ $item->ordered_volume . ' mc'}}</td>
+                        <td class="basic_details basic_data">{{ $item->price . ' ' . $item->currency }}</td>
+                    </tr>
+                @endforeach
             </table>
             <hr>
                 <p class="total">
-                    Cantitatea reclamata: {{ $claim->claim_amount }}m&sup3;
+                    Conditie de livrare: {{ $order->incoterms }}
                 </p>
                 <p class="total">
-                    Valoare: {{ $claim->claim_value }} {{ $claim->claim_currency }}
+                    TOTAL: {{ $total_volume }}m&sup3;
                 </p>
             <hr>
-            <p class="user">Creata de {{ $user }}</p>
         </div>
     </body>
 </html>

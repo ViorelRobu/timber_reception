@@ -10,10 +10,10 @@
         </h3>
     </div>
     <div class="modal-body">
-        <form action="/orders/details/delete" method="POST">
+        <form action="/orders/delete/detail" method="POST">
             @method('DELETE')
             @csrf
-            <input type="hidden" name="delete_detail_id" id="delete_detail_id">
+            <input type="hidden" name="delete_id" id="delete_id">
             <h4>Esti sigur ca vrei sa stergi aceasta pozitie? Veti pierde aceste date in mod definitiv!</h4>
     </div>
       <div class="modal-footer">

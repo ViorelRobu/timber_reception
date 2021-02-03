@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CompanyInfo;
+use App\Countries;
 use App\Order;
 use App\OrderDetail;
 use App\Suppliers;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Yajra\DataTables\Facades\DataTables;
 use OwenIt\Auditing\Models\Audit;
+use domPDF;
+
 
 class OrdersController extends Controller
 {
@@ -189,9 +192,27 @@ class OrdersController extends Controller
         return $number;
     }
 
-    public function storeDetails()
+    /**
+     * Save the details for the order
+     *
+     * @param int $id
+     * @param Request $request
+     * @return redirect
+     */
+    public function storeDetails($id, Request $request)
     {
+        $details = OrderDetail::create([
+            'order_id' => $request->order_id,
+            'position' => $request->position,
+            'dimensions' => $request->dimensions,
+            'ordered_volume' => $request->ordered_volume,
+            'price' => $request->price,
+            'currency' => $request->currency,
+            'confirmed_volume' => $request->confirmed_volume,
+            'delivered_volume' => 0
+        ]);
 
+        return back();
     }
 
     /**
@@ -199,7 +220,7 @@ class OrdersController extends Controller
      *
      * @param int $id
      * @param Request $request
-     * @return back()
+     * @return redirect
      */
     public function update($id, Request $request)
     {
@@ -214,9 +235,76 @@ class OrdersController extends Controller
         return back();
     }
 
-    public function updateDetails()
+    /**
+     * Update one detail
+     *
+     * @param Request $request
+     * @return redirect
+     */
+    public function updateDetail(Request $request)
     {
+        $details = OrderDetail::find($request->id);
+        $details->update([
+            'order_id' => $request->order_id,
+            'position' => $request->position,
+            'dimensions' => $request->dimensions,
+            'ordered_volume' => $request->ordered_volume,
+            'price' => $request->price,
+            'currency' => $request->currency,
+            'confirmed_volume' => $request->confirmed_volume,
+        ]);
 
+        return back();
+    }
+
+    /**
+     * Add delivery to order position
+     *
+     * @param Request $request
+     * @return redirect
+     */
+    public function addDelivery(Request $request)
+    {
+        $detail = OrderDetail::find($request->delivery_id);
+        $detail->delivered_volume = $request->delivered_volume;
+        $detail->save();
+
+        return back();
+    }
+
+    /**
+     * Delete a position from the order
+     *
+     * @param Request $request
+     * @return redirect
+     */
+    public function destroy(Request $request)
+    {
+        $detail = OrderDetail::find($request->delete_id);
+        $detail->delete();
+
+        return back();
+    }
+
+    public function print(Order $order, $language)
+    {
+        $company = CompanyInfo::find($order->company_info_id);
+        $supplier = Suppliers::find($order->supplier_id);
+        $country = Countries::find($supplier->country_id);
+        $details = OrderDetail::where('order_id', $order->id)->get();
+        $total_volume = $details->sum('ordered_volume');
+
+        $data = [
+            'company' => $company,
+            'supplier' => $supplier,
+            'country' => $country,
+            'order' => $order,
+            'details' => $details,
+            'total_volume' => $total_volume,
+        ];
+
+        $pdf = domPDF::loadView('orders.print_' . $language, $data);
+        return $pdf->stream();
     }
 
     /**

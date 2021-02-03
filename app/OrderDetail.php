@@ -10,4 +10,5 @@ class OrderDetail extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $table = 'order_details';
+    protected $guarded = [];
 }

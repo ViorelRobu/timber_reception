@@ -4,7 +4,8 @@
   <h1 class="d-inline"><a href="/orders"><i class="fa fa-arrow-left"></i></a>
     <strong>Detalii comanda cherestea {{ $order->order }} din {{ date("d.m.Y", strtotime($order->order_date)) }}</strong> - {{ $company->name }} &nbsp;
     @can('user')
-        <a href="/order/{{ $order->id }}/print" target="_blank" ><i class="fa fa-print"></i></a>
+        <a href="/orders/{{ $order->id }}/print/ro" target="_blank" style="color: green"><i class="fa fa-print"></i></a>
+        <a href="/orders/{{ $order->id }}/print/en" target="_blank" style="color: red"><i class="fa fa-print"></i></a>
     @endcan
 @can('admin')
   <a href="#" class="pull-right" data-toggle="modal" data-target="#orderHistory"><i class="fa fa-history"></i></a>
@@ -69,7 +70,17 @@
               <td class="text-center">{{ $detail->price . ' ' . $detail->currency }}</td>
               <td class="text-center">{{ $detail->value . ' ' . $detail->currency }}</td>
               @can('user')
-                <td class="text-center"><a href="#" id="{{ $detail->id }}" class="editDet" data-toggle="modal" data-target="#orderDetailsForm"><i class="fa fa-edit"></i></a> <a href="#" id="{{ $detail->id }}" class="delete_details" data-toggle="modal" data-target="#deleteDetailsForm"><i class="fa fa-trash"></i></a></td>
+                <td class="text-center">
+                    <a href="#" id="{{ $detail->id }}" class="addDelivery" data-toggle="modal" data-target="#deliveryForm">
+                        <i class="fa fa-truck"></i>
+                    </a>
+                    <a href="#" id="{{ $detail->id }}" class="editDet" data-toggle="modal" data-target="#orderDetailsForm">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <a href="#" id="{{ $detail->id }}" class="delete_details" data-toggle="modal" data-target="#deleteDetailsForm">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
               @endcan
             </tr>
           @endforeach
@@ -90,7 +101,8 @@
 
 @can('user')
   @include('orders.partials.details')
-  {{-- @include('orders.partials.delete_detail') --}}
+  @include('orders.partials.delivery')
+  @include('orders.partials.delete_detail')
 @endcan
 @can('admin')
   @include('orders.partials.history')
@@ -105,48 +117,10 @@
 
 @section('js')
   <script>
-    $('#invoiceForm').on('hidden.bs.modal', function() {
-      $(this).find('form')[0].reset();
-      $('form').attr('action', '/nir/invoice/add');
-      $('.modal-title').text('Adauga factura');
-      $('#id').val('');
-      $(document).off('submit');
-    });
-
-    $(document).on('click', '.editInvoice', function() {
-      var id = $(this).attr("id");
-      $.ajax({
-        url: "{{ route('invoice.fetch') }}",
-        method: 'get',
-        data: {id:id},
-        dataType:'json',
-        success: function(data)
-            {
-                $('.modal-title').text('Editeaza factura');
-                $('#id').val(id);
-                $('#numar_factura').val(data.numar_factura);
-                $('#data_factura').val(data.data_factura);
-                $('#valoare_factura').val(data.valoare_factura);
-                $('#valoare_transport').val(data.valoare_transport);
-            }
-      });
-
-      $(document).on('submit', function() {
-        var id = $('#id').val();
-        $('form').attr('action', '/nir/invoice/' + id + '/update');
-        $("input[name='_method']").val('PATCH');
-      });
-    });
-
-    $(document).on('click', '.delete', function() {
-      const id = $(this).attr("id");
-      $('#delete_id').val(id);
-    });
-
     $('.editDet').on('click', function() {
         var id = $(this).attr("id");
         $.ajax({
-          url: "{{ route('details.fetch') }}",
+          url: "{{ route('orders.fetchDetail') }}",
           method: 'get',
           data: {id:id},
           dataType:'json',
@@ -154,25 +128,24 @@
               {
                   $('.modal-title').text('Editeaza pozitie');
                   $('#id').val(id);
-                  $('#article_id').val(data.article_id);
-                  $('#species_id').val(data.species_id);
-                  $('#moisture_id').val(data.moisture_id);
-                  $('#volum_aviz').val(data.volum_aviz);
-                  $('#volum_receptionat').val(data.volum_receptionat);
-                  $('#pachete').val(data.pachete);
-                  $('#total_ml').val(data.total_ml);
+                  $('#position').val(data.position);
+                  $('#dimensions').val(data.dimensions);
+                  $('#ordered_volume').val(data.ordered_volume);
+                  $('#confirmed_volume').val(data.confirmed_volume);
+                  $('#price').val(data.price);
+                  $('#currency').val(data.currency);
               }
         });
         $(document).on('submit', function() {
           var id = $('#id').val();
-          $('form').attr('action', '/nir/details/' + id + '/update');
+          $('form').attr('action', '/orders/update/detail');
           $("input[name='_method']").val('PATCH');
       });
     });
 
-    $('#nirDetailsForm').on('hidden.bs.modal', function() {
+    $('#orderDetailsForm').on('hidden.bs.modal', function() {
       $(this).find('form')[0].reset();
-      $('form').attr('action', '/nir/details/add');
+      $('form').attr('action', '/orders/' + {{ $order->id }} + '/add/detail');
       $('.modal-title').text('Adauga detalii');
       $('#id').val('');
       $(document).off('submit');
@@ -180,7 +153,22 @@
 
     $('.delete_details').on('click', function() {
       const id = $(this).attr("id");
-      $('#delete_detail_id').val(id);
+      $('#delete_id').val(id);
+    });
+
+    $('.addDelivery').on('click', function() {
+      const id = $(this).attr("id");
+      $('#delivery_id').val(id);
+        $.ajax({
+          url: "{{ route('orders.fetchDetail') }}",
+          method: 'get',
+          data: {id:id},
+          dataType:'json',
+          success: function(data)
+              {
+                  $('#delivered_volume').val(data.delivered_volume);
+              }
+        });
     });
 
   </script>
