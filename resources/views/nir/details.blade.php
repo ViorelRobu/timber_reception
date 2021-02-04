@@ -41,16 +41,19 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <input type="number" class="form-control" id="volum_aviz"  step="0.000001"name="volum_aviz" placeholder="Volum aviz" required>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
+                        <input type="number" class="form-control" id="volum_dvi"  step="0.01"name="volum_dvi" placeholder="Volum dvi" required>
+                    </div>
+                    <div class="form-group col-md-4">
                         <input type="number" class="form-control" id="volum_receptionat" step="0.001" name="volum_receptionat" placeholder="Volum factura" required>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-6">
                         <input type="number" class="form-control" id="pachete" name="pachete" placeholder="Numar pachete" required>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-6">
                         <input type="number" class="form-control" id="total_ml" step="0.01"name="total_ml" placeholder="Total lungimi pachete" required>
                     </div>
                 </div>

@@ -84,6 +84,7 @@
               <th>Specie</th>
               <th>Umiditate</th>
               <th>Volum aviz</th>
+              <th>Volum DVI</th>
               <th>Volum receptionat</th>
               <th>Numar pachete</th>
               <th>Total ml pachete</th>
@@ -99,6 +100,7 @@
               <td class="text-center">{{ $detail->species }}</td>
               <td class="text-center">{{ $detail->moisture }}</td>
               <td class="text-center">{{ $detail->volum_aviz }}</td>
+              <td class="text-center">{{ $detail->volum_dvi }}</td>
               <td class="text-center">{{ $detail->volum_receptionat }}</td>
               <td class="text-center">{{ $detail->pachete }}</td>
               <td class="text-center">{{ $detail->total_ml }}</td>
@@ -110,6 +112,7 @@
           <tr style="background: lightgrey">
             <td class="text-center" colspan="3"><strong>TOTAL</strong></td>
             <td class="text-center"><strong>{{ $total_aviz }}</strong></td>
+            <td class="text-center"><strong>{{ $total_dvi }}</strong></td>
             <td class="text-center"><strong>{{ $total_receptionat }}</strong></td>
             <td class="text-center"><strong>{{ $total_pachete }}</strong></td>
             <td class="text-center"><strong>{{ $total_ml }}</strong></td>
@@ -194,6 +197,7 @@
                   $('#species_id').val(data.species_id);
                   $('#moisture_id').val(data.moisture_id);
                   $('#volum_aviz').val(data.volum_aviz);
+                  $('#volum_dvi').val(data.volum_dvi);
                   $('#volum_receptionat').val(data.volum_receptionat);
                   $('#pachete').val(data.pachete);
                   $('#total_ml').val(data.total_ml);

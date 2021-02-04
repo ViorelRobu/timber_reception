@@ -16,7 +16,7 @@ class NIRDetailsController extends Controller
         $nirDetails->create($values);
 
         return back();
-       
+
     }
 
     public function fetchDetails(Request $request)
@@ -26,6 +26,7 @@ class NIRDetailsController extends Controller
             'article_id' => $nir->article_id,
             'species_id' => $nir->species_id,
             'volum_aviz' => $nir->volum_aviz,
+            'volum_dvi' => $nir->volum_dvi,
             'volum_receptionat' => $nir->volum_receptionat,
             'moisture_id' => $nir->moisture_id,
             'pachete' => $nir->pachete,
@@ -56,6 +57,7 @@ class NIRDetailsController extends Controller
             'article_id.required' => 'Selectati un articol!',
             'species_id.required' => 'Selectati o specie!',
             'volum_aviz.required' => 'Completati volumul de pe aviz!',
+            'volum_dvi.required' => 'Completati volumul de pe dvi!',
             'volum_receptionat.required' => 'Completati volumul de pe factura!',
             'moisture_id.required' => 'Selectati o umiditate!',
             'pachete.required' => 'Completati numarul de pachete!',
@@ -66,6 +68,7 @@ class NIRDetailsController extends Controller
             'article_id' => 'required',
             'species_id' => 'required',
             'volum_aviz' => 'required',
+            'volum_dvi' => 'required',
             'volum_receptionat' => 'required',
             'moisture_id' => 'required',
             'pachete' => 'required',

@@ -262,6 +262,7 @@ class NIRController extends Controller
                     'article_id' => $this->validateRequestDetails()['article_id'][$i],
                     'species_id' => $this->validateRequestDetails()['species_id'][$i],
                     'volum_aviz' => $this->validateRequestDetails()['volum_aviz'][$i],
+                    'volum_dvi' => $this->validateRequestDetails()['volum_dvi'][$i],
                     'volum_receptionat' => $this->validateRequestDetails()['volum_receptionat'][$i],
                     'moisture_id' => $this->validateRequestDetails()['moisture_id'][$i],
                     'pachete' => $this->validateRequestDetails()['pachete'][$i],
@@ -423,31 +424,17 @@ class NIRController extends Controller
                 'species.name as species',
                 'moisture.name as moisture',
                 'nir_details.volum_aviz as volum_aviz',
+                'nir_details.volum_dvi as volum_dvi',
                 'nir_details.volum_receptionat as volum_receptionat',
                 'nir_details.pachete as pachete',
                 'nir_details.total_ml as total_ml'
             ])->get();
 
-        $total_aviz = 0;
-        $total_receptionat = 0;
-        $total_pachete = 0;
-        $total_ml = 0;
-
-        foreach ($nir_details as $details) {
-            $total_aviz += $details->volum_aviz;
-        }
-
-        foreach ($nir_details as $details) {
-            $total_receptionat += $details->volum_receptionat;
-        }
-
-        foreach ($nir_details as $details) {
-            $total_pachete += $details->pachete;
-        }
-
-        foreach ($nir_details as $details) {
-            $total_ml += $details->total_ml;
-        }
+        $total_aviz = $nir_details->sum('volum_aviz');
+        $total_dvi = $nir_details->sum('volum_dvi');
+        $total_receptionat = $nir_details->sum('volum_receptionat');
+        $total_pachete = $nir_details->sum('pachete');
+        $total_ml = $nir_details->sum('total_ml');
 
         // get the audits for the current nir
         $audit_nir = $this->displayHistoryNIR($nir->id, $nir->created_at);
@@ -483,6 +470,7 @@ class NIRController extends Controller
                         'nir_details' =>$nir_details,
                         'total_aviz' => $total_aviz,
                         'total_receptionat' => $total_receptionat,
+                        'total_dvi' => $total_dvi,
                         'total_pachete' => $total_pachete,
                         'total_ml' => $total_ml,
                         'articles' => $articles,
@@ -953,6 +941,7 @@ class NIRController extends Controller
             'article_id.required' => 'Selectati un articol!',
             'species_id.required' => 'Selectati o specie!',
             'volum_aviz.required' => 'Completati volumul de pe aviz!',
+            'volum_dvi.required' => 'Completati volumul de pe dvi!',
             'volum_receptionat.required' => 'Completati volumul de pe factura!',
             'moisture_id.required' => 'Selectati o umiditate!',
             'pachete.required' => 'Completati numarul de pachete!',
@@ -963,6 +952,7 @@ class NIRController extends Controller
             'article_id' => 'required',
             'species_id' => 'required',
             'volum_aviz' => 'required',
+            'volum_dvi' => 'required',
             'volum_receptionat' => 'required',
             'moisture_id' => 'required',
             'pachete' => 'required',

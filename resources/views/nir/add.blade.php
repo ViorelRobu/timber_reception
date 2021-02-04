@@ -150,16 +150,19 @@
                         <div class="form-group col-md-2">
                         <button type="button" class="addBtn btn btn-secondary">Adauga</button>
                     </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <input type="number" class="form-control" id="volum_aviz" step="0.000001" min="0" name="volum_aviz[]" placeholder="Volum aviz" value="" required>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
+                            <input type="number" class="form-control" id="volum_dvi" step="0.01" min="0" name="volum_dvi[]" placeholder="Volum dvi" value="" required>
+                        </div>
+                        <div class="form-group col-md-4">
                             <input type="number" class="form-control" id="volum_receptionat" step="0.001" min="0" name="volum_receptionat[]" placeholder="Volum factura" value="" required>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6">
                             <input type="number" class="form-control" id="pachete" step="1" name="pachete[]" min="0" placeholder="Numar pachete" value="" required>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6">
                             <input type="number" class="form-control" id="total_ml" step="0.01" name="total_ml[]" min="0" placeholder="Total lungimi pachete" value="" required>
                         </div>
                         <div class="col-md-12"><hr></div>
