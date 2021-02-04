@@ -78,10 +78,10 @@
                     <input type="number" class="form-control" id="greutate_neta" step="0.01" min="0" name="greutate_neta" placeholder="Greutate neta">
                 </div>
                 <div class="form-group col-md-4">
-                    <input type="text" class="form-control" id="serie_aviz" name="serie_aviz" placeholder="Serie aviz" required>
+                    <input type="text" class="form-control" id="serie_aviz" name="serie_aviz" placeholder="Serie aviz">
                 </div>
                 <div class="form-group col-md-4">
-                    <input type="text" class="form-control" id="numar_aviz" name="numar_aviz" placeholder="Numar aviz" required>
+                    <input type="text" class="form-control" id="numar_aviz" name="numar_aviz" placeholder="Numar aviz">
                 </div>
                 <div class="form-group col-md-4">
                     <div class="input-group date">

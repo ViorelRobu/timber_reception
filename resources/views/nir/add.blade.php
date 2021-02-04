@@ -74,11 +74,11 @@
                 <div class="form-group col-md-3">
                     <input type="number" class="form-control" id="greutate_neta" step="0.01" min="0" name="greutate_neta" placeholder="Greutate neta">
                 </div>
-                <div class="form-group col-md-4">
-                    <input type="text" class="form-control" id="serie_aviz" name="serie_aviz" placeholder="Serie aviz" required>
+                <div class="form-group col-md-2">
+                    <input type="text" class="form-control" id="serie_aviz" name="serie_aviz" placeholder="Serie aviz">
                 </div>
-                <div class="form-group col-md-4">
-                    <input type="text" class="form-control" id="numar_aviz" name="numar_aviz" placeholder="Numar aviz" required>
+                <div class="form-group col-md-6">
+                    <input type="text" class="form-control" id="numar_aviz" name="numar_aviz" placeholder="Numar aviz">
                 </div>
                 <div class="form-group col-md-4">
                     <div class="input-group date">
@@ -151,7 +151,7 @@
                         <button type="button" class="addBtn btn btn-secondary">Adauga</button>
                     </div>
                         <div class="form-group col-md-3">
-                            <input type="number" class="form-control" id="volum_aviz" step="0.01" min="0" name="volum_aviz[]" placeholder="Volum aviz" value="" required>
+                            <input type="number" class="form-control" id="volum_aviz" step="0.000001" min="0" name="volum_aviz[]" placeholder="Volum aviz" value="" required>
                         </div>
                         <div class="form-group col-md-3">
                             <input type="number" class="form-control" id="volum_receptionat" step="0.001" min="0" name="volum_receptionat[]" placeholder="Volum factura" value="" required>
