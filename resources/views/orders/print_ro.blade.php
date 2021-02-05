@@ -117,6 +117,18 @@
                 height: 150px;
                 padding-bottom: 30px;
             }
+            table {
+                table-layout: auto;
+                width: 100%;
+            }
+            .high_width {
+                width: 70%;
+                overflow-x: auto;
+            }
+            .small_width {
+                width: 15%;
+                overflow-x: auto;
+            }
         </style>
         <title>Comanda</title>
     </head>
@@ -154,22 +166,20 @@
             <hr>
             <table class="basic_details">
                     <tr>
-                        <td class="basic_details basic_data" colspan="3"><strong>Descriere</strong></td>
-                        <td class="basic_details basic_data"></td>
-                        <td class="basic_details basic_data"><strong>Cantitate</strong></td>
-                        <td class="basic_details basic_data"><strong>Pret/mc</strong></td>
+                        <td class="basic_details basic_data high_width"><strong>Descriere</strong></td>
+                        <td class="basic_details basic_data small_width"><strong>Cantitate</strong></td>
+                        <td class="basic_details basic_data small_width"><strong>Pret/mc</strong></td>
                     </tr>
                 @foreach ($details as $item)
                     <tr>
-                        <td class="basic_details basic_data" colspan="3">{{ $item->position }}</td>
-                        <td class="basic_details basic_data"></td>
-                        <td class="basic_details basic_data"></td>
-                        <td class="basic_details basic_data"></td>
+                        <td class="basic_details basic_data high_width">{{ $item->position }}</td>
+                        <td class="basic_details basic_data small_width"></td>
+                        <td class="basic_details basic_data small_width"></td>
                     </tr>
                     <tr>
-                        <td class="basic_details basic_data" colspan="4"><small><i>{{ $item->dimensions }}</i></small></td>
-                        <td class="basic_details basic_data">{{ $item->ordered_volume . ' mc'}}</td>
-                        <td class="basic_details basic_data">{{ $item->price . ' ' . $item->currency }}</td>
+                        <td class="basic_details basic_data high_width"><small><i>{{ $item->dimensions }}</i></small></td>
+                        <td class="basic_details basic_data small_width">{{ $item->ordered_volume . ' mc'}}</td>
+                        <td class="basic_details basic_data small_width">{{ $item->price . ' ' . $item->currency }}</td>
                     </tr>
                 @endforeach
             </table>
