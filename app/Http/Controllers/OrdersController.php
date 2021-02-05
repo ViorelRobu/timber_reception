@@ -66,7 +66,8 @@ class OrdersController extends Controller
                 ->addColumn('action', function ($main) {
                         $edit = '<a href="#" class="edit" id="' . $main->id . '" data-toggle="modal" data-target="#editOrdersForm"><i class="fa fa-edit"></i></a>';
                         $view = '<a href="/orders/' . $main->id . '/show" class="view" target="_blank"> <i class="fa fa-eye"></i></a>';
-                        return $edit . ' ' . $view;
+                        $copy = '<a href="#" data-id="' . $main->id . '" data-order="' . $main->order . '" class="copy_order" data-toggle="modal" data-target="#copyOrder"> <i class="fa fa-copy"></i></a>';
+                        return $edit . ' ' . $copy . ' ' . $view;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -173,6 +174,51 @@ class OrdersController extends Controller
                 $detail->save();
             }
         };
+
+        return back();
+    }
+
+    /**
+     * Copy a order and its details
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function copy(Request $request)
+    {
+        $old = Order::find($request->copy_id);
+
+        $company_id = request()->session()->get('company_was_selected');
+        $company = CompanyInfo::find($company_id);
+        $now = Carbon::now()->toDate();
+        $year = Carbon::now()->year;
+
+        $new = new Order();
+        $new->company_info_id = $company->id;
+        $new->order = $this->getNumber($company);
+        $new->order_year = $year;
+        $new->order_date = $now;
+        $new->supplier_id = $old->supplier_id;
+        $new->destination = $old->destination;
+        $new->delivery_term = $old->delivery_term;
+        $new->incoterms = $old->incoterms;
+        $new->save();
+
+        $details = OrderDetail::where('order_id', $request->copy_id)->get();
+        if ($details->count() > 0) {
+            foreach ($details as $old) {
+                $new_detail = new OrderDetail();
+                $new_detail->order_id = $new->id;
+                $new_detail->position = $old->position;
+                $new_detail->dimensions = $old->dimensions;
+                $new_detail->ordered_volume = $old->ordered_volume;
+                $new_detail->price = $old->price;
+                $new_detail->currency = $old->currency;
+                $new_detail->confirmed_volume = 0;
+                $new_detail->delivered_volume = 0;
+                $new_detail->save();
+            }
+        }
 
         return back();
     }

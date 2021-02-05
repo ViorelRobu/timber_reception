@@ -41,6 +41,7 @@
   </div>
 @include('orders.form')
 @include('orders.edit')
+@include('orders.partials.copy')
 @include('orders.delete')
 
 @stop
@@ -150,6 +151,14 @@
             }
       });
 
+    });
+
+    $(document).on('click', '.copy_order', function() {
+        var id = $(this).attr("data-id");
+        var order = $(this).attr("data-order");
+
+        $('#copy_id').val(id);
+        $('#copy_order').html(order);
     });
   </script>
 @endsection

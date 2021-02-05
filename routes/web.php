@@ -211,6 +211,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/fetch/detail', 'OrdersController@fetchDetail')->name('orders.fetchDetail')->middleware('can:user');
             Route::get('/{order}/print/{language}', 'OrdersController@print')->middleware('can:user');
             Route::post('/add', 'OrdersController@store')->middleware('can:user');
+            Route::post('/copy', 'OrdersController@copy')->middleware('can:user');
             Route::patch('/update/detail', 'OrdersController@updateDetail')->middleware('can:user');
             Route::patch('/add/delivery', 'OrdersController@addDelivery')->middleware('can:user');
             Route::delete('/delete/detail', 'OrdersController@destroy')->middleware('can:user');
