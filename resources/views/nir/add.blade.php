@@ -154,7 +154,7 @@
                             <input type="number" class="form-control" id="volum_aviz" step="0.000001" min="0" name="volum_aviz[]" placeholder="Volum aviz" value="" required>
                         </div>
                         <div class="form-group col-md-4">
-                            <input type="number" class="form-control" id="volum_dvi" step="0.01" min="0" name="volum_dvi[]" placeholder="Volum dvi" value="" required>
+                            <input type="number" class="form-control" id="volum_dvi" step="0.01" min="0" name="volum_dvi[]" placeholder="Volum 2 zecimale" value="" required>
                         </div>
                         <div class="form-group col-md-4">
                             <input type="number" class="form-control" id="volum_receptionat" step="0.001" min="0" name="volum_receptionat[]" placeholder="Volum factura" value="" required>

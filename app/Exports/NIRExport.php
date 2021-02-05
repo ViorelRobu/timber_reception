@@ -41,6 +41,7 @@ class NIRExport implements FromCollection, WithHeadings
             'Specie',
             'Tip',
             'Volum aviz',
+            'Volum 2 zecimale',
             'Volum receptionat',
             'Umiditate',
             'Categorie',

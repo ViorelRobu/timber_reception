@@ -84,7 +84,7 @@
               <th>Specie</th>
               <th>Umiditate</th>
               <th>Volum aviz</th>
-              <th>Volum DVI</th>
+              <th>Volum 2 zecimale</th>
               <th>Volum receptionat</th>
               <th>Numar pachete</th>
               <th>Total ml pachete</th>

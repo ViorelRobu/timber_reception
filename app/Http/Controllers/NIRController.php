@@ -1010,6 +1010,7 @@ class NIRController extends Controller
                 'species.name as specie',
                 'articles.name as articol',
                 'nir_details.volum_aviz as volum_aviz',
+                'nir_details.volum_dvi as volum_dvi',
                 'nir_details.volum_receptionat as volum_receptionat',
                 'moisture.name as moisture',
             ])->get();
@@ -1038,6 +1039,7 @@ class NIRController extends Controller
                 'specie' => $nir->specie,
                 'articol' => $nir->articol,
                 'volum_aviz' => $nir->volum_aviz,
+                'volum_dvi' => $nir->volum_dvi,
                 'volum_receptionat' => $nir->volum_receptionat,
                 'moisture' => $nir->moisture,
                 'certificare' => $nir->certificare,
