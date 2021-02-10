@@ -70,8 +70,11 @@ class ReceptionCommitteeController extends Controller
      */
     public function indexCommittee(Request $request)
     {
+        $company = session()->get('company_was_selected');
+
         if ($request->ajax()) {
             $data = DB::table('committee')
+                ->where('committee.company_id', $company)
                 ->join('company_info', 'committee.company_id', '=', 'company_info.id')
                 ->select([
                     'committee.id as id',
