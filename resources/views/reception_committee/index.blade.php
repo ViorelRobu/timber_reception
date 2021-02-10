@@ -82,7 +82,7 @@
 
       $(document).on('submit', function() {
         var id = $('#id').val();
-        $('form').attr('action', 'reception/' + id + '/update/member');
+        $('form').attr('action', '/reception/' + id + '/update/member');
         $("input[name='_method']").val('PATCH');
       });
 
@@ -138,8 +138,8 @@
               var p3 = '</sup></div><div class="col-lg-5"><div>';
               var p4 = '</div></div><div class="col-lg-5"><div>';
               var p5 = '</div></div><div class="col-lg-12"><hr></div>';
-              
-              
+
+
                 data.forEach(element => {
                   var newValues = '';
                   var new_values = Object.entries(element.new_values);

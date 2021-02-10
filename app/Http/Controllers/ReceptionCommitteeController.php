@@ -30,8 +30,11 @@ class ReceptionCommitteeController extends Controller
      */
     public function index(Request $request)
     {
+        $company = session()->get('company_was_selected');
+
         if ($request->ajax()) {
             $data = DB::table('reception_committee')
+                ->where('committee.company_id', $company)
                 ->join('committee', 'reception_committee.committee_id', '=', 'committee.id')
                 ->join('company_info', 'committee.company_id', '=', 'company_info.id')
                 ->select([
@@ -55,7 +58,6 @@ class ReceptionCommitteeController extends Controller
                 ->make(true);
         }
 
-        $company = session()->get('company_was_selected');
         $committee_list = Committee::where('company_id', $company)->get();
 
         return view('reception_committee.index', \compact('committee_list'));
@@ -216,7 +218,7 @@ class ReceptionCommitteeController extends Controller
         $receptionCommittee->img_url = null;
         $receptionCommittee->update();
         return back();
-        
+
     }
 
     /**
