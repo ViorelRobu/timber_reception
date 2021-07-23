@@ -5,8 +5,6 @@
     <strong>Ambalaje</strong>
     @can('user')
       <button id="export" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#exportPackaging">Exporta date ambalaj</button>
-    @endcan
-    @can('admin')
       <button id="recalculate" class="btn btn-primary pull-right d-inline" data-toggle="modal" data-target="#recalculateFormMultiple">Recalculeaza ambalaj pentru perioada</button>
     @endcan
 </h1>
@@ -41,12 +39,12 @@
   </div>
 
 @can('admin')
-  @include('packaging.recalculate')
-  @include('packaging.multiple')
-  @include('packaging.history')
+    @include('packaging.history')
 @endcan
 @can('user')
-  @include('packaging.export')
+    @include('packaging.multiple')
+    @include('packaging.recalculate')
+    @include('packaging.export')
 @endcan
 
 @stop

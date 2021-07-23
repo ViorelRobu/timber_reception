@@ -164,8 +164,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('packaging')->group(function () {
             Route::get('/', 'PackagingController@index')->name('packaging.index')->middleware('can:user');
             Route::get('/history', 'PackagingController@fetchHistory')->name('packaging.history')->middleware('can:user');
-            Route::patch('/nir/recalculate', 'NIRController@updatePackagingSingle')->middleware('can:admin');
-            Route::patch('/nir/recalculate/multiple', 'NIRController@updatePackagingMultiple')->middleware('can:admin');
+            Route::patch('/nir/recalculate', 'NIRController@updatePackagingSingle')->middleware('can:user');
+            Route::patch('/nir/recalculate/multiple', 'NIRController@updatePackagingMultiple')->middleware('can:user');
             Route::post('/nir/export', 'PackagingController@exportPackagingData')->middleware('can:user');
             Route::get('/main', 'PackagingController@indexMain')->name('packaging_main.index')->middleware('can:superadmin');
             Route::get('/main/history', 'PackagingController@fetchHistoryMain')->name('packaging_main.history')->middleware('can:superadmin');
